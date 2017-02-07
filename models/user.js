@@ -88,11 +88,10 @@ module.exports.usersFollowing = function(userID, callback){
 }
 
 const follow = (followerID, toFollowId, cb) => { //REVISE only update
-	User.findByIdAndUpdate(
-		toFollowId,
+	User.update(
+		{ _id: toFollowId},
 		{$push: {usersFollowing: followerID}},
-		{safe: true, new: true},
-		function(err, model){
+		function(err){
 			if (err){
 				cb(true);
 			} else {
@@ -114,11 +113,10 @@ const follow = (followerID, toFollowId, cb) => { //REVISE only update
 }
 
 const unfollow = (unfollowerId, toUnfollowId, cb) => { //REVISE only update
-	User.findByIdAndUpdate(
-		toUnfollowId,
+	User.update(
+		{ _id: toUnfollowId},
 		{$pull: {usersFollowing: unfollowerId}},
-		{safe: true, new: true},
-		function(err, model){
+		function(err){
 			if (err){
 				return	cb(true);
 			} else {
