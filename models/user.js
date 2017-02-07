@@ -87,6 +87,75 @@ module.exports.usersFollowing = function(userID, callback){
 	getFollowing(userID, callback, "usersFollowing");
 }
 
+const follow = (followerID, toFollowId, cb) => { //REVISE only update
+	User.findByIdAndUpdate(
+		toFollowId,
+		{$push: {usersFollowing: followerID}},
+		{safe: true, new: true},
+		function(err, model){
+			if (err){
+				cb(true);
+			} else {
+				User.findByIdAndUpdate(
+					followerID,
+					{$push: {usersBeingFollowed: toFollowId}},
+					{safe: true, new: true},
+					function(err, model){
+						if (err){
+							cb(true);
+						} else {
+							cb(null, model);
+						}
+					}
+				)
+			}
+		}
+	)
+}
+
+const unfollow = (unfollowerId, toUnfollowId, cb) => { //REVISE only update
+	User.findByIdAndUpdate(
+		toUnfollowId,
+		{$pull: {usersFollowing: unfollowerId}},
+		{safe: true, new: true},
+		function(err, model){
+			if (err){
+				return	cb(true);
+			} else {
+				User.findByIdAndUpdate(
+					unfollowerId,
+					{$pull: {usersBeingFollowed: toUnfollowId}},
+					{safe: true, new: true},
+					function(err, model){
+						if (err){
+							cb(true);
+						} else {
+							cb(null, model)
+						}
+					}
+				)
+			}
+		}
+	)
+}
+
+module.exports.toggleFollow = function(currUserId, otherUserId, cb){
+	User.findById(currUserId, (err, currUser) => {
+		if (err){
+			return callback(err);
+		} 
+
+		const followingIDs = currUser["usersBeingFollowed"];
+		if (followingIDs.some((id) => {
+			return (otherUserId.equals(id));
+		})) {
+			unfollow(currUserId, otherUserId, cb)
+		} else {
+			follow(currUserId, otherUserId, cb)
+		}
+	})
+}
+
 // module.exports.saveProfilePic = function(userID, callback){
 
 // }
