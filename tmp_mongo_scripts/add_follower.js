@@ -6,8 +6,8 @@ mongoose.Promise = es6Promise.Promise;
 
 const db = config.configDB();
 
-const user1Id = mongoose.Types.ObjectId("58926ae09c87d022d791c207");
-const user2Id = mongoose.Types.ObjectId("58998280acd2114190586141");
+const user1Id = mongoose.Types.ObjectId("589992add19b9a435d067a1b");
+const user2Id = mongoose.Types.ObjectId("589991231295f3431017a764");
 
 User.findByIdAndUpdate(
 	user1Id,
