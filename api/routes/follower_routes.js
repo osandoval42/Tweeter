@@ -25,9 +25,9 @@ const configFollowerRoutes = (router) => {
 		})
 	})
 	router.post('/follow', (req, res) => { //REVISE protect CSRF
-		const currUser = req.user;//REVISE GET OFF SESSION TOKEN
+		const currUser = req.user;
 		if (!currUser){
-			return res.status(401).send({"ok": false}); 
+			return res.status(401).send({"error": "You must be logged in to follow someone"}); 
 		}
 		const currUserId = currUser['_id'];
 		const strUserId = req.body.toFollowId;
@@ -40,7 +40,6 @@ const configFollowerRoutes = (router) => {
 				res.send(updatedCurrUser);
 			}
 		});
-		//send back user
 	})
 }
 

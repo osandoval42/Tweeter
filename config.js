@@ -99,7 +99,17 @@ export default {
 	setupRoutes(server){
 		server.use('/api', apiRouter);
 		server.get('/*', (req, res) => {
-    		res.render('index', {currentUser: req.user});
+			let currUser;
+			if (req.user){
+				currUser = {};
+				currUser.username = req.user.username;
+				currUser.usersBeingFollowed = req.user.usersBeingFollowed;
+				currUser.usersFollowing = req.user.usersFollowing;
+				currUser["_id"] = req.user["_id"];
+			} else {
+				currUser = undefined;
+			}
+    		res.render('index', {currentUser: currUser});
   		});
 	}
 };

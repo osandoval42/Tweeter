@@ -74,7 +74,7 @@ const getFollowing = (userID, callback, type) => {
 		const followingIDs = userOfInterest[type];
 		User.find({
 			'_id': { $in: followingIDs}
-		}, callback);
+		}).select('username').exec(callback);
 	})
 }
 
@@ -98,7 +98,7 @@ const follow = (followerID, toFollowId, cb) => {
 				User.findByIdAndUpdate(
 					followerID,
 					{$push: {usersBeingFollowed: toFollowId}},
-					{safe: true, new: true},
+					{safe: true, new: true, fields: {username: 1, usersBeingFollowed: 1, usersFollowing: 1}},
 					function(err, model){
 						if (err){
 							cb(true);
@@ -123,7 +123,7 @@ const unfollow = (unfollowerId, toUnfollowId, cb) => {
 				User.findByIdAndUpdate(
 					unfollowerId,
 					{$pull: {usersBeingFollowed: toUnfollowId}},
-					{safe: true, new: true},
+					{safe: true, new: true, fields: {username: 1}},
 					function(err, model){
 						if (err){
 							cb(true);
