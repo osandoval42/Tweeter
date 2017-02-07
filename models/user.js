@@ -87,7 +87,7 @@ module.exports.usersFollowing = function(userID, callback){
 	getFollowing(userID, callback, "usersFollowing");
 }
 
-const follow = (followerID, toFollowId, cb) => { //REVISE only update
+const follow = (followerID, toFollowId, cb) => { 
 	User.update(
 		{ _id: toFollowId},
 		{$push: {usersFollowing: followerID}},
@@ -112,10 +112,10 @@ const follow = (followerID, toFollowId, cb) => { //REVISE only update
 	)
 }
 
-const unfollow = (unfollowerId, toUnfollowId, cb) => { //REVISE only update
+const unfollow = (unfollowerId, toUnfollowId, cb) => { 
 	User.update(
 		{ _id: toUnfollowId},
-		{$pull: {usersFollowing: unfollowerId}},
+		{$pull: {usersFollowing: unfollowerId}}, 
 		function(err){
 			if (err){
 				return	cb(true);
@@ -133,8 +133,7 @@ const unfollow = (unfollowerId, toUnfollowId, cb) => { //REVISE only update
 					}
 				)
 			}
-		}
-	)
+		})
 }
 
 module.exports.toggleFollow = function(currUserId, otherUserId, cb){

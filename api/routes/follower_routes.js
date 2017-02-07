@@ -25,9 +25,12 @@ const configFollowerRoutes = (router) => {
 		})
 	})
 	router.post('/follow', (req, res) => { //REVISE protect CSRF
-		const currUserId = mongoose.Types.ObjectId(req.body.currUserId);//REVISE GET OFF SESSION TOKEN
+		const currUser = req.user;//REVISE GET OFF SESSION TOKEN
+		if (!currUser){
+			return res.status(401).send({"ok": false}); 
+		}
+		const currUserId = currUser['_id'];
 		const strUserId = req.body.toFollowId;
-		
 		const toFollowId = mongoose.Types.ObjectId(strUserId);
 		User.toggleFollow(currUserId, toFollowId, (err, updatedCurrUser) => {
 			if (err) { 
