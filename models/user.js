@@ -1,0 +1,96 @@
+var mongoose = require('mongoose');
+var bcrypt = require('bcryptjs');
+import es6Promise from 'es6-promise';
+mongoose.Promise = es6Promise.Promise;
+
+var UserSchema = mongoose.Schema({
+	//REVISE add profile pic and cover pic
+	firstName: {
+		type: String,
+		trim: true,
+		sparse: true //REVISE DELETE
+	},
+	lastName: {
+		type: String,
+		trim: true,
+		sparse: true //REVISE DELETE
+	},
+	username: {
+		type: String,
+		index: true,
+		unique: true,
+		trim: true
+	},
+	password: {
+		type: String
+	},
+	email: {
+		type: String,
+		unique: true,
+		trim: true,
+		index: true,
+		sparse: true //REVISE DELETE
+	},
+	usersBeingFollowed: [mongoose.Schema.Types.ObjectId],
+	usersFollowing: [mongoose.Schema.Types.ObjectId]
+}, 	{timestamps: true});
+
+var User = module.exports = mongoose.model('User', UserSchema);
+
+module.exports.createUser = function(newUser, callback){
+	bcrypt.genSalt(10, function(err, salt) {
+	    bcrypt.hash(newUser.password, salt, function(err, hash) {
+	        newUser.password = hash;
+	        newUser.save(callback);
+	    });
+	});
+}
+
+module.exports.getUserByUsername = function(username, callback){
+	var query = {username: username};
+	User.findOne(query).then(callback)
+     .catch(error => {
+       console.error(error);
+     });;
+}
+
+module.exports.getUserById = function(id, callback){
+	User.findById(id, callback);
+}
+
+module.exports.comparePassword = function(candidatePassword, hash, callback){
+	bcrypt.compare(candidatePassword, hash, function(err, isMatch) {
+    	if(err) throw err;
+    	callback(null, isMatch);
+	});
+}
+
+const getFollowing = (userID, callback, type) => {
+	const id = mongoose.Types.ObjectId(userID);
+	User.findById(id, (err, userOfInterest) => {
+		if (err){
+			return callback(err);
+		} 
+		const followingIDs = userOfInterest[type];
+		User.find({
+			'_id': { $in: followingIDs}
+		}, callback);
+	})
+}
+
+module.exports.usersBeingFollowed = function(userID, callback){
+	getFollowing(userID, callback, "usersBeingFollowed");
+}
+
+
+module.exports.usersFollowing = function(userID, callback){
+	getFollowing(userID, callback, "usersFollowing");
+}
+
+// module.exports.saveProfilePic = function(userID, callback){
+
+// }
+
+// module.exports.saveCoverPic = function(userID, callback){
+
+// }
