@@ -1,6 +1,7 @@
 import express from 'express';
 import passport from 'passport';
 import User from '../../models/user';
+import RouteHelpers from '../util/route_helpers';
 var mongoose = require('mongoose');
 
 const configFollowerRoutes = (router) => {
@@ -26,20 +27,19 @@ const configFollowerRoutes = (router) => {
 	})
 	router.post('/follow', (req, res) => { //REVISE protect CSRF
 		const currUser = req.user;
-		if (!currUser){
-			return res.status(401).send({"error": "You must be logged in to follow someone"}); 
+		if (RouteHelpers.ensureLoggedIn(currUser)){
+			const currUserId = currUser['_id'];
+			const strUserId = req.body.toFollowId;
+			const toFollowId = mongoose.Types.ObjectId(strUserId);
+			User.toggleFollow(currUserId, toFollowId, (err, updatedCurrUser) => {
+				if (err) { 
+					return res.status(401).send({"ok": false}); 
+				}
+				else { 
+					res.send(updatedCurrUser);
+				}
+			});
 		}
-		const currUserId = currUser['_id'];
-		const strUserId = req.body.toFollowId;
-		const toFollowId = mongoose.Types.ObjectId(strUserId);
-		User.toggleFollow(currUserId, toFollowId, (err, updatedCurrUser) => {
-			if (err) { 
-				return res.status(401).send({"ok": false}); 
-			}
-			else { 
-				res.send(updatedCurrUser);
-			}
-		});
 	})
 }
 
