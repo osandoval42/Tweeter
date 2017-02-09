@@ -73,7 +73,67 @@ module.exports.postTweet = (content, currUserId, cb) => {
 	});
 }
 
-module.exports.replyTweet = (content, currUserId, original, cb) => {
+
+
+module.exports.retweet = (currUserId, original, cb) => { //REVISE disallow self retweet
+	const originalTweetId = mongoose.Types.ObjectId(original['_id']);
+	Tweet.getTweetById(originalTweetId, (err, tweet) => {
+		if (tweet){
+			const retweet = new Tweet({
+				authorId: currUserId,
+				retweetId: originalTweetId
+			})
+			retweet.save(cb); //Revise to send up content of original with retweet
+		} else {
+			cb(true);
+		}
+	})
+}
+
+module.exports.delete = (currUserId, tweetId, cb) => { 
+	Tweet.findOneAndRemove({_id: tweetId, authorId: currUserId}, (err, deletedTweet) => {
+		if (err || !deletedTweet){
+			cb(true);
+		} else {
+			const deletedId = deletedTweet['_id'];
+			Tweet.remove({$or: [{replyToId: deletedId}, {retweetId: deletedId}]}, (err) => {
+				if (err) {console.err(`delete retweets and replies err is ${err}`);}
+			})
+			cb(undefined, deletedTweet);
+		}
+	})
+}
+
+const getFeedTweets = (query, cb) => {
+	Tweet.find(query ,null, 
+		{limit: 10, sort: { _id: -1}}, 
+		(err, tweets) => {
+			cb(err, tweets);
+	})
+}
+
+module.exports.feedTweets = (currUserId, lastDownloadedTweetId, cb) => {
+	const query = lastDownloadedTweetId ? {_id: {$lt: lastDownloadedTweetId}} : {};
+	if (currUserId){
+		User.usersBeingFollowed(currUserId, (err, usersBeingFollowed) => {
+			if (err){return cb(err);}
+
+			const beingFollowedIds = usersBeingFollowed.map((user) => {return user['_id'];});
+			query.authorId = {$in: beingFollowedIds};
+			getFeedTweets(query, cb);
+		})
+	} else {
+		getFeedTweets(query, cb);
+	}
+}
+
+module.exports.userTweets = (userId, lastDownloadedTweetId, cb) => {
+	const query = lastDownloadedTweetId ? {_id: {$lt: lastDownloadedTweetId}} : {};
+	query.authorId = userId;
+	getFeedTweets(query, cb);
+}
+
+module.exports.replyTweet = (content, currUserId, original, cb) => { //REVISE disallow self reply
 	parseAtSymbols(content, (tweetedAtIds) => {
 		verifyRepliedToAuthor(tweetedAtIds, original, (didReply) => {
 			console.log(`did reply is ${didReply}`);
