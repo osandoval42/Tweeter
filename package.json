@@ -12,6 +12,7 @@
   "license": "GPL-3.0",
   "homepage": "https://github.com/jscomplete/learn-fullstack-javascript#readme",
   "dependencies": {
+    "async": "^2.1.4",
     "axios": "^0.15.0",
     "bcryptjs": "*",
     "body-parser": "^1.15.2",

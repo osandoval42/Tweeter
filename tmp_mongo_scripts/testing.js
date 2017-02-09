@@ -5,10 +5,3 @@ import es6Promise from 'es6-promise';
 mongoose.Promise = es6Promise.Promise;
 
 const db = config.configDB();
-
-console.log(`hello rara`);
-
-User.getUserByUsername("patrick", function(user) {
-	console.log("call back hit");
-	console.log(`user is ${user}`);
-})

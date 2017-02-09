@@ -3,41 +3,27 @@ var bcrypt = require('bcryptjs');
 import es6Promise from 'es6-promise';
 import User from './user';
 mongoose.Promise = es6Promise.Promise;
+import async from 'async';
 
-const parseAtSymbols = (content, saveTweet) => {
+
+const parseAtSymbols = (content, cb) => {
 	let namesTweetedAt = content.split('@');
-	console.log(`names tweeted at are ${namesTweetedAt}`);
 	let idsTweetedAt = [];
-
-	if (namesTweetedAt.length === 0){
-		saveTweet(idsTweetedAt);
-	} else {
-		namesTweetedAt.forEach((stringWithName, i) => {
-			if (i === 0){
-				return;
+	async.eachSeries(namesTweetedAt, (stringWithName, next) => {
+		let idxAfterName = stringWithName.indexOf(" ");
+		let username = (idxAfterName === -1) ? stringWithName : stringWithName.slice(0, idxAfterName);
+		User.getUserByUsername(username, function(user, err){
+			if (err) console.error(`err is ${err}`)
+			if (user !== null){
+				console.log(`user is ${user}`);
+				const userId = user['_id'];
+				idsTweetedAt.push(userId);
 			}
-			let idxAfterName = stringWithName.indexOf(" ");
-			let username = (idxAfterName === -1) ? stringWithName : stringWithName.slice(0, idxAfterName);
-			if (i === (namesTweetedAt.length - 1)){
-				User.getUserByUsername(username, function(user){
-					if (user !== null){
-						const userId = user['_id'];
-						idsTweetedAt.push(userId);
-					}
-					saveTweet(idsTweetedAt);
-				})
-			} else {
-				User.getUserByUsername(username, function(user){
-					if (user !== null){
-						const userId = user['_id'];
-						idsTweetedAt.push(userId);
-					}
-				})
-			}
-			// console.log(`i is ${i} out of ${namesTweetedAt.length - 1}`);
-			// console.log(`current idsTweetedAt are ${idsTweetedAt}`);
+			next()
 		})
-	}
+	}, (err) => {
+		cb(idsTweetedAt);
+	})
 }
 
 const TweetSchema = mongoose.Schema({ //REVISE img data
@@ -65,6 +51,15 @@ const TweetSchema = mongoose.Schema({ //REVISE img data
 
 const Tweet = module.exports = mongoose.model('Tweet', TweetSchema);
 
+module.exports.getTweetById = function(id, callback){
+	Tweet.findById(id, callback);
+}
+
+const verifyRepliedToAuthor = (tweetedAtIds, originalTweet, cb) => {
+	const originalAuthorId = mongoose.Types.ObjectId(originalTweet.authorId);
+	cb(tweetedAtIds.some((tweetedAtId) => {return tweetedAtId['_id'] === originalAuthorId['_id']}));
+}
+
 //REVISE test for empty string content
 module.exports.postTweet = (content, currUserId, cb) => {
 	//REVISE parse content for @s to determine ids
@@ -76,4 +71,19 @@ module.exports.postTweet = (content, currUserId, cb) => {
 		})
 		newPost.save(cb);
 	});
+}
+
+module.exports.replyTweet = (content, currUserId, original, cb) => {
+	parseAtSymbols(content, (tweetedAtIds) => {
+		verifyRepliedToAuthor(tweetedAtIds, original, (didReply) => {
+			console.log(`did reply is ${didReply}`);
+			const newPost = new Tweet({
+				content,
+				authorId: currUserId,
+				tweetedAt: tweetedAtIds,
+				replyToId: didReply ? mongoose.Types.ObjectId(original['_id']) : undefined
+			})
+			newPost.save(cb);
+		})
+	})
 }
