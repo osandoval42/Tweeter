@@ -28,7 +28,6 @@ const configTweetRoutes = (router) => {
 		// if (RouteHelpers.ensureLoggedIn(currUser, res)){
 			// const currUserId = currUser['_id'];
 			const currUserId = mongoose.Types.ObjectId(req.body.posterId); //Revise Delete and uncommment rest
-			debugger;
 			const content = req.body.content;
 			const original = req.body.original;
 			Tweet.replyTweet(content, currUserId, original, (err, newReply) => {
@@ -47,12 +46,12 @@ const configTweetRoutes = (router) => {
 			// const currUserId = currUser['_id'];
 			const currUserId = mongoose.Types.ObjectId(req.body.posterId); //Revise Delete and uncommment rest
 			const original = req.body.original;
-			Tweet.retweet(currUserId, original, (err, retweet) => {
+			Tweet.retweet(currUserId, original, (err, originalTweetAfterRetweet) => {
 				if (err) { 
 					return res.status(401).send({"ok": false}); 
 				}
 				else { 
-					res.send(retweet);
+					res.send(originalTweetAfterRetweet);
 				}
 			})
 		// }

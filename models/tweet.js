@@ -2,6 +2,7 @@ var mongoose = require('mongoose');
 var bcrypt = require('bcryptjs');
 import es6Promise from 'es6-promise';
 import User from './user';
+import Like from './like';
 mongoose.Promise = es6Promise.Promise;
 import async from 'async';
 
@@ -55,7 +56,7 @@ module.exports.getTweetById = function(id, callback){
 	Tweet.findById(id, callback);
 }
 
-const verifyRepliedToAuthor = (tweetedAtIds, originalTweet, cb) => {
+const verifyTweetedAtOriginalAuthor = (tweetedAtIds, originalTweet, cb) => {
 	const originalAuthorId = mongoose.Types.ObjectId(originalTweet.authorId);
 	cb(tweetedAtIds.some((tweetedAtId) => {return tweetedAtId['_id'] === originalAuthorId['_id']}));
 }
@@ -74,7 +75,7 @@ module.exports.postTweet = (content, currUserId, cb) => {
 }
 
 
-
+// REVISE to send back actual tweet
 module.exports.retweet = (currUserId, original, cb) => { //REVISE disallow self retweet
 	const originalTweetId = mongoose.Types.ObjectId(original['_id']);
 	Tweet.getTweetById(originalTweetId, (err, tweet) => {
@@ -104,13 +105,84 @@ module.exports.delete = (currUserId, tweetId, cb) => {
 	})
 }
 
+const getRetweets = (tweetToGetRetweetsFor, next, retweet) => {
+	Tweet.find({retweetId: tweetToGetRetweetsFor['_id']}, (err, retweets) => {
+		if (retweet){
+			retweet.retweets = retweets;
+		} else {
+			tweetToGetRetweetsFor.retweets = retweets;
+		}
+		next();
+	})
+}
+
+const getLikes = (tweetToGetLikes, next, retweet) => {
+	Like.find({tweetId: tweetToGetLikes['_id']}, (err, likes) => {
+		if (retweet){
+			retweet.likes = likes;
+		} else {
+			tweetToGetLikes.likes = likes;
+		}
+		next();
+	})
+}
+
 const getFeedTweets = (query, cb) => {
 	Tweet.find(query ,null, 
 		{limit: 10, sort: { _id: -1}}, 
 		(err, tweets) => {
-			cb(err, tweets);
+			const jsonTweets = tweets.map((tweet) => {return tweet.toObject();});
+			async.eachSeries(jsonTweets, (tweet, next) => {
+				User.getUserById(tweet.authorId, (err, user) => {
+					tweet['authorName'] = user.username;
+					next();
+				})
+			}, (err) => {
+				async.eachSeries(jsonTweets, (tweet, next) => {
+					if (tweet.replyToId){
+						Tweet.findById(tweet.replyToId, (err, tweetRepliedTo) => {
+							User.getUserById(tweetRepliedTo.authorId, (err, user) => {
+								tweet.tweetRepliedTo = {
+									_id: tweetRepliedTo['id'],
+									content: tweetRepliedTo.content,
+									authorName: user.username
+								};
+								next();
+							})
+						})
+					} else {
+						next();
+					}
+				}, (err) => {
+					async.eachSeries(jsonTweets, (tweet, next) => {
+						const originalId = tweet.retweetId;
+						if (originalId){
+							Tweet.getTweetById(originalId, (err, originalTweet) => {
+								getLikes(originalTweet, next, tweet);
+							})
+						} else {
+							getLikes(tweet, next);
+						}
+					}, (err) => {
+						async.eachSeries(jsonTweets, (tweet, next) => {
+								const originalId = tweet.retweetId;
+								if (originalId){
+									Tweet.getTweetById(originalId, (err, originalTweet) => {
+										tweet.content = originalTweet.content;
+										getRetweets(originalTweet, next, tweet);
+									})
+								} else {
+									getRetweets(tweet, next);
+								}
+							}, (err) => {
+									cb(err, jsonTweets);						
+							})
+					})
+				})
+			})
 	})
 }
+
 
 module.exports.feedTweets = (currUserId, lastDownloadedTweetId, cb) => {
 	const query = lastDownloadedTweetId ? {_id: {$lt: lastDownloadedTweetId}} : {};
@@ -135,13 +207,13 @@ module.exports.userTweets = (userId, lastDownloadedTweetId, cb) => {
 
 module.exports.replyTweet = (content, currUserId, original, cb) => { //REVISE disallow self reply
 	parseAtSymbols(content, (tweetedAtIds) => {
-		verifyRepliedToAuthor(tweetedAtIds, original, (didReply) => {
-			console.log(`did reply is ${didReply}`);
+		verifyTweetedAtOriginalAuthor(tweetedAtIds, original, (didTweetAt) => {
+			console.log(`did reply is ${didTweetAt}`);
 			const newPost = new Tweet({
 				content,
 				authorId: currUserId,
 				tweetedAt: tweetedAtIds,
-				replyToId: didReply ? mongoose.Types.ObjectId(original['_id']) : undefined
+				replyToId: didTweetAt ? mongoose.Types.ObjectId(original['_id']) : undefined
 			})
 			newPost.save(cb);
 		})
