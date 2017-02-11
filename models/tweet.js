@@ -105,27 +105,80 @@ module.exports.delete = (currUserId, tweetId, cb) => {
 	})
 }
 
-const getRetweets = (tweetToGetRetweetsFor, next, retweet) => {
-	Tweet.find({retweetId: tweetToGetRetweetsFor['_id']}, (err, retweets) => {
+const getAuthorNameAndNext = (tweet, next, finalCB) => {
+			User.getUserById(tweet.authorId, (err, user) => {
+				if (err) {throw err;} //REVISE
+
+				tweet['authorName'] = user.username;
+				getTweetRepliedToAndNext(tweet, next, finalCB)
+			})
+}
+
+const getTweetRepliedToAndNext = (tweet, next, finalCB) => {
+	if (tweet.replyToId){
+		Tweet.findById(tweet.replyToId, (err, tweetRepliedTo) => {
+			if (err) {throw err;} //REVISE
+
+			User.getUserById(tweetRepliedTo.authorId, (err, user) => {
+				if (err) {throw err;} //REVISE
+
+				tweet.tweetRepliedTo = {
+					_id: tweetRepliedTo['id'],
+					content: tweetRepliedTo.content,
+					authorName: user.username
+				};
+				determineIfRetweet(tweet, next, finalCB);
+			})
+		})
+	} else {
+		determineIfRetweet(tweet, next, finalCB);
+	}
+}
+
+const determineIfRetweet = (tweet, next, finalCB) => {
+	const originalId = tweet.retweetId;
+	if (originalId){
+		Tweet.getTweetById(originalId, (err, originalTweet) => {
+			if (err) {throw err;} //REVISE
+
+			getLikesAndNext(originalTweet, tweet, next, finalCB);
+		})
+	} else {
+		getLikesAndNext(tweet, undefined, next, finalCB);
+	}
+}
+
+
+const getLikesAndNext = (tweetToGetLikesFor, retweet, next, finalCB) => {
+	Like.find({tweetId: tweetToGetLikesFor['_id']}, (err, likes) => {
+		if (err) {throw err;} //REVISE
+
+		if (retweet){
+			retweet.likes = likes;
+		} else {
+			tweetToGetLikesFor.likes = likes;
+		}
+		getRetweetsAndComplete(tweetToGetLikesFor, retweet, next, finalCB);
+	})
+}
+
+const getRetweetsAndComplete = (tweetToGetRetweetsFor, retweet, next, finalCB) => {
+		Tweet.find({retweetId: tweetToGetRetweetsFor['_id']}, (err, retweets) => {
+		if (err) {throw err;} //REVISE
+
 		if (retweet){
 			retweet.retweets = retweets;
 		} else {
 			tweetToGetRetweetsFor.retweets = retweets;
 		}
-		next();
+		if (next){
+			next()
+		} else {
+				retweet ? finalCB(null, retweet) : finalCB(null, tweetToGetRetweetsFor);
+		}
 	})
 }
 
-const getLikes = (tweetToGetLikes, next, retweet) => {
-	Like.find({tweetId: tweetToGetLikes['_id']}, (err, likes) => {
-		if (retweet){
-			retweet.likes = likes;
-		} else {
-			tweetToGetLikes.likes = likes;
-		}
-		next();
-	})
-}
 
 const getFeedTweets = (query, cb) => {
 	Tweet.find(query ,null, 
@@ -133,56 +186,12 @@ const getFeedTweets = (query, cb) => {
 		(err, tweets) => {
 			const jsonTweets = tweets.map((tweet) => {return tweet.toObject();});
 			async.eachSeries(jsonTweets, (tweet, next) => {
-				User.getUserById(tweet.authorId, (err, user) => {
-					tweet['authorName'] = user.username;
-					next();
-				})
+				getAuthorNameAndNext(tweet, next, undefined);
 			}, (err) => {
-				async.eachSeries(jsonTweets, (tweet, next) => {
-					if (tweet.replyToId){
-						Tweet.findById(tweet.replyToId, (err, tweetRepliedTo) => {
-							User.getUserById(tweetRepliedTo.authorId, (err, user) => {
-								tweet.tweetRepliedTo = {
-									_id: tweetRepliedTo['id'],
-									content: tweetRepliedTo.content,
-									authorName: user.username
-								};
-								next();
-							})
-						})
-					} else {
-						next();
-					}
-				}, (err) => {
-					async.eachSeries(jsonTweets, (tweet, next) => {
-						const originalId = tweet.retweetId;
-						if (originalId){
-							Tweet.getTweetById(originalId, (err, originalTweet) => {
-								getLikes(originalTweet, next, tweet);
-							})
-						} else {
-							getLikes(tweet, next);
-						}
-					}, (err) => {
-						async.eachSeries(jsonTweets, (tweet, next) => {
-								const originalId = tweet.retweetId;
-								if (originalId){
-									Tweet.getTweetById(originalId, (err, originalTweet) => {
-										tweet.content = originalTweet.content;
-										getRetweets(originalTweet, next, tweet);
-									})
-								} else {
-									getRetweets(tweet, next);
-								}
-							}, (err) => {
-									cb(err, jsonTweets);						
-							})
-					})
-				})
+				cb(err, jsonTweets);
 			})
 	})
 }
-
 
 module.exports.feedTweets = (currUserId, lastDownloadedTweetId, cb) => {
 	const query = lastDownloadedTweetId ? {_id: {$lt: lastDownloadedTweetId}} : {};
