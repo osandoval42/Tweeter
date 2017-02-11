@@ -1,7 +1,7 @@
 import express from 'express';
 import passport from 'passport';
 import User from '../../models/user';
-import Like from '../../models/like';
+import Like from '../../models/like/like_complete';
 import RouteHelpers from '../util/route_helpers';
 var mongoose = require('mongoose');
 

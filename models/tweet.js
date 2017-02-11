@@ -2,7 +2,7 @@ var mongoose = require('mongoose');
 var bcrypt = require('bcryptjs');
 import es6Promise from 'es6-promise';
 import User from './user';
-import Like from './like';
+import Like from './like/like_schema_only';
 mongoose.Promise = es6Promise.Promise;
 import async from 'async';
 
@@ -56,6 +56,14 @@ module.exports.getTweetById = function(id, callback){
 	Tweet.findById(id, callback);
 }
 
+module.exports.getTweetByIdWithAllInfo = (id, cb) => {
+	Tweet.findById(id, (err, tweet) => {
+		if (err) {return cb(true);}
+		const jsonTweet = tweet.toObject();
+		getAuthorNameAndNext(jsonTweet, undefined, cb);
+	});
+}
+
 const verifyTweetedAtOriginalAuthor = (tweetedAtIds, originalTweet, cb) => {
 	const originalAuthorId = mongoose.Types.ObjectId(originalTweet.authorId);
 	cb(tweetedAtIds.some((tweetedAtId) => {return tweetedAtId['_id'] === originalAuthorId['_id']}));
@@ -79,12 +87,18 @@ module.exports.postTweet = (content, currUserId, cb) => {
 module.exports.retweet = (currUserId, original, cb) => { //REVISE disallow self retweet
 	const originalTweetId = mongoose.Types.ObjectId(original['_id']);
 	Tweet.getTweetById(originalTweetId, (err, tweet) => {
+		if (err) {cb(true);}
+
 		if (tweet){
 			const retweet = new Tweet({
 				authorId: currUserId,
 				retweetId: originalTweetId
 			})
-			retweet.save(cb); //Revise to send up content of original with retweet
+			retweet.save((err, _) => {
+				if (err) {cb(true);}
+
+				Tweet.getTweetByIdWithAllInfo(originalTweetId, cb);
+			}); //Revise to send up content of original with retweet
 		} else {
 			cb(true);
 		}
@@ -104,81 +118,6 @@ module.exports.delete = (currUserId, tweetId, cb) => {
 		}
 	})
 }
-
-const getAuthorNameAndNext = (tweet, next, finalCB) => {
-			User.getUserById(tweet.authorId, (err, user) => {
-				if (err) {throw err;} //REVISE
-
-				tweet['authorName'] = user.username;
-				getTweetRepliedToAndNext(tweet, next, finalCB)
-			})
-}
-
-const getTweetRepliedToAndNext = (tweet, next, finalCB) => {
-	if (tweet.replyToId){
-		Tweet.findById(tweet.replyToId, (err, tweetRepliedTo) => {
-			if (err) {throw err;} //REVISE
-
-			User.getUserById(tweetRepliedTo.authorId, (err, user) => {
-				if (err) {throw err;} //REVISE
-
-				tweet.tweetRepliedTo = {
-					_id: tweetRepliedTo['id'],
-					content: tweetRepliedTo.content,
-					authorName: user.username
-				};
-				determineIfRetweet(tweet, next, finalCB);
-			})
-		})
-	} else {
-		determineIfRetweet(tweet, next, finalCB);
-	}
-}
-
-const determineIfRetweet = (tweet, next, finalCB) => {
-	const originalId = tweet.retweetId;
-	if (originalId){
-		Tweet.getTweetById(originalId, (err, originalTweet) => {
-			if (err) {throw err;} //REVISE
-
-			getLikesAndNext(originalTweet, tweet, next, finalCB);
-		})
-	} else {
-		getLikesAndNext(tweet, undefined, next, finalCB);
-	}
-}
-
-
-const getLikesAndNext = (tweetToGetLikesFor, retweet, next, finalCB) => {
-	Like.find({tweetId: tweetToGetLikesFor['_id']}, (err, likes) => {
-		if (err) {throw err;} //REVISE
-
-		if (retweet){
-			retweet.likes = likes;
-		} else {
-			tweetToGetLikesFor.likes = likes;
-		}
-		getRetweetsAndComplete(tweetToGetLikesFor, retweet, next, finalCB);
-	})
-}
-
-const getRetweetsAndComplete = (tweetToGetRetweetsFor, retweet, next, finalCB) => {
-		Tweet.find({retweetId: tweetToGetRetweetsFor['_id']}, (err, retweets) => {
-		if (err) {throw err;} //REVISE
-
-		if (retweet){
-			retweet.retweets = retweets;
-		} else {
-			tweetToGetRetweetsFor.retweets = retweets;
-		}
-		if (next){
-			next()
-		} else {
-				retweet ? finalCB(null, retweet) : finalCB(null, tweetToGetRetweetsFor);
-		}
-	})
-}
-
 
 const getFeedTweets = (query, cb) => {
 	Tweet.find(query ,null, 
@@ -226,5 +165,81 @@ module.exports.replyTweet = (content, currUserId, original, cb) => { //REVISE di
 			})
 			newPost.save(cb);
 		})
+	})
+}
+
+
+
+//EVERYTHING BELOW IS FACILITATES TWEET RENDERING
+const getAuthorNameAndNext = (tweet, next, finalCB) => {
+			User.getUserById(tweet.authorId, (err, user) => {
+				if (err) {throw err;} //REVISE
+
+				tweet['authorName'] = user.username;
+				getTweetRepliedToAndNext(tweet, next, finalCB)
+			})
+}
+
+const getTweetRepliedToAndNext = (tweet, next, finalCB) => {
+	if (tweet.replyToId){
+		Tweet.findById(tweet.replyToId, (err, tweetRepliedTo) => {
+			if (err) {throw err;} //REVISE
+
+			User.getUserById(tweetRepliedTo.authorId, (err, user) => {
+				if (err) {throw err;} //REVISE
+
+				tweet.tweetRepliedTo = {
+					_id: tweetRepliedTo['id'],
+					content: tweetRepliedTo.content,
+					authorName: user.username
+				};
+				determineIfRetweet(tweet, next, finalCB);
+			})
+		})
+	} else {
+		determineIfRetweet(tweet, next, finalCB);
+	}
+}
+
+const determineIfRetweet = (tweet, next, finalCB) => {
+	const originalId = tweet.retweetId;
+	if (originalId){
+		Tweet.getTweetById(originalId, (err, originalTweet) => {
+			if (err) {throw err;} //REVISE
+
+			getLikesAndNext(originalTweet, tweet, next, finalCB);
+		})
+	} else {
+		getLikesAndNext(tweet, undefined, next, finalCB);
+	}
+}
+
+const getLikesAndNext = (tweetToGetLikesFor, retweet, next, finalCB) => {
+	Like.find({tweetId: tweetToGetLikesFor['_id']}, (err, likes) => {
+		if (err) {throw err;} //REVISE
+
+		if (retweet){
+			retweet.likes = likes;
+		} else {
+			tweetToGetLikesFor.likes = likes;
+		}
+		getRetweetsAndComplete(tweetToGetLikesFor, retweet, next, finalCB);
+	})
+}
+
+const getRetweetsAndComplete = (tweetToGetRetweetsFor, retweet, next, finalCB) => {
+		Tweet.find({retweetId: tweetToGetRetweetsFor['_id']}, (err, retweets) => {
+		if (err) {throw err;} //REVISE
+
+		if (retweet){
+			retweet.retweets = retweets;
+		} else {
+			tweetToGetRetweetsFor.retweets = retweets;
+		}
+		if (next){
+			next()
+		} else {
+				retweet ? finalCB(null, retweet) : finalCB(null, tweetToGetRetweetsFor);
+		}
 	})
 }
