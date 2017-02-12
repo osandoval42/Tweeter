@@ -100,6 +100,20 @@ const configTweetRoutes = (router) => {
 					res.send(tweets);
 				}
 		})
+	}),
+	router.get('/tweet_replies', (req, res) => {
+		const tweetIdStr = req.query.tweetId;
+		const tweetId = tweetIdStr ? mongoose.Types.ObjectId(tweetIdStr) : undefined;
+		const lastDownloadedTweetIdStr = req.query.lastId;
+		const lastDownloadedTweetId = lastDownloadedTweetIdStr ? mongoose.Types.ObjectId(lastDownloadedTweetIdStr) : undefined;
+		Tweet.tweetReplies(tweetId, lastDownloadedTweetId, (err, replies) => {
+				if (err) { 
+					return res.status(401).send({"ok": false}); 
+				}
+				else { 
+					res.send(replies);
+				}
+		})
 	})
 }
 

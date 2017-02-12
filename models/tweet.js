@@ -132,6 +132,12 @@ const getFeedTweets = (query, cb) => {
 	})
 }
 
+module.exports.tweetReplies = (tweetId, lastDownloadedReplyId, cb) => {
+	const query = lastDownloadedReplyId ? {_id: {$lt: lastDownloadedReplyId}} : {};
+	query.replyToId = tweetId;
+	getFeedTweets(query, cb);
+}
+
 module.exports.feedTweets = (currUserId, lastDownloadedTweetId, cb) => {
 	const query = lastDownloadedTweetId ? {_id: {$lt: lastDownloadedTweetId}} : {};
 	if (currUserId){
@@ -174,8 +180,6 @@ module.exports.replyTweet = (content, currUserId, original, cb) => { //REVISE di
 const getAuthorNameAndNext = (tweet, next, finalCB) => {
 			User.getUserById(tweet.authorId, (err, user) => {
 				if (err) {throw err;} //REVISE
-
-				tweet['authorName'] = user.username;
 				getTweetRepliedToAndNext(tweet, next, finalCB)
 			})
 }
@@ -223,12 +227,12 @@ const getLikesAndNext = (tweetToGetLikesFor, retweet, next, finalCB) => {
 		} else {
 			tweetToGetLikesFor.likes = likes;
 		}
-		getRetweetsAndComplete(tweetToGetLikesFor, retweet, next, finalCB);
+		getRetweetsAndNext(tweetToGetLikesFor, retweet, next, finalCB);
 	})
 }
 
-const getRetweetsAndComplete = (tweetToGetRetweetsFor, retweet, next, finalCB) => {
-		Tweet.find({retweetId: tweetToGetRetweetsFor['_id']}, (err, retweets) => {
+const getRetweetsAndNext = (tweetToGetRetweetsFor, retweet, next, finalCB) => {
+	Tweet.find({retweetId: tweetToGetRetweetsFor['_id']}, (err, retweets) => {
 		if (err) {throw err;} //REVISE
 
 		if (retweet){
@@ -236,10 +240,25 @@ const getRetweetsAndComplete = (tweetToGetRetweetsFor, retweet, next, finalCB) =
 		} else {
 			tweetToGetRetweetsFor.retweets = retweets;
 		}
+
+		getReplyCountAndComplete(tweetToGetRetweetsFor, retweet, next, finalCB);
+	})
+}
+
+const getReplyCountAndComplete = (tweetToGetReplyCountFor, retweet, next, finalCB) => {
+	Tweet.count({replyToId: tweetToGetReplyCountFor['_id']}, (err, count) => {
+		if (err) {throw err;}
+
+		if (retweet){
+			retweet.replyCount = count;
+		} else {
+			tweetToGetReplyCountFor.replyCount = count;
+		}
+
 		if (next){
 			next()
 		} else {
-				retweet ? finalCB(null, retweet) : finalCB(null, tweetToGetRetweetsFor);
-		}
+			retweet ? finalCB(null, retweet) : finalCB(null, tweetToGetReplyCountFor);
+		}		
 	})
 }
