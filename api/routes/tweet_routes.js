@@ -8,10 +8,9 @@ var mongoose = require('mongoose');
 
 const configTweetRoutes = (router) => {
 	router.post('/tweet', (req, res) => {
-		// const currUser = req.user;
-		// if (RouteHelpers.ensureLoggedIn(currUser, res)){
-			// const currUserId = currUser['_id'];
-			const currUserId = mongoose.Types.ObjectId(req.body.posterId); //Revise Delete and uncommment rest
+		const currUser = req.user;
+		if (RouteHelpers.ensureLoggedIn(currUser, res)){
+			const currUserId = currUser['_id'];
 			const content = req.body.content;
 			Tweet.postTweet(content, currUserId, (err, newPost) => {
 				if (err) { 
@@ -21,13 +20,12 @@ const configTweetRoutes = (router) => {
 					res.send(newPost);
 				}
 			})
-		// }
+		}
 	})
 	router.post('/tweet_reply', (req, res) => {
-		// const currUser = req.user;
-		// if (RouteHelpers.ensureLoggedIn(currUser, res)){
-			// const currUserId = currUser['_id'];
-			const currUserId = mongoose.Types.ObjectId(req.body.posterId); //Revise Delete and uncommment rest
+		const currUser = req.user;
+		if (RouteHelpers.ensureLoggedIn(currUser, res)){
+			const currUserId = currUser['_id'];
 			const content = req.body.content;
 			const original = req.body.original;
 			Tweet.replyTweet(content, currUserId, original, (err, newReply) => {
@@ -38,13 +36,12 @@ const configTweetRoutes = (router) => {
 					res.send(newReply);
 				}
 			})
-		// }
+		}
 	}),
 	router.post('/retweet', (req, res) => {
-		// const currUser = req.user;
-		// if (RouteHelpers.ensureLoggedIn(currUser, res)){
-			// const currUserId = currUser['_id'];
-			const currUserId = mongoose.Types.ObjectId(req.body.posterId); //Revise Delete and uncommment rest
+		const currUser = req.user;
+		if (RouteHelpers.ensureLoggedIn(currUser, res)){
+			const currUserId = currUser['_id'];
 			const original = req.body.original;
 			Tweet.retweet(currUserId, original, (err, originalTweetAfterRetweet) => {
 				if (err) { 
@@ -54,13 +51,12 @@ const configTweetRoutes = (router) => {
 					res.send(originalTweetAfterRetweet);
 				}
 			})
-		// }
+		}
 	}),
 	router.delete('/tweet', (req, res) => {
-		// const currUser = req.user;
-		// if (RouteHelpers.ensureLoggedIn(currUser, res)){
-			// const currUserId = currUser['_id'];
-			const currUserId = mongoose.Types.ObjectId(req.body.posterId); //Revise Delete and uncommment rest
+		const currUser = req.user;
+		if (RouteHelpers.ensureLoggedIn(currUser, res)){
+			const currUserId = currUser['_id'];
 			const tweetId = mongoose.Types.ObjectId(req.body.tweetId);
 			Tweet.delete(currUserId, tweetId, (err, deletedTweet) => {
 				if (err) { 
@@ -70,12 +66,11 @@ const configTweetRoutes = (router) => {
 					res.send(deletedTweet);
 				}
 			})
-		// }
+		}
 	}),
 	router.get('/feed_tweets', (req, res) => {
-		// const currUserIdStr = req.user;
-		const currUserIdStr = req.query.currUserId;//REVISE DELETE AND UNCOMMENT REST
-		const currUserId = currUserIdStr ? mongoose.Types.ObjectId(currUserIdStr) : undefined;
+		const currUser = req.user;
+		const currUserId = currUser ? currUser['_id'] : undefined;
 		const lastDownloadedTweetIdStr = req.query.lastId;
 		const lastDownloadedTweetId = lastDownloadedTweetIdStr ? mongoose.Types.ObjectId(lastDownloadedTweetIdStr) : undefined;
 		Tweet.feedTweets(currUserId, lastDownloadedTweetId, (err, tweets) => {
@@ -88,7 +83,7 @@ const configTweetRoutes = (router) => {
 		})
 	}),
 	router.get('/user_tweets', (req, res) => {
-		const userIdStr = req.query.user;
+		const userIdStr = req.query.userId;
 		const userId = userIdStr ? mongoose.Types.ObjectId(userIdStr) : undefined;
 		const lastDownloadedTweetIdStr = req.query.lastId;
 		const lastDownloadedTweetId = lastDownloadedTweetIdStr ? mongoose.Types.ObjectId(lastDownloadedTweetIdStr) : undefined;
