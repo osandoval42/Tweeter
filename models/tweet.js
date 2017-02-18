@@ -60,7 +60,7 @@ module.exports.getTweetByIdWithAllInfo = (id, cb) => {
 	Tweet.findById(id, (err, tweet) => {
 		if (err) {return cb(true);}
 		const jsonTweet = tweet.toObject();
-		getAuthorNameAndNext(jsonTweet, undefined, cb);
+		getTweetRepliedToAndNext(jsonTweet, undefined, cb);
 	});
 }
 
@@ -125,7 +125,7 @@ const getFeedTweets = (query, cb) => {
 		(err, tweets) => {
 			const jsonTweets = tweets.map((tweet) => {return tweet.toObject();});
 			async.eachSeries(jsonTweets, (tweet, next) => {
-				getAuthorNameAndNext(tweet, next, undefined);
+				getTweetRepliedToAndNext(tweet, next, undefined);
 			}, (err) => {
 				cb(err, jsonTweets);
 			})
@@ -177,10 +177,11 @@ module.exports.replyTweet = (content, currUserId, original, cb) => { //REVISE di
 
 
 //EVERYTHING BELOW IS FACILITATES TWEET RENDERING
-const getAuthorNameAndNext = (tweet, next, finalCB) => {
+const getAuthorNameAndNext = (tweet, next, finalCB, tweetToReturn) => {
 			User.getUserById(tweet.authorId, (err, user) => {
 				if (err) {throw err;} //REVISE
-				getTweetRepliedToAndNext(tweet, next, finalCB)
+				tweet.authorName = user.username;
+				determineIfRetweet(tweet, next, finalCB, tweetToReturn)
 			})
 }
 
@@ -197,68 +198,54 @@ const getTweetRepliedToAndNext = (tweet, next, finalCB) => {
 					content: tweetRepliedTo.content,
 					authorName: user.username
 				};
-				determineIfRetweet(tweet, next, finalCB);
+				getAuthorNameAndNext(tweet, next, finalCB);
 			})
 		})
 	} else {
-		determineIfRetweet(tweet, next, finalCB);
+		getAuthorNameAndNext(tweet, next, finalCB);
 	}
 }
 
-const determineIfRetweet = (tweet, next, finalCB) => {
+const determineIfRetweet = (tweet, next, finalCB, tweetToReturn) => {
 	const originalId = tweet.retweetId;
 	if (originalId){
 		Tweet.getTweetById(originalId, (err, originalTweet) => {
 			if (err) {throw err;} //REVISE
-
-			getLikesAndNext(originalTweet, tweet, next, finalCB);
+			const jsonOriginalTweet = originalTweet.toObject();
+			tweet.retweet = jsonOriginalTweet;
+			getAuthorNameAndNext(jsonOriginalTweet, next, finalCB, tweetToReturn);
 		})
 	} else {
-		getLikesAndNext(tweet, undefined, next, finalCB);
+		getLikesAndNext(tweet, next, finalCB, tweetToReturn);
 	}
 }
 
-const getLikesAndNext = (tweetToGetLikesFor, retweet, next, finalCB) => {
+const getLikesAndNext = (tweetToGetLikesFor, next, finalCB, tweetToReturn) => {
 	Like.find({tweetId: tweetToGetLikesFor['_id']}, (err, likes) => {
 		if (err) {throw err;} //REVISE
-
-		if (retweet){
-			retweet.likes = likes;
-		} else {
-			tweetToGetLikesFor.likes = likes;
-		}
-		getRetweetsAndNext(tweetToGetLikesFor, retweet, next, finalCB);
+		tweetToGetLikesFor.likes = likes;
+		getRetweetsAndNext(tweetToGetLikesFor, next, finalCB, tweetToReturn);
 	})
 }
 
-const getRetweetsAndNext = (tweetToGetRetweetsFor, retweet, next, finalCB) => {
+const getRetweetsAndNext = (tweetToGetRetweetsFor, next, finalCB, tweetToReturn) => {
 	Tweet.find({retweetId: tweetToGetRetweetsFor['_id']}, (err, retweets) => {
 		if (err) {throw err;} //REVISE
-
-		if (retweet){
-			retweet.retweets = retweets;
-		} else {
-			tweetToGetRetweetsFor.retweets = retweets;
-		}
-
-		getReplyCountAndComplete(tweetToGetRetweetsFor, retweet, next, finalCB);
+		tweetToGetRetweetsFor.retweets = retweets;
+		getReplyCountAndComplete(tweetToGetRetweetsFor, next, finalCB, tweetToReturn);
 	})
 }
 
-const getReplyCountAndComplete = (tweetToGetReplyCountFor, retweet, next, finalCB) => {
+const getReplyCountAndComplete = (tweetToGetReplyCountFor, next, finalCB, tweetToReturn) => {
 	Tweet.count({replyToId: tweetToGetReplyCountFor['_id']}, (err, count) => {
 		if (err) {throw err;}
 
-		if (retweet){
-			retweet.replyCount = count;
-		} else {
-			tweetToGetReplyCountFor.replyCount = count;
-		}
+		tweetToGetReplyCountFor.replyCount = count;
 
 		if (next){
 			next()
 		} else {
-			retweet ? finalCB(null, retweet) : finalCB(null, tweetToGetReplyCountFor);
+			tweetToReturn ? finalCB(null, tweetToReturn) : finalCB(null, tweetToGetReplyCountFor);
 		}		
 	})
 }

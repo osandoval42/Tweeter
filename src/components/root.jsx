@@ -3,6 +3,7 @@ import { Provider } from 'react-redux';
 import { Router, Route, IndexRoute, browserHistory } from 'react-router';
 import App from './app';
 import Home from './home/home_container';
+import HomeToBe from './home_to_be/home';
 
 const Root = ({store}) => {
   // const _ensureLoggedIn = (nextState, replace) => {
@@ -23,7 +24,8 @@ return (
     <Provider store= {store}>
       <Router history={browserHistory}>
         <Route path="/" component={App}>
-        <IndexRoute component={Home} />
+          <IndexRoute component={Home} />
+          <Route path="home" component={HomeToBe} />
         </Route>
       </Router>
     </Provider>

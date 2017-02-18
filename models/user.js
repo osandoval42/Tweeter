@@ -46,6 +46,16 @@ module.exports.createUser = function(newUser, callback){
 	});
 }
 
+module.exports.createUserWithPromise = (newUser) => {
+	const promise = new es6Promise.Promise((resolve, reject) => {
+		User.createUser(newUser, (err, user) => {
+			if (err){throw err;}
+			else{resolve(user);}
+		})
+	})
+	return promise;
+}
+
 module.exports.getUserByUsername = function(username, callback){
 	var query = {username: username};
 	User.findOne(query).then(callback)

@@ -6,7 +6,8 @@
   "scripts": {
     "start": "nodemon --exec babel-node app.js --ignore public/",
     "test": "nodemon --exec babel-node --inspect app.js --ignore public/",
-    "dev": "webpack -wd"
+    "dev": "webpack -wd",
+    "seed": "babel-node tmp_mongo_scripts/seed_db.js"
   },
   "author": "",
   "license": "GPL-3.0",
