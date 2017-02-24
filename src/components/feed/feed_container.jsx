@@ -1,11 +1,10 @@
 import {connect} from 'react-redux';
 import Feed from './feed';
 import {fetchAllTweets} from '../../actions/tweet_actions';
-import thunk from 'redux-thunk';
 
 
 const mapStateToProps = (state) => ({
-	tweets: state.tweets
+	tweets: state.tweets,
 });
 
 const mapDispatchToProps = (dispatch) => ({

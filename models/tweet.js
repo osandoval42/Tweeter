@@ -159,6 +159,14 @@ module.exports.userTweets = (userId, lastDownloadedTweetId, cb) => {
 	getFeedTweets(query, cb);
 }
 
+module.exports.getTweetCount = (userId, cb) => {
+	const query = {authorId: userId};
+	Tweet.count({authorId: userId}, (err, count) => {
+		if (err) {cb(err);}
+		return cb(null, count);
+	})
+}
+
 module.exports.replyTweet = (content, currUserId, original, cb) => { //REVISE disallow self reply
 	parseAtSymbols(content, (tweetedAtIds) => {
 		verifyTweetedAtOriginalAuthor(tweetedAtIds, original, (didTweetAt) => {

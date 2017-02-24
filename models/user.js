@@ -163,6 +163,10 @@ module.exports.toggleFollow = function(currUserId, otherUserId, cb){
 	})
 }
 
+module.exports.usersMatchingSubstr = (substr, cb) => {
+	User.find({'username': {$regex: substr}}, cb)
+}
+
 // module.exports.saveProfilePic = function(userID, callback){
 
 // }

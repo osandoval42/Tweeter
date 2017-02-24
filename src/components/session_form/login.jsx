@@ -1,5 +1,4 @@
 import React from 'react';
-import {login} from '../../actions/session_actions';
 
 class LogInForm extends React.Component {
 	constructor(props) {
@@ -18,7 +17,7 @@ class LogInForm extends React.Component {
 			password: this.state.password
 		};
 
-    	this.props.signin(formData);
+    	this.props.login(formData);
 	}
 	render() {
 		return (
@@ -42,6 +41,7 @@ class LogInForm extends React.Component {
 						</div>
 						  <input type="submit" value="Log In" className="login-submit" />
 				</form>
+				<a onClick={this.props.toggleSessionFormType}>Sign Up</a>
 			</header>
 		);
 	}

@@ -22,6 +22,7 @@ class SignUp extends React.Component {
 	}
 	render(){
 		return (
+		<div>
 		<form onSubmit={this.handleSubmit} className="signup-form-box">
           <h3 className="signup-header">Sign Up</h3>
 						<label>
@@ -48,6 +49,8 @@ class SignUp extends React.Component {
 				</label>
 						<input className="signup-btn" type="submit" value="Sign Up" />
 				</form>
+			<a onClick={this.props.toggleSessionFormType}>login</a>
+			</div>
 			)
 	}
 }

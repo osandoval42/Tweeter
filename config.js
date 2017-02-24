@@ -13,6 +13,7 @@ var session = require('express-session');
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 var User = require('./models/user');
+import Tweet from './models/tweet'
 import apiRouter from './api';
 
 export const nodeEnv = env.NODE_ENV || 'development';
@@ -106,10 +107,14 @@ export default {
 				currUser.usersBeingFollowed = req.user.usersBeingFollowed;
 				currUser.usersFollowing = req.user.usersFollowing;
 				currUser["_id"] = req.user["_id"];
+				Tweet.getTweetCount(req.user['_id'], (err, tweetCount) => {
+					currUser.tweetCount = tweetCount;
+					res.render('index', {currentUser: currUser});
+				})
 			} else {
 				currUser = undefined;
+				res.render('index', {currentUser: currUser});
 			}
-    		res.render('index', {currentUser: currUser});
   		});
 	}
 };

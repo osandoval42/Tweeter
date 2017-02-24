@@ -1,20 +1,15 @@
 import React from 'react';
-import LoggedOutHome from './logged_out_home';
-import LoggedInHome from './logged_in_home';
+import Feed from '../feed/feed_container'; 
+import ProfileBox from '../profile_box/profile_box_container';
+import SessionForm from '../session_form/session_form';
 
 
+//REVISE put in session starter or profile on left depending 
+const HomeToBe = ({currentUser}) => (
+	<div>
+		{currentUser ? <ProfileBox/> : <SessionForm/>}
+		<Feed/>
+	</div>
+)
 
-class Home extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-  render() {
-  	if (this.props.currentUser === null){
-  		return (<LoggedOutHome signin={this.props.signin} signup={this.props.signup}/>)
-  	} else {
-  		return (<LoggedInHome signout={this.props.signout} currentUser={this.props.currentUser}/>)
-  	}
-  }
-}
-
-module.exports = Home
+module.exports = HomeToBe;

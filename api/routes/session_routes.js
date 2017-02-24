@@ -1,6 +1,7 @@
 import express from 'express';
 import passport from 'passport';
 import User from '../../models/user';
+import Tweet from '../../models/tweet';
 
 const Helpers = {
 	checkForSessionStartErrs(req, res, isSignup = false){
@@ -29,7 +30,12 @@ const configSessionRoutes = (router) => {
 		        if (!user) { return res.status(401).send({"ok": false}); }
 		        req.logIn(user, function(err) {
 		          if (err) { return res.status(401).send({"ok": false}); }
-		          return res.send(user);
+		     		Tweet.getTweetCount(user['_id'], (err, tweetCount) => {
+		     			if (err) { return res.status(401).send({"ok": false}); }
+		     			let userInJson = user.toObject();
+		     			userInJson.tweetCount = tweetCount;
+		     			return res.send(userInJson);
+		     		})
 		        });
 		  	  })(req, res, next);  
 		  }  
@@ -70,7 +76,12 @@ const configSessionRoutes = (router) => {
 					// req.flash('success_msg', 'You are registered and can now login');
 					req.logIn(user, function(err) {
 			     	if (err) { return res.status(401).send({"ok": false}); }
-			      		return res.send(user);
+			     		Tweet.getTweetCount(user['_id'], (err, tweetCount) => {
+			     			if (err) { return res.status(401).send({"ok": false}); }
+			     			let userInJson = user.toObject();
+			     			userInJson.tweetCount = tweetCount;
+			     			return res.send(userInJson);
+			     		})
 			    	});
 				});
 			}

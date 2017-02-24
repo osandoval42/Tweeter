@@ -13,6 +13,9 @@ import React from 'react';
 
 //how do I ensure tweets in tweet_reducer is empty when getTweets fires
 class Feed extends React.Component { 
+	constructor(props) {
+		super(props);
+	}
 	componentWillMount(){
 		this.props.getTweets();
 	}
