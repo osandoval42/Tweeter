@@ -11,8 +11,8 @@ const SearchBar = React.createClass({
   		let that = this
   		if (input !== ""){
   			actions.searchUsers(input, (users) => { //REVISE GET RID OF THAT THIS
-  				if (that){
-  					that.setState(matchedUsers: users)
+          if (that){
+  					that.setState({matchedUsers: users});
   				}
   			})	
   			this.setState({searchInput: input});

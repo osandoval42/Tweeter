@@ -1,6 +1,6 @@
 import {connect} from 'react-redux';
 import Feed from './feed';
-import {fetchAllTweets} from '../../actions/tweet_actions';
+import {fetchAllTweets, resetTweets} from '../../actions/tweet_actions';
 
 
 const mapStateToProps = (state) => ({
@@ -9,6 +9,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
 	getTweets: (currUserId) => {
+		dispatch(resetTweets())
 		return dispatch(fetchAllTweets(currUserId));
 	}
 });

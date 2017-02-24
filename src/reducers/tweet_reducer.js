@@ -1,5 +1,6 @@
 import {
-	RECEIVE_TWEETS
+	RECEIVE_TWEETS,
+	RESET_TWEETS
 } from '../constants/constants';
 
 
@@ -32,6 +33,8 @@ const TweetReducer = (state = tweets, action) => {
 	switch(action.type){
 		case RECEIVE_TWEETS:
 			return populateTweets(action.tweets);
+		case RESET_TWEETS:
+			return state;
 		default:
 			return state;
 	}

@@ -9,6 +9,10 @@ export const fetchAllTweets = (currUserId) => dispatch => {
 		err => dispatch(receiveErrors(err.responseJSON))
 };
 
+export const resetTweets = () => ({
+	type: Constants.RESET_TWEETS
+})
+
 export const receiveTweets = tweets => ({
 	type: Constants.RECEIVE_TWEETS,
 	tweets

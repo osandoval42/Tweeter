@@ -164,7 +164,7 @@ module.exports.toggleFollow = function(currUserId, otherUserId, cb){
 }
 
 module.exports.usersMatchingSubstr = (substr, cb) => {
-	User.find({'username': {$regex: substr}}, cb)
+	User.find({'username': {$regex: substr, $options: 'i'}}, null, {limit: 10}, cb)
 }
 
 // module.exports.saveProfilePic = function(userID, callback){
