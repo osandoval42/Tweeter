@@ -9,76 +9,159 @@ mongoose.Promise = es6Promise.Promise;
 
 const db = config.configDB();
 
-const User1 = new User({
+let Oscar = new User({
 	username: "Oscar",
 	password: "password"
 })
-const User2 = new User({
+let Max = new User({
 	username: "Max",
 	password: "password"
 })
-const User3 = new User({
+let Patrick = new User({
 	username: "Patrick",
 	password: "password"
 })
-const User4 = new User({
+let Andrew = new User({
 	username: "Andrew",
 	password: "password"
 })
 
+let likedAndAtTweet;
+let oscarsRetweetedTweet;
+
+//DROP DB
 User.remove().exec()
 .then(()=> {
 	return Like.remove().exec();
-}).then(()=> {
+})
+.then(()=> {
 	return Tweet.remove().exec();
 })
+//CREATE USERS
+.then(() => {return User.createUserWithPromise(Oscar);})
+.then((newUser) => {
+	Oscar = newUser;
+	return User.createUserWithPromise(Max);})
+.then((newUser) => {
+	Max = newUser;
+	return User.createUserWithPromise(Patrick);})
+.then((newUser) => {
+	Patrick = newUser;
+	return User.createUserWithPromise(Andrew);})
+//ADD FOLLOWING RELATIONSHIPS
+.then((newUser) => {
+	Andrew = newUser;
+	return (User.findByIdAndUpdate(Oscar['_id'], 	
+	{$push: {usersFollowing: Max['_id']}}, {new: true}).exec())
+}) 
+.then((updatedUser) => {
+	Oscar = updatedUser;
+	return (User.findByIdAndUpdate(Oscar['_id'], 	
+	{$push: {usersFollowing: Andrew['_id']}}, {new: true}).exec())
+})
+.then((updatedUser) => {
+	Oscar = updatedUser;
+	return (User.findByIdAndUpdate(Oscar['_id'], 	
+	{$push: {usersFollowing: Patrick['_id']}}, {new: true}).exec())
+})
+.then((updatedUser) => {
+	Oscar = updatedUser;
+	console.log(`new user after update 3 is ${updatedUser}`)
+	return (User.findByIdAndUpdate(Max['_id'], 	
+	{$push: {usersBeingFollowed: Oscar['_id']}}, {new: true}).exec())
+})
+.then((updatedUser) => {
+	Max = updatedUser;
+	return (User.findByIdAndUpdate(Andrew['_id'], 	
+	{$push: {usersBeingFollowed: Oscar['_id']}}, {new: true}).exec())
+})
+.then((updatedUser) => {
+	Andrew = updatedUser;
+	return (User.findByIdAndUpdate(Patrick['_id'], 	
+	{$push: {usersBeingFollowed: Oscar['_id']}}, {new: true}).exec())
+})
+.then((updatedUser) => {
+	Patrick = updatedUser;
+	return (User.findByIdAndUpdate(Oscar['_id'], 	
+	{$push: {usersBeingFollowed: Max['_id']}}, {new: true}).exec())
+})
+.then((updatedUser) => {
+	Oscar = updatedUser;
+	return (User.findByIdAndUpdate(Max['_id'], 	
+	{$push: {usersFollowing: Oscar['_id']}}, {new: true}).exec())
+})
+//create tweets
+.then((updatedUser) => {
+	Max = updatedUser;
+	const newTweet = new Tweet({
+		content: "Oscar's first tweet",
+		authorId: Oscar['_id'],
+	})
+	return newTweet.save();
+})
+.then((savedTweet) => {
+	const newTweet = new Tweet({
+		content: "Oscar's first tweet at the homies",
+		authorId: Oscar['_id'],
+		tweetedAt: [Max['_id'], Patrick['_id'], Andrew['_id']],
+		likeCount: 2
+	})
+	return newTweet.save();
+})
+.then((savedTweet) => {
+	likedAndAtTweet = savedTweet;
+	const newTweet = new Tweet({
+		content: "Oscar's retweeted tweet",
+		authorId: Oscar['_id'],
+	})
+	return newTweet.save();
+})
+.then((savedTweet) => {
+	oscarsRetweetedTweet = savedTweet;
+	const newTweet = new Tweet({
+		originalTweetId: savedTweet['_id'],
+		authorId: Max['_id']
+	})
+	return newTweet.save();
+})
+.then((savedTweet) => {
+	const newTweet = new Tweet({
+		originalTweetId: oscarsRetweetedTweet['_id'],
+		authorId: Patrick['_id']
+	})
+	return newTweet.save();
+})
+.then((savedTweet) => {
+	const newTweet = new Tweet({
+		content: "@Oscar this is Cancer",
+		replyToId: oscarsRetweetedTweet['_id'],
+		authorId: Andrew['_id'],
+		tweetedAt: [Oscar['_id']]
+	})
+	return newTweet.save();
+})
+//ADD LIKES
+.then((newTweet) => {
+	const newLike = new Like({
+		tweetId: likedAndAtTweet['_id'],
+		userId: Max['_id']
+	})
+	return newLike.save();
+})
+.then((savedLike) => {
+	const newLike = new Like({
+		tweetId: likedAndAtTweet['_id'],
+		userId: Andrew['_id']
+	})
+	return newLike.save();
+})
+.then((savedLike) => {
 
-
-let Oscar;
-let Max;
-let Patrick;
-let Andrew;
-
-// User.createUser(User1, (err, user) => {
-// 	Oscar = user;
-// 	console.log(`Oscar is ${Oscar}`);
-// })
-
-// User.createUser(User2, (err, user) => {
-// 	Max = user;
-// })
-
-// User.createUser(User3, (err, user) => {
-// 	Patrick = user;
-// })
-// User.createUser(User4, (err, user) => {
-// 	Andrew = user;
-// })
-
-User.createUserWithPromise(User1)
-.then((newUser) => {return User.createUserWithPromise(User2);})
-.then((newUser) => {return User.createUserWithPromise(User3);})
-.then((newUser) => {return User.createUserWithPromise(User4);})
-.then((newUser) => {console.log(`user 4 is ${newUser}`);})
+})
 .catch((err) => {
 	console.error(`err is ${err}`)
 })
 
-
-
-// User.findByIdAndUpdate(Oscar['_id'], 	
-// 	{$push: {usersFollowing: Max['_id']}}, null, ()=>{});
-// User.findByIdAndUpdate(Oscar['_id'], 	
-// 	{$push: {usersFollowing: Andrew['_id']}}, null, ()=>{});
-// User.findByIdAndUpdate(Oscar['_id'], 	
-// 	{$push: {usersFollowing: Patrick['_id']}}, null, ()=>{});
-
-// User.findByIdAndUpdate(Max['_id'], 	
-// 	{$push: {usersBeingFollowed: Oscar['_id']}}, null, ()=>{});
-// User.findByIdAndUpdate(Andrew['_id'], 	
-// 	{$push: {usersBeingFollowed: Oscar['_id']}}, null, ()=>{});
-// User.findByIdAndUpdate(Patrick['_id'], 	
-// 	{$push: {usersBeingFollowed: Oscar['_id']}}, null, ()=>{});
 
 
 

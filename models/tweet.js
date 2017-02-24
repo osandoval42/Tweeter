@@ -28,7 +28,7 @@ const parseAtSymbols = (content, cb) => {
 }
 
 const TweetSchema = mongoose.Schema({ //REVISE img data
-	retweetId: {
+	originalTweetId: {
 		type: mongoose.Schema.Types.ObjectId,
 		index: true
 	},
@@ -92,7 +92,7 @@ module.exports.retweet = (currUserId, original, cb) => { //REVISE disallow self 
 		if (tweet){
 			const retweet = new Tweet({
 				authorId: currUserId,
-				retweetId: originalTweetId
+				originalTweetId: originalTweetId
 			})
 			retweet.save((err, _) => {
 				if (err) {cb(true);}
@@ -111,7 +111,7 @@ module.exports.delete = (currUserId, tweetId, cb) => {
 			cb(true);
 		} else {
 			const deletedId = deletedTweet['_id'];
-			Tweet.remove({$or: [{replyToId: deletedId}, {retweetId: deletedId}]}, (err) => {
+			Tweet.remove({$or: [{replyToId: deletedId}, {originalTweetId: deletedId}]}, (err) => {
 				if (err) {console.err(`delete retweets and replies err is ${err}`);}
 			})
 			cb(undefined, deletedTweet);
@@ -207,12 +207,12 @@ const getTweetRepliedToAndNext = (tweet, next, finalCB) => {
 }
 
 const determineIfRetweet = (tweet, next, finalCB, tweetToReturn) => {
-	const originalId = tweet.retweetId;
+	const originalId = tweet.originalTweetId;
 	if (originalId){
 		Tweet.getTweetById(originalId, (err, originalTweet) => {
 			if (err) {throw err;} //REVISE
 			const jsonOriginalTweet = originalTweet.toObject();
-			tweet.retweet = jsonOriginalTweet;
+			tweet.originalTweet = jsonOriginalTweet;
 			getAuthorNameAndNext(jsonOriginalTweet, next, finalCB, tweetToReturn);
 		})
 	} else {
@@ -229,7 +229,7 @@ const getLikesAndNext = (tweetToGetLikesFor, next, finalCB, tweetToReturn) => {
 }
 
 const getRetweetsAndNext = (tweetToGetRetweetsFor, next, finalCB, tweetToReturn) => {
-	Tweet.find({retweetId: tweetToGetRetweetsFor['_id']}, (err, retweets) => {
+	Tweet.find({originalTweetId: tweetToGetRetweetsFor['_id']}, (err, retweets) => {
 		if (err) {throw err;} //REVISE
 		tweetToGetRetweetsFor.retweets = retweets;
 		getReplyCountAndComplete(tweetToGetRetweetsFor, next, finalCB, tweetToReturn);
