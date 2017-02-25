@@ -25,7 +25,7 @@ class LogInForm extends React.Component {
 				<h3>Log In</h3>
 				<form onSubmit={this.handleSubmit} className="login-form-box">
 						<div className='input-w-label'>
-							<label for="login-input"> Username 	</label>
+							<label htmlFor="login-input"> Username 	</label>
 							<input type="text"
 								value={this.state.email}
 								onChange={this.update("email")}
@@ -33,7 +33,7 @@ class LogInForm extends React.Component {
 						</div>
 
           				<div className="input-w-label">
-							<label for="login-password-input"> Password 	</label>
+							<label htmlFor="login-password-input"> Password 	</label>
 							<input type="password"
 								value={this.state.password}
 								onChange={this.update("password")}

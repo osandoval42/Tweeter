@@ -7,7 +7,7 @@ class ProfileBox extends React.Component{
 	render(){
 		return (
 			<div>
-				<h1>username: {this.props.currentUser.username}</h1>
+				<h1>username: {currentUser.username}</h1>
 				<h3>full name</h3>
 				<h5>tweets: {currentUser.tweetCount}</h5>
 				<h5>followees: {currentUser.usersBeingFollowed.length}</h5>

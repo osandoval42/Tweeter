@@ -9,7 +9,6 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
 	getTweets: (currUserId) => {
-		dispatch(resetTweets())
 		return dispatch(fetchAllTweets(currUserId));
 	}
 });

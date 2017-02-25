@@ -3,15 +3,16 @@ import Constants from '../constants/constants';
 import thunk from 'redux-thunk';
 
 //REVISE ADD LAST ID
+export const resetTweets = () => ({
+	type: Constants.RESET_TWEETS
+})
+
 export const fetchAllTweets = (currUserId) => dispatch => {
+	dispatch(resetTweets())
 	APIUtil.fetchAllTweets(currUserId)
 		.then(tweets => dispatch(receiveTweets(tweets))), 
 		err => dispatch(receiveErrors(err.responseJSON))
 };
-
-export const resetTweets = () => ({
-	type: Constants.RESET_TWEETS
-})
 
 export const receiveTweets = tweets => ({
 	type: Constants.RECEIVE_TWEETS,

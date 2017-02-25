@@ -23,7 +23,8 @@ const SearchBar = React.createClass({
   	autocompleted(){
   		return (<ul>{
   			this.state.matchedUsers.map((user) => {
-  				return (<li>{user.username}</li>);
+          const username = user.username;
+  				return (<li key={username}>{username}</li>);
   			})}
   		</ul>)
   	},

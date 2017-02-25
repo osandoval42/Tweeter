@@ -1,6 +1,6 @@
 <%- include('header') -%>
   <div id="root">IT WORKED!</div>
     <script type="text/javascript">
-    	window.currentUser = <%- currentUser ? JSON.stringify(currentUser) : undefined -%>;
+    	window.currentUser = <%- currentUser ? JSON.stringify(currentUser) : false -%>;
   </script>
 <%- include('footer') -%>
