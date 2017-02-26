@@ -36,7 +36,7 @@ class Profile extends React.Component {
 		return (this.props.profileUser.username !== undefined)
 	}
 	username(){
-		const username = this.props.profileUser.username
+		const username = this.props.profileUser.username;
 		return username ? <h3>user profile is of {username}</h3> : <h3>invalid user</h3>;
 	}
 	render(){

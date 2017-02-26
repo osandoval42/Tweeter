@@ -31,6 +31,24 @@ class Follow extends React.Component {
 			this.fetchFollow()
 		}
 	}
+	isFollowingUser(oneOfUsers){ //optimization opp: turn follow arrays into hashes
+		const currUser = this.props.currUser;
+		if (currUser){
+			return (currUser.usersBeingFollowed.some((beingFollowedId) => {
+				return (beingFollowedId === oneOfUsers['_id']);
+			}))
+		} else {
+			return false;
+		}
+	}
+	followButton(oneOfUsers){ //REVISE DISABLE DOUBLE CLICK
+		const currUser = this.props.currUser;
+	    if (this.isFollowingUser(oneOfUsers)){
+	      return (<a onClick={this.props.toggleFollow.bind(this, oneOfUsers['_id'])} className="Following">Following</a>)
+	    } else {
+	      return (<a onClick={this.props.toggleFollow.bind(this, oneOfUsers['_id'])} className="Follow">Follow</a>)
+	    }
+	}
 	//add user list
 	render(){
 		const users = this.props.users;
@@ -40,8 +58,9 @@ class Follow extends React.Component {
 			<ul>
 				{
 					Object.keys(users).map((userId) => {
-						const username = users[userId].username;
-						return (<li key={username}>{username}</li>);
+						const user = users[userId];
+						const username = user.username;
+						return (<li key={username}><span>{username}</span>{this.followButton(user)}</li>);
 					})
 				}
 			</ul>

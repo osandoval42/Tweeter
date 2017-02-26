@@ -1,10 +1,11 @@
 import {connect} from 'react-redux';
 import Follow from './follow';
-import {fetchFollowers, fetchUsersBeingFollowed} from '../../actions/user_actions';
+import {fetchFollowers, fetchUsersBeingFollowed, toggleFollow} from '../../actions/user_actions';
 
 
 
 const mapStateToProps = (state) => ({
+	currUser: state.session.currentUser,
 	profileUser: state.profileUser,
 	users: state.users
 });
@@ -15,6 +16,9 @@ const mapDispatchToProps = (dispatch) => ({
 	},
 	getUsersBeingFollowed: (userId) => {
 		return dispatch(fetchUsersBeingFollowed(userId));
+	},
+	toggleFollow: (followedUserId) => {
+		return dispatch(toggleFollow(followedUserId));
 	}
 });
 

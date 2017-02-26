@@ -12,7 +12,9 @@ const resetUsers = () => ({
 
 export const toggleFollow = (followedUserId) => dispatch => {
 	APIUtil.toggleFollow(followedUserId)
-		.then(currUser => dispatch(receiveCurrentUser(currUser))), 
+		.then(currUser => {
+			dispatch(receiveCurrentUser(currUser))
+		}), 
 		err => dispatch(receiveErrors(err.responseJSON))
 };
 
