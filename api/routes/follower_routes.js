@@ -36,6 +36,7 @@ const configFollowerRoutes = (router) => {
 					return res.status(401).send({"ok": false}); 
 				}
 				else { 
+
 					res.send(updatedCurrUser);
 				}
 			});

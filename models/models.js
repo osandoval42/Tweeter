@@ -359,7 +359,7 @@ const unfollow = (unfollowerId, toUnfollowId, cb) => {
 				User.findByIdAndUpdate(
 					unfollowerId,
 					{$pull: {usersBeingFollowed: toUnfollowId}},
-					{safe: true, new: true, fields: {username: 1}},
+					{safe: true, new: true, fields: {username: 1, usersBeingFollowed: 1, usersFollowing: 1}},
 					function(err, model){
 						if (err){
 							cb(true);
@@ -427,7 +427,6 @@ Tweet.likedTweets = (likerId, lastDownloadedTweetId, cb) =>{ //REVISE put in las
 		return (es6Promise.Promise.all(likes.map((like) => {
 			const promise = new es6Promise.Promise((resolve, reject) => {
 				Tweet.getTweetByIdWithAllInfo(like.tweetId, (err, tweet) => {
-					debugger;
 					if (err){throw err;}
 					else{resolve(tweet);}
 				})

@@ -1,5 +1,5 @@
 import React from 'react';
-import Panel from './Panel';
+import Panel from './panel_container';
 import Constants from '../../constants/constants';
 import ProfileTweets from './profile_tweets';
 import Follow from './follow_container';
@@ -51,7 +51,7 @@ class Profile extends React.Component {
 						Profile Photo
 					</h3>
 					{this.username()}
-					<Panel params={this.props.params} profileUser={this.props.profileUser}/>
+					<Panel params={this.props.params}/>
 					<br/>
 					<br/>
 					<br/>

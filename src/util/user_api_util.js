@@ -26,3 +26,11 @@ module.exports.fetchUsersBeingFollowed = (followerId) => {
 		url: `/api/${followerId}/following`
 	});
 }
+
+module.exports.toggleFollow = (followedUserId) => {
+	return $.ajax({
+		method: 'POST',
+		url: `/api/follow`,
+		data: {toFollowId: followedUserId}
+	});
+}
