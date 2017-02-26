@@ -1,7 +1,6 @@
 import express from 'express';
 import passport from 'passport';
-import User from '../../models/user';
-import Tweet from '../../models/tweet';
+import {User, Like, Tweet} from '../../models/models';
 
 const Helpers = {
 	checkForSessionStartErrs(req, res, isSignup = false){

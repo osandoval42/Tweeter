@@ -7,9 +7,24 @@ export const resetTweets = () => ({
 	type: Constants.RESET_TWEETS
 })
 
-export const fetchAllTweets = (currUserId) => dispatch => {
+export const fetchAllTweets = () => dispatch => {
 	dispatch(resetTweets())
-	APIUtil.fetchAllTweets(currUserId)
+	APIUtil.fetchAllTweets()
+		.then(tweets => dispatch(receiveTweets(tweets))), 
+		err => dispatch(receiveErrors(err.responseJSON))
+};
+
+
+export const fetchNonReplyProfileTweets = (currUserId) => dispatch => {
+	dispatch(resetTweets())
+	APIUtil.fetchNonReplyProfileTweets(currUserId)
+		.then(tweets => dispatch(receiveTweets(tweets))), 
+		err => dispatch(receiveErrors(err.responseJSON))
+};
+
+export const fetchAllUserProfileTweets = (currUserId) => dispatch => {
+	dispatch(resetTweets())
+	APIUtil.fetchAllUserProfileTweets(currUserId)
 		.then(tweets => dispatch(receiveTweets(tweets))), 
 		err => dispatch(receiveErrors(err.responseJSON))
 };

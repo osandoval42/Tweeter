@@ -1,15 +1,22 @@
 import {connect} from 'react-redux';
 import Feed from './feed';
-import {fetchAllTweets, resetTweets} from '../../actions/tweet_actions';
+import {fetchAllTweets, fetchAllUserProfileTweets, fetchNonReplyProfileTweets} from '../../actions/tweet_actions';
 
 
 const mapStateToProps = (state) => ({
-	tweets: state.tweets,
+	profileUser: state.profileUser,
+	tweets: state.tweets
 });
 
 const mapDispatchToProps = (dispatch) => ({
-	getTweets: (currUserId) => {
-		return dispatch(fetchAllTweets(currUserId));
+	getCurrUserFeedTweets: () => {
+		return dispatch(fetchAllTweets());
+	},
+	getNonReplyProfileTweets: (currUserId) => {
+		return dispatch(fetchNonReplyProfileTweets(currUserId));
+	},
+	getAllProfileTweets: (currUserId) => {
+		return dispatch(fetchAllUserProfileTweets(currUserId));
 	}
 });
 

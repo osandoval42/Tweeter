@@ -1,23 +1,48 @@
 import React from 'react';
-
-// is retweet?
-// content
-// authorname (semi dependent)
-// retweet author (dependent)
-// date time 
-// picture
-// likes *
-// retweets 
-// replies
+import Constants from '../../constants/constants';
+import * as TweetActions from '../../actions/tweet_actions';
 
 
-//how do I ensure tweets in tweet_reducer is empty when getTweets fires
 class Feed extends React.Component { 
 	constructor(props) {
 		super(props);
+		this.fetchTweets();
 	}
-	componentWillMount(){
-		this.props.getTweets();
+	fetchTweets(){
+		const profileUser = this.props.profileUser
+		let profileUserId;
+		if (profileUser){
+			profileUserId = profileUser['_id'];
+		}
+		switch (this.props.feedType){
+			case Constants.LIKES_FEED:{
+				if (profileUserId){
+					//get liked tweets
+				} else {
+					TweetActions.resetTweets();
+				}
+				break;}
+			case Constants.CURR_USER_FEED:{
+				this.props.getCurrUserFeedTweets();
+				break;}
+			case Constants.PROFILE_FEED:{
+				if (profileUserId){
+					this.props.getAllProfileTweets(profileUserId);	
+				} else {
+					TweetActions.resetTweets();
+				}
+				break;}
+			case Constants.NON_REPLY_PROFILE_FEED:{
+				if (profileUserId){
+					this.props.getNonReplyProfileTweets(profileUserId);
+				} else {
+					TweetActions.resetTweets();
+				}
+			break;}
+			default:{
+				break;
+			}
+		}
 	}
 	retweeter(tweet){
 		const retweeter = tweet.retweetAuthorName;
@@ -26,6 +51,11 @@ class Feed extends React.Component {
 	authorRepliedTo(tweet){
 		const repliedTo = tweet.tweetRepliedTo;
 		return repliedTo ? (<li>In reply to: {repliedTo.authorName}</li>) : undefined;
+	}
+	componentDidUpdate(prevProps){
+		if (prevProps.feedType != this.props.feedType){
+			this.fetchTweets()
+		}
 	}
 	render(){
 		const tweets = this.props.tweets;

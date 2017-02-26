@@ -4,3 +4,10 @@ module.exports.searchUsers = (query) => {
 		url: `/api/search_users?substr=${query}`
 	});
 }
+
+module.exports.fetchProfileUser = (username) => {
+	return $.ajax({
+		method: 'GET',
+		url: `/api/profile_user?username=${username}`
+	});
+}

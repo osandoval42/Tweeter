@@ -1,6 +1,6 @@
 import express from 'express';
 import passport from 'passport';
-import User from '../../models/user';
+import {User, Like, Tweet} from '../../models/models';
 import RouteHelpers from '../util/route_helpers';
 var mongoose = require('mongoose');
 

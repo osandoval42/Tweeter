@@ -1,6 +1,6 @@
 import express from 'express';
 import passport from 'passport';
-import Tweet from '../../models/tweet';
+import {User, Like, Tweet} from '../../models/models';
 import RouteHelpers from '../util/route_helpers';
 var mongoose = require('mongoose');
 
@@ -96,6 +96,20 @@ const configTweetRoutes = (router) => {
 				}
 		})
 	}),
+	router.get('/user_tweets_without_replies', (req, res) => {
+		const userIdStr = req.query.userId;
+		const userId = userIdStr ? mongoose.Types.ObjectId(userIdStr) : undefined;
+		const lastDownloadedTweetIdStr = req.query.lastId;
+		const lastDownloadedTweetId = lastDownloadedTweetIdStr ? mongoose.Types.ObjectId(lastDownloadedTweetIdStr) : undefined;
+		Tweet.userTweetsWithoutReplies(userId, lastDownloadedTweetId, (err, tweets) => {
+				if (err) { 
+					return res.status(401).send({"ok": false}); 
+				}
+				else { 
+					res.send(tweets);
+				}
+		})
+	})
 	router.get('/tweet_replies', (req, res) => {
 		const tweetIdStr = req.query.tweetId;
 		const tweetId = tweetIdStr ? mongoose.Types.ObjectId(tweetIdStr) : undefined;
