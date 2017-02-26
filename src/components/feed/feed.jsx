@@ -9,7 +9,7 @@ class Feed extends React.Component {
 		this.fetchTweets();
 	}
 	fetchTweets(){
-		const profileUser = this.props.profileUser
+		const profileUser = this.props.profileUser;
 		let profileUserId;
 		if (profileUser){
 			profileUserId = profileUser['_id'];

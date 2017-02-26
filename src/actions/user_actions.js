@@ -5,12 +5,20 @@ const resetProfileUser = () => ({
 	type: Constants.RESET_PROFILE_USER
 })
 
+const resetUsers = () => ({
+	type: Constants.RESET_USERS
+})
+
 
 export const receiveProfileUser = profileUser => ({
 	type: Constants.RECEIVE_PROFILE_USER,
 	profileUser
 });
 
+export const receiveUsers = users => ({
+	type: Constants.RECEIVE_USERS,
+	users
+});
 
 export const fetchProfileUser = (username) => dispatch => {
 	dispatch(resetProfileUser())
@@ -18,4 +26,20 @@ export const fetchProfileUser = (username) => dispatch => {
 		.then(user => dispatch(receiveProfileUser(user))), 
 		err => dispatch(receiveErrors(err.responseJSON))
 };
+
+
+export const fetchFollowers = (followedId) => dispatch => {
+	dispatch(resetUsers())
+	APIUtil.fetchFollowers(followedId)
+		.then(users => dispatch(receiveUsers(users))), 
+		err => dispatch(receiveErrors(err.responseJSON))
+};
+
+export const fetchUsersBeingFollowed = (followerId) => dispatch => {
+	dispatch(resetUsers())
+	APIUtil.fetchUsersBeingFollowed(followerId)
+		.then(users => dispatch(receiveUsers(users))), 
+		err => dispatch(receiveErrors(err.responseJSON))
+};
+
 

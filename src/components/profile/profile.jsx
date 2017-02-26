@@ -2,8 +2,7 @@ import React from 'react';
 import Panel from './Panel';
 import Constants from '../../constants/constants';
 import ProfileTweets from './profile_tweets';
-import Following from './following_container';
-import Followers from './followers_container';
+import Follow from './follow_container';
 import Likes from './likes';
 
 class Profile extends React.Component { 
@@ -14,17 +13,16 @@ class Profile extends React.Component {
 	}
 	mainDisplay(){
 		if (this.hasFetchedProfileUser()){
+			const display = this.props.params.display;
 			switch(this.props.params.display){
 				case undefined:
 				case Constants.WITH_REPLIES:
 				{
 					return <ProfileTweets params={this.props.params}/>
 					break;}
-				case Constants.FOLLOWING:{
-					return <Following/>;
-					break;}
+				case Constants.FOLLOWING:
 				case Constants.FOLLOWERS:{
-					return <Followers/>;
+					return <Follow followType={display}/>;
 					break;}
 				case Constants.LIKES: {
 					return <Likes profileUser={this.props.profileUser}/>;

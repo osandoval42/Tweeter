@@ -11,3 +11,18 @@ module.exports.fetchProfileUser = (username) => {
 		url: `/api/profile_user?username=${username}`
 	});
 }
+
+module.exports.fetchFollowers = (followedId) => {
+	return $.ajax({
+		method: 'GET',
+		url: `/api/${followedId}/followers`
+	});
+}
+
+
+module.exports.fetchUsersBeingFollowed = (followerId) => {
+	return $.ajax({
+		method: 'GET',
+		url: `/api/${followerId}/following`
+	});
+}
