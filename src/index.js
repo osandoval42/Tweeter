@@ -6,7 +6,7 @@ import configureStore from './store/store'
 document.addEventListener("DOMContentLoaded", () => {
 	  let store;
 	
-	  const preloadedState = { session: { currentUser: window.currentUser }};
+	  const preloadedState = { session: { currentUser: window.currentUser }, tweets:{}};
 	  store = configureStore(preloadedState);
 
 	  const root = document.getElementById('root');

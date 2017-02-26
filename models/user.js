@@ -1,5 +1,4 @@
 var mongoose = require('mongoose');
-var bcrypt = require('bcryptjs');
 import es6Promise from 'es6-promise';
 mongoose.Promise = es6Promise.Promise;
 

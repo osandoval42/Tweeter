@@ -17,7 +17,7 @@ class Feed extends React.Component {
 		switch (this.props.feedType){
 			case Constants.LIKES_FEED:{
 				if (profileUserId){
-					//get liked tweets
+					this.props.getLikedTweets(profileUserId);
 				} else {
 					TweetActions.resetTweets();
 				}

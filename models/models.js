@@ -2,6 +2,10 @@ import Tweet from './tweet';
 import User from './user';
 import Like from './like';
 import async from 'async';
+var bcrypt = require('bcryptjs');
+var mongoose = require('mongoose');
+import es6Promise from 'es6-promise';
+mongoose.Promise = es6Promise.Promise;
 
 module.exports.Like = Like;
 module.exports.Tweet = Tweet;
@@ -415,4 +419,36 @@ Like.toggleLike = (userId, tweetId, cb) => { //REVISE confirm not retweet
 			})
 		}
 	})
+}
+
+Tweet.likedTweets = (likerId, lastDownloadedTweetId, cb) =>{ //REVISE put in lastDownloaded
+	Like.find({'userId': likerId}).exec()
+	.then((likes) => {
+		return (es6Promise.Promise.all(likes.map((like) => {
+			const promise = new es6Promise.Promise((resolve, reject) => {
+				Tweet.getTweetByIdWithAllInfo(like.tweetId, (err, tweet) => {
+					debugger;
+					if (err){throw err;}
+					else{resolve(tweet);}
+				})
+			})
+			return promise;
+		})))
+	})
+	.then((tweets) => {
+		cb(null, tweets);
+	})
+	.catch((err) => {
+		cb(err);
+	})
+}
+
+User.createUserWithPromise = (newUser) => {
+	const promise = new es6Promise.Promise((resolve, reject) => {
+		User.createUser(newUser, (err, user) => {
+			if (err){throw err;}
+			else{resolve(user);}
+		})
+	})
+	return promise;
 }

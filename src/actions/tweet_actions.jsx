@@ -14,6 +14,13 @@ export const fetchAllTweets = () => dispatch => {
 		err => dispatch(receiveErrors(err.responseJSON))
 };
 
+export const fetchTweetsUserLikes = (likerId) => dispatch => {
+	dispatch(resetTweets())
+	APIUtil.fetchTweetsUserLikes(likerId)
+		.then(tweets => dispatch(receiveTweets(tweets))), 
+		err => dispatch(receiveErrors(err.responseJSON))
+};
+
 
 export const fetchNonReplyProfileTweets = (currUserId) => dispatch => {
 	dispatch(resetTweets())

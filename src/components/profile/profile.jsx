@@ -48,7 +48,6 @@ class Profile extends React.Component {
 				<div className="top">
 					<h3>
 						Cover Photo
-
 					</h3>
 					<h3>
 						Profile Photo

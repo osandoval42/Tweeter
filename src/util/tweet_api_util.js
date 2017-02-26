@@ -18,3 +18,10 @@ export const fetchNonReplyProfileTweets = (userId) => { //REVISE ADD LAST ID
     url: `/api/user_tweets_without_replies?userId=${userId}`,
   });
 };
+
+export const fetchTweetsUserLikes = (userId) => { //REVISE ADD LAST ID
+  return $.ajax({
+    method: 'GET',
+    url: `/api/tweets_user_likes?userId=${userId}`,
+  });
+};
