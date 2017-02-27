@@ -6,35 +6,32 @@ import {
 import merge from 'lodash/merge';
 import LimitLessLRUCache from '../data_structures/limitless_lru_cache';
 
-const tweets = {};
+const tweets = new LimitLessLRUCache();
 
 //unecessary for person tweets as each key happens once
 
 const populateTweets = (tweetsArr) => {
-	const newTweetsColl = {};
+	const newTweetsColl = new LimitLessLRUCache();
 	tweetsArr.forEach((tweet) => {
 		let originalTweet = tweet.originalTweet;
 		let id;
 		if (originalTweet){
 			id = originalTweet['_id']
-			newTweetsColl[id] = originalTweet;
-			newTweetsColl[id].retweetAuthorName = tweet.authorName;
+			originalTweet.retweetAuthorName = tweet.authorName;
+			newTweetsColl.insertOldestNodeYet(id, originalTweet);
 		} else {
 			id = tweet['_id'];
-			if (newTweetsColl[id] === undefined){
-				newTweetsColl[id] = tweet;
-			}
+			newTweetsColl.insertOldestNodeYet(id, tweet);
 		}
 	})
 	return newTweetsColl;
 }
 
 const tweetBelongsToCurrColl = (coll, tweet) => {
-	const tweetIds = Object.keys(coll);
-	if (tweetIds.length === 0){
+	if (coll.length === 0){
 		return false;
 	}
-	const firstTweetInColl = coll[tweetIds[0]];
+	const firstTweetInColl = coll.first;
 	if (firstTweetInColl.retweetAuthorname){
 		return (tweet.authorName === firstTweetInColl.retweetAuthorname);
 	} else {
@@ -48,13 +45,12 @@ const tweetBelongsToCurrColl = (coll, tweet) => {
 const TweetReducer = (state = tweets, action) => {
 	switch(action.type){
 		case RECEIVE_TWEETS:
-			debugger;
 			return populateTweets(action.tweets);
 		case RECEIVE_TWEET:
-			const stateDup = merge({}, state);
+			const stateDup = state.dup()
 			const tweet = action.tweet;
 			if (tweetBelongsToCurrColl(stateDup, tweet)){
-				stateDup[tweet['_id']] = tweet;
+				stateDup.insertNewestNodeYet(tweet['_id'], tweet);
 			}
 			return stateDup;
 		case RESET_TWEETS:

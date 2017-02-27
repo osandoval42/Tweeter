@@ -41,6 +41,7 @@ class LimitLessLRUCache{
 		this.tail = new Node();
 		this.head.next = tail;
 		this.tail.prev = head;
+		this.length = 0;
 	}
 }
 
@@ -101,6 +102,7 @@ LimitLessLRUCache.prototype.insertOldestNodeYet = function(key, val){
 }
 
 LimitLessLRUCache.prototype.createNewNode = function(key, val){
+	this.length++;
 	const newNode = new Node(key, val);
 	this.keys[key] = newNode;
 	return newNode;
