@@ -43,9 +43,11 @@ const tweetBelongsToCurrColl = (coll, tweet) => {
 
 //ENSURE ON RECEIVE TWEET THE ORIGINAL AUTHORNAME
 //AND PICTURE IS PRESERVED
+//0th is most recent
 const TweetReducer = (state = tweets, action) => {
 	switch(action.type){
 		case RECEIVE_TWEETS:
+			debugger;
 			return populateTweets(action.tweets);
 		case RECEIVE_TWEET:
 			const stateDup = merge({}, state);

@@ -1,6 +1,4 @@
-import User from '../models/user';
-import Tweet from '../models/tweet';
-import Like from '../models/like/like_complete';
+import {User, Like, Tweet} from '../models/models'
 import config from '../config';
 var mongoose = require('mongoose');
 import es6Promise from 'es6-promise';
