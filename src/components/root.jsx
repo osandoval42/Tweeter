@@ -1,7 +1,7 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 import { Router, Route, IndexRoute, browserHistory } from 'react-router';
-import App from './app';
+import App from './app/app_container';
 import Home from './home/home_container';
 import Profile from './profile/profile_container';
 

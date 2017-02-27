@@ -7,6 +7,19 @@ export const resetTweets = () => ({
 	type: Constants.RESET_TWEETS
 })
 
+export const openTweetingInterface = (initialContent) => {
+	return {
+	type: Constants.WRITING_TWEET,
+	initialContent: initialContent
+	};	
+}
+
+export const closeTweetingInterface = () => {
+	return {
+	type: Constants.NOT_WRITING_TWEET,
+	};	
+}
+
 export const fetchAllTweets = () => dispatch => {
 	dispatch(resetTweets())
 	APIUtil.fetchAllTweets()

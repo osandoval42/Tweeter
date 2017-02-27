@@ -14,7 +14,7 @@ class Navbar extends React.Component{
 				<li>Twitter Icon</li>
 				<SearchBar/>
 				{this.props.currentUser ? <li>profile img</li> : undefined}
-				<a>Post Tweet</a>
+				<a onClick={this.props.openTweetingInterface}>Post Tweet</a>
 			</ul>
 		)
 	}
