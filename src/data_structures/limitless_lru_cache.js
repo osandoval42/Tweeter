@@ -32,6 +32,8 @@
 	}
 */
 
+import merge from 'lodash/merge';
+
 class LimitLessLRUCache{
 	constructor(){
 		this.keys = {};
@@ -50,6 +52,14 @@ LimitLessLRUCache.prototype.map = function(fn){
 		currNode = currNode.next;
 	}
 	return ret;
+}
+
+LimitLessLRUCache.prototype.forEach = function(fn){
+	let currNode = this.head.next;
+	while (currNode != this.tail){
+		fn(currNode.val);
+		currNode = currNode.next;
+	}
 }
 
 LimitLessLRUCache.prototype.val = function(key) {
@@ -91,17 +101,29 @@ LimitLessLRUCache.prototype.insertOldestNodeYet = function(key, val){
 }
 
 LimitLessLRUCache.prototype.createNewNode = function(key, val){
-	const newNode = new Node(val);
+	const newNode = new Node(key, val);
 	this.keys[key] = newNode;
 	return newNode;
 }
 
+LimitLessLRUCache.prototype.dup = function(){ //assumes object val and primitive key
+	let dup = new LimitLessLRUCache();
+	this.forEach((node) => {
+		let valDuped = merge({}, node.val);
+		let dupedNode = new Node(node.key, valDuped);
+		dup.insertOldestNodeYet(node.key, dupedNode);
+	})
+	return dup;
+}
+
 class Node{
-	constructor(val = undefined){
+	constructor(key, val){
 		this.val = val;
+		this.key = key;
 		this.next = undefined;
 		this.prev = undefined;
 	}
 }
+
 
 export default LimitLessLRUCache;

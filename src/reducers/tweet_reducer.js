@@ -4,6 +4,7 @@ import {
 	RESET_TWEETS
 } from '../constants/constants';
 import merge from 'lodash/merge';
+import LimitLessLRUCache from '../data_structures/limitless_lru_cache';
 
 const tweets = {};
 
