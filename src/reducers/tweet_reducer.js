@@ -31,7 +31,7 @@ const tweetBelongsToCurrColl = (coll, tweet) => {
 	if (coll.length === 0){
 		return false;
 	}
-	const firstTweetInColl = coll.first;
+	const firstTweetInColl = coll.first();
 	if (firstTweetInColl.retweetAuthorname){
 		return (tweet.authorName === firstTweetInColl.retweetAuthorname);
 	} else {

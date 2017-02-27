@@ -39,10 +39,15 @@ class LimitLessLRUCache{
 		this.keys = {};
 		this.head = new Node();
 		this.tail = new Node();
-		this.head.next = tail;
-		this.tail.prev = head;
+		this.head.next = this.tail;
+		this.tail.prev = this.head;
 		this.length = 0;
 	}
+}
+
+LimitLessLRUCache.prototype.first = function(){
+	const firstNode = this.head.next;
+	return (firstNode === this.tail) ? undefined : firstNode.val;
 }
 
 LimitLessLRUCache.prototype.map = function(fn){
@@ -58,7 +63,7 @@ LimitLessLRUCache.prototype.map = function(fn){
 LimitLessLRUCache.prototype.forEach = function(fn){
 	let currNode = this.head.next;
 	while (currNode != this.tail){
-		fn(currNode.val);
+		fn(currNode.key, currNode.val);
 		currNode = currNode.next;
 	}
 }
@@ -71,7 +76,7 @@ LimitLessLRUCache.prototype.val = function(key) {
 
 LimitLessLRUCache.prototype.joinNodes = function(prev, next){
 	prev.next = next;
-	next.prev = firstNeighbor;
+	next.prev = prev;
 }
 
 LimitLessLRUCache.prototype.insertNewestNodeYet = function(key, val){
@@ -83,21 +88,21 @@ LimitLessLRUCache.prototype.insertNewestNodeYet = function(key, val){
 		nodeToChange.val = val;
 		const outdatedPrev = nodeToChange.prev;
 		const outdatedNext = nodeToChange.next;
-		joinNodes(outdatedPrev, outdatedNext);
+		this.joinNodes(outdatedPrev, outdatedNext);
 		newNode = nodeToChange;
 	}
 
 	let afterHead = this.head.next;
-	joinNodes(this.head, newNode);
-	joinNodes(newNode, afterHead);
+	this.joinNodes(this.head, newNode);
+	this.joinNodes(newNode, afterHead);
 }
 
 LimitLessLRUCache.prototype.insertOldestNodeYet = function(key, val){
 	if (this.val(key) === undefined){
 		let newNode = this.createNewNode(key, val);
 		let beforeTail = this.tail.prev;
-		joinNodes(beforeTail, newNode);
-		joinNodes(newNode, this.tail);
+		this.joinNodes(beforeTail, newNode);
+		this.joinNodes(newNode, this.tail);
 	}
 }
 
@@ -110,10 +115,9 @@ LimitLessLRUCache.prototype.createNewNode = function(key, val){
 
 LimitLessLRUCache.prototype.dup = function(){ //assumes object val and primitive key
 	let dup = new LimitLessLRUCache();
-	this.forEach((node) => {
-		let valDuped = merge({}, node.val);
-		let dupedNode = new Node(node.key, valDuped);
-		dup.insertOldestNodeYet(node.key, dupedNode);
+	this.forEach((key, val) => {
+		let valDuped = merge({}, val);
+		dup.insertOldestNodeYet(key, valDuped);
 	})
 	return dup;
 }
