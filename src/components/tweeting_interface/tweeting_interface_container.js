@@ -1,6 +1,6 @@
 import {connect} from 'react-redux';
 import TweetingInterface from './tweeting_interface';
-import {closeTweetingInterface} from '../../actions/tweet_actions';
+import {closeTweetingInterface, postTweet} from '../../actions/tweet_actions';
 
 
 const mapStateToProps = (state) => ({
@@ -10,6 +10,9 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
 	closeTweetingInterface: () => {
 		return dispatch(closeTweetingInterface());
+	},
+	postTweet: (tweet) => {
+		return dispatch(postTweet(tweet));
 	}
 });
 

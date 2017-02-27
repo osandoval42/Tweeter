@@ -65,8 +65,8 @@ class Feed extends React.Component {
 					<ul>
 						{   originalTweetIds.map((originalTweetId) => {
 							const tweet = tweets[originalTweetId];
-							const retweetCount = tweet.retweets.length;
-							const likesCount = tweet.likes.length;
+							const retweetCount = tweet.retweets ? tweet.retweets.length : 0;
+							const likesCount = tweet.likes ? tweet.likes.length : 0;
 							return (
 								<li key={originalTweetId}>
 									<ul>

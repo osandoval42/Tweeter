@@ -25,3 +25,13 @@ export const fetchTweetsUserLikes = (userId) => { //REVISE ADD LAST ID
     url: `/api/tweets_user_likes?userId=${userId}`,
   });
 };
+
+export const postTweet = (content) => { //REVISE ADD LAST ID
+  return $.ajax({
+    method: 'POST',
+    url: '/api/tweet',
+    data: {content}
+  });
+};
+
+

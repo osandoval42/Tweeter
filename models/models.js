@@ -85,7 +85,14 @@ Tweet.postTweet = (content, currUserId, cb) => {
 			authorId: currUserId,
 			tweetedAt: tweetedAtIds
 		})
-		newPost.save(cb);
+		newPost.save((err, newTweet) => {
+			User.getUserById(newTweet.authorId, (err, user) => {
+				if (err) {return cb(true);}
+				const tweetJson = newTweet.toObject();
+				tweetJson.authorName = user.username;
+				cb(err, tweetJson);
+			})
+		});
 	});
 }
 

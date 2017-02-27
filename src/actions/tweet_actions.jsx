@@ -20,6 +20,14 @@ export const closeTweetingInterface = () => {
 	};	
 }
 
+export const postTweet = (newTweet) => dispatch => {
+	APIUtil.postTweet(newTweet)
+		.then(newTweet => {
+			dispatch(closeTweetingInterface()); //revise provide success feedback
+			dispatch(receiveTweet(newTweet))}), 
+		err => dispatch(receiveErrors(err.responseJSON))
+};
+
 export const fetchAllTweets = () => dispatch => {
 	dispatch(resetTweets())
 	APIUtil.fetchAllTweets()
@@ -52,6 +60,11 @@ export const fetchAllUserProfileTweets = (currUserId) => dispatch => {
 export const receiveTweets = tweets => ({
 	type: Constants.RECEIVE_TWEETS,
 	tweets
+});
+
+export const receiveTweet = tweet => ({
+	type: Constants.RECEIVE_TWEET,
+	tweet
 });
 
 export const receiveErrors = errors => ({

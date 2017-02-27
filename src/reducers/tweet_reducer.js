@@ -1,8 +1,9 @@
 import {
 	RECEIVE_TWEETS,
+	RECEIVE_TWEET,
 	RESET_TWEETS
 } from '../constants/constants';
-
+import merge from 'lodash/merge';
 
 const tweets = {};
 
@@ -27,12 +28,32 @@ const populateTweets = (tweetsArr) => {
 	return newTweetsColl;
 }
 
+const tweetBelongsToCurrColl = (coll, tweet) => {
+	const tweetIds = Object.keys(coll);
+	if (tweetIds.length === 0){
+		return false;
+	}
+	const firstTweetInColl = coll[tweetIds[0]];
+	if (firstTweetInColl.retweetAuthorname){
+		return (tweet.authorName === firstTweetInColl.retweetAuthorname);
+	} else {
+		return (tweet.authorName === firstTweetInColl.authorName);
+	} 
+}
+
 //ENSURE ON RECEIVE TWEET THE ORIGINAL AUTHORNAME
 //AND PICTURE IS PRESERVED
 const TweetReducer = (state = tweets, action) => {
 	switch(action.type){
 		case RECEIVE_TWEETS:
 			return populateTweets(action.tweets);
+		case RECEIVE_TWEET:
+			const stateDup = merge({}, state);
+			const tweet = action.tweet;
+			if (tweetBelongsToCurrColl(stateDup, tweet)){
+				stateDup[tweet['_id']] = tweet;
+			}
+			return stateDup;
 		case RESET_TWEETS:
 			return state;
 		default:
