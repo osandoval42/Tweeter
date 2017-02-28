@@ -34,4 +34,28 @@ export const postTweet = (content) => { //REVISE ADD LAST ID
   });
 };
 
+export const replyTweet = (original, content) => { //REVISE ADD LAST ID
+  return $.ajax({
+    method: 'POST',
+    url: '/api/tweet_reply',
+    data: {content, original}
+  });
+};
+
+export const postRetweet = (originalTweetId) => {
+    return $.ajax({
+    method: 'POST',
+    url: '/api/retweet',
+    data: {originalTweetId}
+  });
+}
+
+export const deleteRetweet = (retweetId) => {
+    return $.ajax({
+    method: 'DELETE',
+    url: '/api/retweet',
+    data: {retweetId}
+  });
+}
+
 

@@ -84,7 +84,7 @@ LimitLessLRUCache.prototype.insertNewestNodeYet = function(key, val){
 	if (this.val(key) === undefined){
 		newNode = this.createNewNode(key, val);
 	} else {
-		let nodeToChange = this.map[key];
+		let nodeToChange = this.keys[key];
 		nodeToChange.val = val;
 		const outdatedPrev = nodeToChange.prev;
 		const outdatedNext = nodeToChange.next;

@@ -13,25 +13,23 @@ class TweetingInterface extends React.Component {
   	handleSubmit(e){
 	    e.preventDefault()
 	    const newTweet = this.state.newTweetContent;
+	    const tweetReplyingTo = this.props.tweetReplyingTo;
+	    if (tweetReplyingTo){
+	    	this.props.postReply(tweetReplyingTo, newTweet)
+	    }
 	    this.props.postTweet(newTweet);
     }
 	render(){
 		return (
-			<div className = "PageBlackout">
-				<div className = "TweetingInterface">
-					<h1>Tweeting Interface With {this.props.initialContent}</h1>
-					<a onClick={this.props.closeTweetingInterface}>Close Tweeting Interface</a>
-						   <form onSubmit={this.handleSubmit.bind(this)}>
-					          <div className='new-tweet-content-container'>
-					            <input type='text' onChange={this.updateTweetContent.bind(this)} value={this.state.newTweetContent}
-					              className='new-post-input' placeholder="Whats happening?"/>
-					          </div>
-					          <div className='post-tweet-btn-container'>
-					            <input type='submit' className='tweet-btn' value='Tweet'/>
-					          </div>
-				          </form>
-				</div>
-			</div>
+					   <form className = "TweetingInterface" onSubmit={this.handleSubmit.bind(this)}>
+				          <div className='new-tweet-content-container'>
+				            <input type='text' onChange={this.updateTweetContent.bind(this)} value={this.state.newTweetContent}
+				              className='new-post-input' placeholder="Whats happening?"/>
+				          </div>
+				          <div className='post-tweet-btn-container'>
+				            <input type='submit' className='tweet-btn' value='Tweet'/>
+				          </div>
+			          </form>
 		)
 	}
 };

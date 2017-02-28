@@ -98,8 +98,7 @@ Tweet.postTweet = (content, currUserId, cb) => {
 
 
 // REVISE to send back actual tweet
-Tweet.retweet = (currUserId, original, cb) => { //REVISE disallow self retweet
-	const originalTweetId = mongoose.Types.ObjectId(original['_id']);
+Tweet.retweet = (currUserId, originalTweetId, cb) => { 
 	Tweet.getTweetById(originalTweetId, (err, tweet) => {
 		if (err) {cb(true);}
 
@@ -115,6 +114,17 @@ Tweet.retweet = (currUserId, original, cb) => { //REVISE disallow self retweet
 			}); //Revise to send up content of original with retweet
 		} else {
 			cb(true);
+		}
+	})
+}
+
+Tweet.unretweet = (currUserId, retweetId, cb) => { 
+	Tweet.findOneAndRemove({_id: retweetId, authorId: currUserId}, (err, deletedTweet) => {
+		if (err || !deletedTweet){
+			cb(true);
+		} else {
+			const originalId = deletedTweet.originalTweetId;
+			Tweet.getTweetByIdWithAllInfo(originalId, cb);
 		}
 	})
 }
@@ -188,17 +198,21 @@ Tweet.getTweetCount = (userId, cb) => {
 	})
 }
 
-Tweet.replyTweet = (content, currUserId, original, cb) => { //REVISE disallow self reply
+Tweet.replyTweet = (content, currUserId, originalTweet, cb) => { //REVISE disallow self reply
 	parseAtSymbols(content, (tweetedAtIds) => {
-		verifyTweetedAtOriginalAuthor(tweetedAtIds, original, (didTweetAt) => {
+		verifyTweetedAtOriginalAuthor(tweetedAtIds, originalTweet, (didTweetAt) => {
 			console.log(`did reply is ${didTweetAt}`);
 			const newPost = new Tweet({
 				content,
 				authorId: currUserId,
 				tweetedAt: tweetedAtIds,
-				replyToId: didTweetAt ? mongoose.Types.ObjectId(original['_id']) : undefined
+				replyToId: didTweetAt ? mongoose.Types.ObjectId(originalTweet['_id']) : undefined
 			})
-			newPost.save(cb);
+			newPost.save((err, newReply) => {
+				if (err){return (cb(true));}
+				const originalId = mongoose.Types.ObjectId(originalTweet['_id']);
+				Tweet.getTweetByIdWithAllInfo(originalId, cb);
+			});
 		})
 	})
 }

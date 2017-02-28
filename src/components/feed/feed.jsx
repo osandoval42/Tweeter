@@ -57,6 +57,28 @@ class Feed extends React.Component {
 			this.fetchTweets()
 		}
 	}
+	retweetButton(tweet){
+		const tweetId = tweet['_id'];
+		const currUser = this.props.currentUser
+		const retweetButton = <a onClick={this.props.retweet.bind(this, tweetId)}>retweet</a>
+		let retweetId;
+		const retweets = tweet.retweets;
+		if (currUser){
+			if (retweets && retweets.some((retweet) => {
+				const bool =(retweet.authorId === currUser['_id'])
+				if (bool) {retweetId = retweet['_id']}
+				return bool;
+			})){
+				return (<a onClick={this.props.unretweet.bind(this, retweetId)}>unretweet</a>)
+			} else {
+				return retweetButton
+			}
+			//return retweetButton if has not retweeted
+			//else return unretweetButton
+		} else {
+			return retweetButton;
+		}
+	}
 	render(){
 		const tweets = this.props.tweets;
 		return (
@@ -65,16 +87,17 @@ class Feed extends React.Component {
 						{   tweets.map((tweet) => {
 							const retweetCount = tweet.retweets ? tweet.retweets.length : 0;
 							const likesCount = tweet.likes ? tweet.likes.length : 0;
+							const tweetId = tweet['_id']
 							return (
-								<li key={tweet['_id']}>
+								<li key={tweetId}>
 									<ul>
 										{this.retweeter(tweet)}
 										{this.authorRepliedTo(tweet)}
 										<li>content: {tweet.content}</li>
 										<li>created: {tweet.createdAt}</li>
 										<li>original author: {tweet.authorName}</li>
-										<li>replies: {tweet.replyCount}</li>
-										<li>retweets: {retweetCount}</li>
+										<li><a onClick={this.props.openReplyingInterface.bind(this, tweet)}>reply</a> replies: {tweet.replyCount}</li>
+										<li>{this.retweetButton(tweet)} retweets: {retweetCount}</li>
 										<li>likes: {likesCount}</li>
 									</ul>
 								</li>);
