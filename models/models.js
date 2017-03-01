@@ -45,6 +45,39 @@ User.getUserById = function(id, callback){
 	User.findById(id, callback);
 }
 
+const Constants = {
+	FOLLOW: "FOLLOW",
+	MENTION: "MENTION"
+}
+
+User.createFollowNotification = (followedId, follower, cb) => { //REVISE protect against multiple follow
+	User.getUserById(followedId, (err, followedUser) => {
+		const followNotification = {
+			type: Constants.FOLLOW,
+			follower,
+			userHasSeen: false
+		}
+		if (followedUser.notifications.length >= 10){
+			followedUser.notifications.shift();
+		}
+		followedUser.notifications.push(followNotification);
+		followedUser.save(cb);
+	})
+}
+
+User.createMentionNotification = (user, tweet, cb) => {
+		const mentionNotification = {
+			type: Constants.MENTION,
+			tweet,
+			userHasSeen: false
+		}
+		if (followedUser.notifications.length >= 10){
+			User.notifications.shift();
+		}
+		User.notifications.push(mentionNotification);
+		User.save(cb);
+}
+
 const getFollowing = (userID, callback, type) => {
 	const id = mongoose.Types.ObjectId(userID);
 	User.findById(id, (err, userOfInterest) => {
@@ -361,13 +394,15 @@ const follow = (followerID, toFollowId, cb) => {
 				User.findByIdAndUpdate(
 					followerID,
 					{$push: {usersBeingFollowed: toFollowId}},
-					{safe: true, new: true, fields: {username: 1, usersBeingFollowed: 1, usersFollowing: 1}},
+					{safe: true, new: true, fields: {username: 1, usersBeingFollowed: 1, usersFollowing: 1, notifications: 1}},
 					function(err, model){
-						if (err){
-							cb(true);
-						} else {
-							cb(null, model);
-						}
+						User.createFollowNotification(toFollowId, model, (err, _) => {
+							if (err){
+								cb(true);
+							} else {
+								cb(null, model);
+							}
+						})
 					}
 				)
 			}

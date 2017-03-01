@@ -31,7 +31,8 @@ var UserSchema = mongoose.Schema({
 		sparse: true //REVISE DELETE
 	},
 	usersBeingFollowed: [mongoose.Schema.Types.ObjectId],
-	usersFollowing: [mongoose.Schema.Types.ObjectId]
+	usersFollowing: [mongoose.Schema.Types.ObjectId],
+	notifications: {type: Array, "default": []}
 }, 	{timestamps: true});
 
 var User = module.exports = mongoose.model('User', UserSchema);
