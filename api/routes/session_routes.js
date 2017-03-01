@@ -60,6 +60,8 @@ const configSessionRoutes = (router) => {
 				//REVISE check for signupErrs
 				const newUser = new User({
 					username,
+					firstName,
+					lastName,
 					password
 					// email,
 					// firstName,

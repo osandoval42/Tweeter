@@ -3,7 +3,7 @@ import React from 'react';
 class SignUp extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = { username: "", password: "", confirmPassword: "" };
+		this.state = { username: "", firstName: "", lastName: "", password: "", confirmPassword: "" };
 		this.handleSubmit = this.handleSubmit.bind(this);
 	}
 
@@ -15,6 +15,8 @@ class SignUp extends React.Component {
 
 		const formData = {
 			username: this.state.username,
+			firstName: this.state.firstName,
+			lastName: this.state.lastName,
 			password: this.state.password,
 			confirmPassword: this.state.confirmPassword
 		};
@@ -32,6 +34,22 @@ class SignUp extends React.Component {
 								onChange={this.update("username")}
 								className="signup-input"
                 placeholder="name" />
+						</label>
+				<label>
+							<input type="text"
+                label='First Name'
+								value={this.state.firstName}
+								onChange={this.update("firstName")}
+								className="signup-input"
+                placeholder="first name" />
+						</label>
+				<label>
+											<input type="text"
+                label='Last Name'
+								value={this.state.lastName}
+								onChange={this.update("lastName")}
+								className="signup-input"
+                placeholder="last name" />
 						</label>
 				<label>
 		          <input type="password"

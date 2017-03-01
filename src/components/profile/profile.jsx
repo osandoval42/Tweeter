@@ -37,7 +37,9 @@ class Profile extends React.Component {
 	}
 	username(){
 		const username = this.props.profileUser.username;
-		return username ? <h3>user profile is of {username}</h3> : <h3>invalid user</h3>;
+		const firstName = this.props.profileUser.username;
+		const lastName = this.props.profileUser.lastName;
+		return username ? <h3>user profile is of {username}, first: {firstName}, last: {lastName}</h3> : <h3>invalid user</h3>;
 	}
 	tweetToButton(){
 		const username = this.props.profileUser.username;

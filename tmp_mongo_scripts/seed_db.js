@@ -9,18 +9,26 @@ const db = config.configDB();
 
 let Oscar = new User({
 	username: "Oscar",
+	firstName: "Oscar",
+	lastName: "Sandoval",
 	password: "password"
 })
 let Max = new User({
 	username: "Max",
+	firstName: "Max",
+	lastName: "Rutyna",
 	password: "password"
 })
 let Patrick = new User({
 	username: "Patrick",
+	firstName: "Patrick",
+	lastName: "Baldwin",
 	password: "password"
 })
 let Andrew = new User({
 	username: "Andrew",
+	firstName: "Andrew",
+	lastName: "Chi",
 	password: "password"
 })
 

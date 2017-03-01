@@ -106,6 +106,8 @@ export default {
 				currUser.username = req.user.username;
 				currUser.usersBeingFollowed = req.user.usersBeingFollowed;
 				currUser.usersFollowing = req.user.usersFollowing;
+				currUser.firstName = req.user.firstName;
+				currUser.lastName = req.user.lastName;
 				currUser["_id"] = req.user["_id"];
 				Tweet.getTweetCount(req.user['_id'], (err, tweetCount) => {
 					currUser.tweetCount = tweetCount;

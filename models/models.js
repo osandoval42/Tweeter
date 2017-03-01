@@ -90,6 +90,8 @@ Tweet.postTweet = (content, currUserId, cb) => {
 				if (err) {return cb(true);}
 				const tweetJson = newTweet.toObject();
 				tweetJson.authorName = user.username;
+				tweet.Json.firstName = user.firstName;
+				tweet.Json.lastName = user.lastName;
 				cb(err, tweetJson);
 			})
 		});
@@ -222,6 +224,8 @@ const getAuthorNameAndNext = (tweet, next, finalCB, tweetToReturn) => {
 			User.getUserById(tweet.authorId, (err, user) => {
 				if (err) {throw err;} //REVISE
 				tweet.authorName = user.username;
+				tweet.firstName = user.firstName;
+				tweet.lastName = user.lastName;
 				determineIfRetweet(tweet, next, finalCB, tweetToReturn)
 			})
 }
@@ -237,7 +241,9 @@ const getTweetRepliedToAndNext = (tweet, next, finalCB) => {
 				tweet.tweetRepliedTo = {
 					_id: tweetRepliedTo['id'],
 					content: tweetRepliedTo.content,
-					authorName: user.username
+					authorName: user.username,
+					firstName: user.firstName,
+					lastName: user.lastName
 				};
 				getAuthorNameAndNext(tweet, next, finalCB);
 			})
