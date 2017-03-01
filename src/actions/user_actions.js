@@ -18,6 +18,14 @@ export const toggleFollow = (followedUserId) => dispatch => {
 		err => dispatch(receiveErrors(err.responseJSON))
 };
 
+export const clearNotifications = () => dispatch => {
+	APIUtil.clearNotifications()
+		.then(currUser => {
+			dispatch(receiveCurrentUser(currUser))
+		}), 
+		err => dispatch(receiveErrors(err.responseJSON))
+};
+
 export const receiveProfileUser = profileUser => ({
 	type: Constants.RECEIVE_PROFILE_USER,
 	profileUser

@@ -24,6 +24,20 @@ const configUserRoutes = (router) => { //REVISE disallow blank string
 			res.send(user);
 		})
 	})
+	router.post('/clear_notifications', (req, res) => {
+		const currUser = req.user;
+		if (RouteHelpers.ensureLoggedIn(currUser, res)){
+			const currUserId = currUser['_id'];
+			User.clearNotifications(currUser, (err, updatedUser) => {
+				if (err) { 
+					return res.status(401).send({"ok": false}); 
+				}
+				else { 
+					res.send(updatedUser);
+				}
+			})
+		}
+	})
 }
 
 /*

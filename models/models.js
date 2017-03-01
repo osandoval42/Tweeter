@@ -57,10 +57,15 @@ User.createFollowNotification = (followedId, follower, cb) => { //REVISE protect
 			follower,
 			userHasSeen: false
 		}
-		if (followedUser.notifications.length >= 10){
-			followedUser.notifications.shift();
+		if (!followedUser.notifications.some((notification) => {
+			const anotherFollower = notification.follower;
+			return (anotherFollower && (anotherFollower['_id'].toString() === follower['_id'].toString()))
+		})){
+			if (followedUser.notifications.length >= 10){
+				followedUser.notifications.shift();
+			}
+			followedUser.notifications.push(followNotification);
 		}
-		followedUser.notifications.push(followNotification);
 		followedUser.save(cb);
 	})
 }
@@ -436,7 +441,7 @@ const unfollow = (unfollowerId, toUnfollowId, cb) => {
 				User.findByIdAndUpdate(
 					unfollowerId,
 					{$pull: {usersBeingFollowed: toUnfollowId}},
-					{safe: true, new: true, fields: {username: 1, usersBeingFollowed: 1, usersFollowing: 1}},
+					{safe: true, new: true, fields: {username: 1, usersBeingFollowed: 1, usersFollowing: 1, notifications: 1}},
 					function(err, model){
 						if (err){
 							cb(true);
@@ -527,4 +532,13 @@ User.createUserWithPromise = (newUser) => {
 		})
 	})
 	return promise;
+}
+
+User.clearNotifications = (userId, cb) => {
+	User.getUserById(userId, (err, user) => {
+		user.notifications.forEach((notification) => {
+			notification.userHasSeen = true;
+		})
+		user.save(cb)
+	})
 }

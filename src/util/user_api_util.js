@@ -34,3 +34,10 @@ module.exports.toggleFollow = (followedUserId) => {
 		data: {toFollowId: followedUserId}
 	});
 }
+
+module.exports.clearNotifications = () => {
+	return $.ajax({
+		method: 'POST',
+		url: `/api/clear_notifications`,
+	});
+}
