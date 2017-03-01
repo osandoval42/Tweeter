@@ -10,7 +10,7 @@ class ReplyingBox extends React.Component{
 		const namesTweetedAt = nameStringsTweetedAt.map((nameString) => {
 			let idxAfterName = nameString.indexOf(" ");
 			let username = (idxAfterName === -1) ? nameString : nameString.slice(0, idxAfterName);
-			return username;
+			return `@${username}`;
 		})
 		const authorName = `@${tweet.authorName}`;
 		if (!namesTweetedAt.some((name) => {return (name === authorName);})){

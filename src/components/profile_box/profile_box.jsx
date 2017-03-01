@@ -10,6 +10,7 @@ class ProfileBox extends React.Component{
 	}
 	render(){
 		const currentUser = this.props.currentUser;
+		if (currentUser){
 		return (
 			<div>
 				<h1 onClick={this.toProfile.bind(this, "")}>username: {currentUser.username}</h1>
@@ -19,7 +20,9 @@ class ProfileBox extends React.Component{
 				<h5><a onClick={this.toProfile.bind(this, "/followers")}>followers: {currentUser.usersFollowing.length}</a></h5>
 				<a onClick={this.props.logout}> Logout</a>
 			</div>
-		)
+		)} else {
+			return (<div></div>);
+		}
 	}
 }
 

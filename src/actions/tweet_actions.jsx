@@ -24,7 +24,7 @@ export const openReplyingInterface = (originalTweet) => {
 export const postRetweet = (originalTweetId) => dispatch => {
 		APIUtil.postRetweet(originalTweetId)
 		.then(revisedOriginalTweet => {
-			dispatch(receiveTweet(revisedOriginalTweet))}), 
+			dispatch(receiveUpdatedTweet(revisedOriginalTweet))}), 
 		err => dispatch(receiveErrors(err.responseJSON))
 }
 
@@ -32,7 +32,7 @@ export const postRetweet = (originalTweetId) => dispatch => {
 export const deleteRetweet = (retweetId) => dispatch =>{
 		APIUtil.deleteRetweet(retweetId)
 		.then(revisedOriginalTweet => {
-			dispatch(receiveTweet(revisedOriginalTweet))}), 
+			dispatch(receiveUpdatedTweet(revisedOriginalTweet))}), 
 		err => dispatch(receiveErrors(err.responseJSON))
 }
 
@@ -46,7 +46,7 @@ export const postTweet = (newTweet) => dispatch => {
 	APIUtil.postTweet(newTweet)
 		.then(newTweet => {
 			dispatch(closeTweetingInterface()); //revise provide success feedback
-			dispatch(receiveTweet(newTweet))}), 
+			dispatch(receiveNewTweet(newTweet))}), 
 		err => dispatch(receiveErrors(err.responseJSON))
 };
 
@@ -54,7 +54,7 @@ export const replyTweet = (originalTweet, replyContent) => dispatch => {
 	APIUtil.replyTweet(originalTweet, replyContent)
 		.then(updatedOriginalTweet => {
 			dispatch(closeTweetingInterface()); //revise provide success feedback
-			dispatch(receiveTweet(updatedOriginalTweet))}), 
+			dispatch(receiveUpdatedTweet(updatedOriginalTweet))}), 
 		err => dispatch(receiveErrors(err.responseJSON))
 };
 
@@ -92,8 +92,13 @@ export const receiveTweets = tweets => ({
 	tweets
 });
 
-export const receiveTweet = tweet => ({
-	type: Constants.RECEIVE_TWEET,
+export const receiveNewTweet = tweet => ({
+	type: Constants.RECEIVE_NEW_TWEET,
+	tweet
+});
+
+export const receiveUpdatedTweet = tweet => ({
+	type: Constants.RECEIVE_UPDATED_TWEET,
 	tweet
 });
 

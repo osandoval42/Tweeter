@@ -11,12 +11,12 @@ const configFollowerRoutes = (router) => {
 			const currUserId = currUser['_id']; 
 			const strTweetId = req.body.tweetId;
 			const tweetId = mongoose.Types.ObjectId(strTweetId);
-			Like.toggleLike(currUserId, tweetId, (err, result) => {
+			Like.toggleLike(currUserId, tweetId, (err, updatedTweet) => {
 				if (err) { 
 					return res.status(401).send({"ok": false}); 
 				}
 				else { 
-					res.send(result);
+					res.send(updatedTweet);
 				}
 			});
 		}

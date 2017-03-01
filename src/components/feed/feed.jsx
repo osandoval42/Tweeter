@@ -79,6 +79,14 @@ class Feed extends React.Component {
 			return retweetButton;
 		}
 	}
+	likeButton(tweet){
+		const currUser = this.props.currentUser
+		if ((!tweet.likes) || currUser && tweet.likes.some((like) => { return (like.userId === currUser['_id'])})){
+			return <a onClick={this.props.toggleLike.bind(this, tweet['_id'])}>unlike</a>
+		} else {
+			return <a onClick={this.props.toggleLike.bind(this, tweet['_id'])}>like</a>
+		}
+	}
 	render(){
 		const tweets = this.props.tweets;
 		return (
@@ -98,7 +106,7 @@ class Feed extends React.Component {
 										<li>original author: {tweet.authorName}</li>
 										<li><a onClick={this.props.openReplyingInterface.bind(this, tweet)}>reply</a> replies: {tweet.replyCount}</li>
 										<li>{this.retweetButton(tweet)} retweets: {retweetCount}</li>
-										<li>likes: {likesCount}</li>
+										<li>{this.likeButton(tweet)} likes: {likesCount}</li>
 									</ul>
 								</li>);
 						})}

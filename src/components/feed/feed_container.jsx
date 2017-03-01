@@ -1,6 +1,7 @@
 import {connect} from 'react-redux';
 import Feed from './feed';
 import {openReplyingInterface, deleteRetweet, postRetweet, fetchTweetsUserLikes, fetchAllTweets, fetchAllUserProfileTweets, fetchNonReplyProfileTweets} from '../../actions/tweet_actions';
+import {toggleLike} from '../../actions/like_actions';
 
 
 const mapStateToProps = (state) => ({
@@ -30,6 +31,9 @@ const mapDispatchToProps = (dispatch) => ({ //REVISE check that currUserId is ne
 	},
 	openReplyingInterface(originalTweet){
 		return dispatch(openReplyingInterface(originalTweet));
+	},
+	toggleLike(tweetId){
+		return dispatch(toggleLike(tweetId));
 	}
 });
 
