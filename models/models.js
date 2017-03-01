@@ -65,17 +65,17 @@ User.createFollowNotification = (followedId, follower, cb) => { //REVISE protect
 	})
 }
 
-User.createMentionNotification = (user, tweet, cb) => {
+User.createMentionNotification = (followedUser, tweet, cb) => {
 		const mentionNotification = {
 			type: Constants.MENTION,
 			tweet,
 			userHasSeen: false
 		}
 		if (followedUser.notifications.length >= 10){
-			User.notifications.shift();
+			followedUser.notifications.shift();
 		}
-		User.notifications.push(mentionNotification);
-		User.save(cb);
+		followedUser.notifications.push(mentionNotification);
+		followedUser.save(cb);
 }
 
 const getFollowing = (userID, callback, type) => {
@@ -108,7 +108,18 @@ Tweet.getTweetByIdWithAllInfo = (id, cb) => {
 	});
 }
 
-
+Tweet.createMentionNotifications = (tweet, cb) => {
+	async.eachSeries(tweet.tweetedAt, (mentionedId, next) => {
+		User.findById(mentionedId, (err, user) => {
+			User.createMentionNotification(user, tweet, (err, _) => {
+				if (err){throw err;} else {next()}
+			})
+		})
+	}, (err) => {
+		if (err) {return cb(false);}
+		cb(true);
+	})
+}
 //REVISE test for empty string content
 Tweet.postTweet = (content, currUserId, cb) => {
 	//REVISE parse content for @s to determine ids
@@ -123,9 +134,11 @@ Tweet.postTweet = (content, currUserId, cb) => {
 				if (err) {return cb(true);}
 				const tweetJson = newTweet.toObject();
 				tweetJson.authorName = user.username;
-				tweet.Json.firstName = user.firstName;
-				tweet.Json.lastName = user.lastName;
-				cb(err, tweetJson);
+				tweetJson.firstName = user.firstName;
+				tweetJson.lastName = user.lastName;
+				Tweet.createMentionNotifications(newTweet, (success) => {
+					if (success){cb(err, tweetJson);} else {cb(true);}
+				})	
 			})
 		});
 	});
@@ -246,7 +259,9 @@ Tweet.replyTweet = (content, currUserId, originalTweet, cb) => { //REVISE disall
 			newPost.save((err, newReply) => {
 				if (err){return (cb(true));}
 				const originalId = mongoose.Types.ObjectId(originalTweet['_id']);
-				Tweet.getTweetByIdWithAllInfo(originalId, cb);
+				Tweet.createMentionNotifications(newReply, (success) => {
+					if (success){Tweet.getTweetByIdWithAllInfo(originalId, cb);} else {cb(true);}
+				})	
 			});
 		})
 	})
