@@ -33,11 +33,11 @@ const SearchBar = React.createClass({
 		      <div className="search-bar">
 		        <form className="search-bar-form" onSubmit={this.handleSubmit}>
 		          <div className="search-bar-inputs">
-		            <input className="search-input" value={this.state.searchInput}
-		              onChange={this.updateSearch}
+		            <input id="search-input" value={this.state.searchInput}
+		              onChange={this.updateSearch} placeholder="Search Twitter"
 		            />
-		          <button type="submit" className='search-submit' >
-		          	submit
+		          <button type="submit" id='search-submit' >
+		          	<i className="fa fa-search"></i>
 		          </button>
 		          </div>
 		        </form>

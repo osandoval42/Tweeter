@@ -19,13 +19,32 @@ class ProfileBox extends React.Component{
 		const currentUser = this.props.currentUser;
 		if (currentUser){
 		return (
-			<div>
-				<h1 onClick={this.toProfile.bind(this, "")}>username: {currentUser.username}</h1>
-				<h3 onClick={this.toProfile.bind(this, "")}>full name: {this.fullName()}</h3>
-				<h5><a onClick={this.toProfile.bind(this, "")}>tweets: {currentUser.tweetCount}</a></h5>
-				<h5><a onClick={this.toProfile.bind(this, "/following")}>followees: {currentUser.usersBeingFollowed.length}</a></h5>
-				<h5><a onClick={this.toProfile.bind(this, "/followers")}>followers: {currentUser.usersFollowing.length}</a></h5>
-				<a onClick={this.props.logout}> Logout</a>
+			<div id="profile-box" className="home-left-box">
+				<div id="top-half-profile-box" className="relative">				
+					<div id="profile-box-img-container">
+						<img id="profile-box-img" src="https://pbs.twimg.com/profile_images/578979277611274241/CgGnz4F-_400x400.png"/>
+					</div>
+					<a onClick={this.props.logout}> Logout</a>
+				</div>
+				<div id="profile-box-separator"></div>
+				<div id="bottom-half-profile-box" className="relative">
+					<h3 id="profile-box-fullname" onClick={this.toProfile.bind(this, "")}>{this.fullName()}</h3>
+					<span id="profile-box-username" onClick={this.toProfile.bind(this, "")}>{`@${currentUser.username}`}</span>
+					<div id="profile-box-stats">
+						<container className="profile-stat" onClick={this.toProfile.bind(this, "")}>
+							<span className="profile-stat-label">TWEETS</span>
+							<span className="profile-stat-content">{currentUser.tweetCount}</span>
+						</container>
+						<container className="profile-stat" onClick={this.toProfile.bind(this, "/following")}>
+							<span className="profile-stat-label">FOLLOWING</span>
+							<span className="profile-stat-content">{currentUser.usersBeingFollowed.length}</span>
+						</container>
+						<container className="profile-stat" onClick={this.toProfile.bind(this, "")}>
+							<span className="profile-stat-label">FOLLOWERS</span>
+							<span className="profile-stat-content">{currentUser.usersFollowing.length}</span>
+						</container>
+					</div>
+				</div>
 			</div>
 		)} else {
 			return (<div></div>);

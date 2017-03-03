@@ -12,7 +12,7 @@ class Navbar extends React.Component{
 			const unseenNotifications = currUser.notifications.filter((notification) => 
 				{return (!notification.userHasSeen)});
 			if (unseenNotifications.length > 0){
-				return (<span className="notification-alert">{unseenNotifications.length} </span>)
+				return (<span id="notification-alert" className="twitter-background-color">{unseenNotifications.length} </span>)
 			}	
 		}
 	}
@@ -23,15 +23,19 @@ class Navbar extends React.Component{
 	}
 	render(){
 		return (
-			<ul>
-				<li>Home</li>
-				<a onClick={this.toNotificationsPage.bind(this)}>{this.notificationCount()}Notifications</a>
-				<li>Messages</li>
-				<li>Twitter Icon</li>
+			<header className="full-width block" id="header">
+				<ul id="nav-tabs">
+					<a>Home</a>
+					<a id="notifications" className="relative block" onClick={this.toNotificationsPage.bind(this)}>{this.notificationCount()}Notifications</a>
+					<a>Messages</a>
+				</ul>
+				<i className="fa fa-twitter twitter-font-color"></i>
+				<div id="right-of-icon">
 				<SearchBar/>
-				{this.props.currentUser ? <li>profile img</li> : undefined}
-				<a onClick={this.props.openTweetingInterface}>Post Tweet</a>
-			</ul>
+					{this.props.currentUser ? <div>pro img</div> : undefined}
+					<button id="post-tweet-btn" onClick={this.props.openTweetingInterface}>Tweet</button>
+				</div>
+			</header>
 		)
 	}
 }

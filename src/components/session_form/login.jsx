@@ -21,7 +21,7 @@ class LogInForm extends React.Component {
 	}
 	render() {
 		return (
-			<header className="login-form-container">
+			<div className="home-left-box">
 				<h3>Log In</h3>
 				<form onSubmit={this.handleSubmit} className="login-form-box">
 						<div className='input-w-label'>
@@ -42,7 +42,7 @@ class LogInForm extends React.Component {
 						  <input type="submit" value="Log In" className="login-submit" />
 				</form>
 				<a onClick={this.props.toggleSessionFormType}>Sign Up</a>
-			</header>
+			</div>
 		);
 	}
 }

@@ -7,7 +7,7 @@ import Constants from '../../constants/constants';
 
 //REVISE put in session starter or profile on left depending 
 const HomeToBe = ({currentUser}) => (
-	<div>
+	<div id="home">
 		{currentUser ? <ProfileBox/> : <SessionForm/>}
 		<Feed feedType = {Constants.CURR_USER_FEED}/>
 	</div>

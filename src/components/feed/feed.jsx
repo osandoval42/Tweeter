@@ -46,16 +46,22 @@ class Feed extends React.Component {
 	}
 	retweeter(tweet){
 		const retweeter = tweet.retweetAuthorName;
-		return (retweeter) ? (<li>Retweeted By: {retweeter}</li>) : undefined;
+		return (retweeter) ? (<span id="retweeter-name">{`@${retweeter} Retweeted`}</span>) : undefined;
 	}
 	authorRepliedTo(tweet){
 		const repliedTo = tweet.tweetRepliedTo;
-		return repliedTo ? (<li>In reply to: {repliedTo.authorName}</li>) : undefined;
+		return repliedTo ? (<span>In reply to: {repliedTo.authorName}</span>) : undefined;
 	}
 	componentDidUpdate(prevProps){
 		if (prevProps.feedType != this.props.feedType){
 			this.fetchTweets()
 		}
+	}
+	fullNameOfAuthor(tweet){
+		let names = []
+		if (tweet.firstName) {names.push(tweet.firstName)};
+		if (tweet.lastName) {names.push(tweet.lastName)};
+		return names.join(" ");
 	}
 	retweetButton(tweet){
 		const tweetId = tweet['_id'];
@@ -87,31 +93,40 @@ class Feed extends React.Component {
 			return <a onClick={this.props.toggleLike.bind(this, tweet['_id'])}>like</a>
 		}
 	}
+	getCount(tweet, type){
+		if (!tweet[type] || tweet[type].length < 1){
+			return undefined;
+		} else {
+			return tweet[type].length;
+		}
+	}
 	render(){
 		const tweets = this.props.tweets;
 		return (
-				<div>
-					<ul>
+					<ul id="feed">
 						{   tweets.map((tweet) => {
-							const retweetCount = tweet.retweets ? tweet.retweets.length : 0;
-							const likesCount = tweet.likes ? tweet.likes.length : 0;
 							const tweetId = tweet['_id']
 							return (
-								<li key={tweetId}>
-									<ul>
+								<li className="tweet relative clearfix" key={tweetId}>
 										{this.retweeter(tweet)}
+										<div id="tweet-img-container" className="clearfix">
+											<img id="tweet-img" src="https://pbs.twimg.com/profile_images/578979277611274241/CgGnz4F-_400x400.png"/>
+										</div>
+										<h3 id="tweet-authorname">{this.fullNameOfAuthor(tweet)}</h3>
+										<span id="tweet-username">{`@${tweet.authorName}`}</span>
+										<span>created: {tweet.createdAt}</span>
 										{this.authorRepliedTo(tweet)}
-										<li>content: {tweet.content}</li>
-										<li>created: {tweet.createdAt}</li>
-										<li>original author: {tweet.authorName}</li>
-										<li><a onClick={this.props.openReplyingInterface.bind(this, tweet)}>reply</a> replies: {tweet.replyCount}</li>
-										<li>{this.retweetButton(tweet)} retweets: {retweetCount}</li>
-										<li>{this.likeButton(tweet)} likes: {likesCount}</li>
-									</ul>
+										<br/>
+										<span id="tweet-content">{tweet.content}</span>
+										<br/>
+										<div className="tweet-buttons">
+											<span className="tweet-inter-btn"><a onClick={this.props.openReplyingInterface.bind(this, tweet)}>reply</a> {this.getCount(tweet, "replies")}</span>
+											<span className="tweet-inter-btn">{this.retweetButton(tweet)} {this.getCount(tweet, "retweets")}</span>
+											<span className="tweet-inter-btn">{this.likeButton(tweet)} {this.getCount(tweet, "likes")}</span>
+										</div>
 								</li>);
 						})}
 					</ul>
-				</div>
 		)
 	}
 };

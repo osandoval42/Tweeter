@@ -24,7 +24,7 @@ class SignUp extends React.Component {
 	}
 	render(){
 		return (
-		<div>
+		<div className="home-left-box">
 		<form onSubmit={this.handleSubmit} className="signup-form-box">
           <h3 className="signup-header">Sign Up</h3>
 						<label>
