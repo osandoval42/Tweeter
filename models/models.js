@@ -332,8 +332,35 @@ const getRetweetsAndNext = (tweetToGetRetweetsFor, next, finalCB, tweetToReturn)
 	Tweet.find({originalTweetId: tweetToGetRetweetsFor['_id']}, (err, retweets) => {
 		if (err) {throw err;} //REVISE
 		tweetToGetRetweetsFor.retweets = retweets;
-		getReplyCountAndComplete(tweetToGetRetweetsFor, next, finalCB, tweetToReturn);
+		computeTweetTimeAndNext(tweetToGetRetweetsFor, next, finalCB, tweetToReturn);
 	})
+}
+
+const secondsInDay = 86400;
+const secondsInHour = 3600;
+const months = ["", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept",  "Oct",  "Nov",  "Dec"];
+
+const computeTweetTimeAndNext = (tweetToComputeTimeFor, next, finalCB, tweetToReturn) => {
+	const now = new Date();
+	const createdAt = tweetToComputeTimeFor.createdAt;
+	const diffInSeconds = (now - createdAt) / 1000;
+	if (diffInSeconds < 86400){
+		const hoursPast = Math.floor(diffInSeconds / secondsInHour)
+		if (hoursPast > 0){
+			tweetToComputeTimeFor.tweetTime = `${hoursPast}h`
+		} else {
+			const minutesPast = Math.floor(diffInSeconds / 60);
+			tweetToComputeTimeFor.tweetTime = (minutesPast > 0) ? `${minutesPast}m` : "now";
+		}
+	} else {
+		const dateStr = createdAt.toLocaleDateString()
+		const dateArr = dateStr.split('/');
+		const month = dateArr[0];
+		const day = dateArr[1];
+		const year = dateArr[2]
+		tweetToComputeTimeFor.tweetTime = `${months[month]} ${day} ${year}`;
+	}
+	getReplyCountAndComplete(tweetToComputeTimeFor, next, finalCB, tweetToReturn);
 }
 
 const getReplyCountAndComplete = (tweetToGetReplyCountFor, next, finalCB, tweetToReturn) => {

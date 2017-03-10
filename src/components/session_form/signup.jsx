@@ -24,50 +24,39 @@ class SignUp extends React.Component {
 	}
 	render(){
 		return (
-		<div className="home-left-box">
+		<div id="signup-form-container" className="home-left-box session-form-container">
 		<form onSubmit={this.handleSubmit} className="signup-form-box">
-          <h3 className="signup-header">Sign Up</h3>
-						<label>
+          <h4 className="question top-question-session-form">Join us!</h4>
 							<input type="text"
-                label='Name'
 								value={this.state.username}
 								onChange={this.update("username")}
-								className="signup-input"
-                placeholder="name" />
-						</label>
-				<label>
-							<input type="text"
-                label='First Name'
+								className="login-input"
+                placeholder="username" />
+							<input type="text"           
 								value={this.state.firstName}
 								onChange={this.update("firstName")}
-								className="signup-input"
-                placeholder="first name" />
-						</label>
-				<label>
-											<input type="text"
-                label='Last Name'
+								className="login-input"
+                placeholder="First name" />
+											<input type="text"               
 								value={this.state.lastName}
 								onChange={this.update("lastName")}
-								className="signup-input"
-                placeholder="last name" />
-						</label>
-				<label>
+								className="login-input"
+                placeholder="Last name" />									
 		          <input type="password"
 		            value={this.state.password}
-                placeholder="password"
+                placeholder="Password"
 		            onChange={this.update("password")}
-								className="signup-input" />
-				</label>
-				<label>
+								className="login-input" />
 		          <input type="password"
 		            value={this.state.confirmPassword}
-                placeholder="confirm password"
+                placeholder="Confirm password"
 		            onChange={this.update("confirmPassword")}
-								className="signup-input" />
-				</label>
-						<input className="signup-btn" type="submit" value="Sign Up" />
+								className="login-input" />				
+						<input type="submit" value="Sign Up" className="session-start-btn" />
 				</form>
-			<a onClick={this.props.toggleSessionFormType}>login</a>
+				<hr id="signup-separator"/>
+			<h4 id="already-have-an-account" className="question">Already have an account?</h4>
+			<button className="session-switch-btn" onClick={this.props.toggleSessionFormType}>Log In</button>
 			</div>
 			)
 	}

@@ -21,6 +21,16 @@ class Navbar extends React.Component{
 			browserHistory.push(`/notifications`);
 		}
 	}
+	myProfileImg(){
+		const currUser = this.props.currentUser;
+		if (currUser){
+			return (
+				<div id="my-profile-img-container">
+					<img id="my-profile-img" src="https://pbs.twimg.com/profile_images/578979277611274241/CgGnz4F-_400x400.png"/>
+				</div>
+			)
+		}
+	}
 	render(){
 		return (
 			<header className="full-width block" id="header">
@@ -32,8 +42,8 @@ class Navbar extends React.Component{
 				<i className="fa fa-twitter twitter-font-color"></i>
 				<div id="right-of-icon">
 				<SearchBar/>
-					{this.props.currentUser ? <div>pro img</div> : undefined}
-					<button id="post-tweet-btn" onClick={this.props.openTweetingInterface}>Tweet</button>
+				{this.myProfileImg.call(this)}
+					<button className="post-tweet-btn" onClick={this.props.openTweetingInterface}>Tweet</button>
 				</div>
 			</header>
 		)

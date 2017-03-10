@@ -25,23 +25,41 @@ class Panel extends React.Component{
   followButton(){ //REVISE DISABLE DOUBLE CLICK
     const profileUser = this.props.profileUser;
     if (this.isFollowingUser()){
-      return (<a onClick={this.props.toggleFollow.bind(this, profileUser['_id'])} className="Following">Following</a>)
+      return (<button onClick={this.props.toggleFollow.bind(this, profileUser['_id'])} id="following-btn" className="profile-follow-btn"><span>Following</span></button>)
     } else {
-      return (<a onClick={this.props.toggleFollow.bind(this, profileUser['_id'])} className="Follow">Follow</a>)
+      return (<button onClick={this.props.toggleFollow.bind(this, profileUser['_id'])} id="follow-btn" className="profile-follow-btn">Follow</button>)
     }
   }
   render() {
     const currDisplay = this.props.params.display;
     const user = this.props.profileUser.username ? this.props.profileUser : undefined
     return (
-      <div className="Panel">
-        <div>
-          <a onClick = {this.changeDisplay.bind(this, "")} className = {(!currDisplay) ? "highlighted" : ""}>Tweets {user? user.tweetCount : undefined}</a>
-          <a onClick = {this.changeDisplay.bind(this, `/${Constants.FOLLOWING}`)} className = {(currDisplay === Constants.FOLLOWING) ? "highlighted" : ""}>Following {user ? user.usersBeingFollowed.length : undefined}</a>
-          <a onClick = {this.changeDisplay.bind(this, `/${Constants.FOLLOWERS}`)} className = {(currDisplay === Constants.FOLLOWERS) ? "highlighted" : ""}>Followers {user ? user.usersFollowing.length : undefined}</a>
-          <a onClick = {this.changeDisplay.bind(this, `/${Constants.LIKES}`)} className = {(currDisplay === Constants.LIKES) ? "highlighted" : ""}>Likes {user ? user.likeCount : undefined}</a>
+      <div id="panel">
+        <div id="all-profile-panel-buttons">
+          <div id="profile-panel-buttons">
+            <a onClick = {this.changeDisplay.bind(this, "")}>
+              <h6>TWEETS</h6>
+              <span className = {(!currDisplay) ? "highlighted" : ""}>{user? user.tweetCount : undefined}</span>
+              <div className = {(!currDisplay) ? "blueLine" : ""}></div>
+            </a>
+            <a onClick = {this.changeDisplay.bind(this, `/${Constants.FOLLOWING}`)}>
+              <h6>FOLLOWING</h6> 
+              <span  className = {(currDisplay === Constants.FOLLOWING) ? "highlighted" : ""}>{user ? user.usersBeingFollowed.length : undefined}</span>
+              <div className = {(currDisplay === Constants.FOLLOWING) ? "blueLine" : ""}></div>
+            </a>
+            <a onClick = {this.changeDisplay.bind(this, `/${Constants.FOLLOWERS}`)}>
+              <h6>FOLLOWERS</h6> 
+              <span className = {(currDisplay === Constants.FOLLOWERS) ? "highlighted" : ""}>{user ? user.usersFollowing.length : undefined}</span>
+              <div className = {(currDisplay === Constants.FOLLOWERS) ? "blueLine" : ""}></div>
+            </a>
+            <a onClick = {this.changeDisplay.bind(this, `/${Constants.LIKES}`)}>
+              <h6>LIKES</h6> 
+              <span className = {(currDisplay === Constants.LIKES) ? "highlighted" : ""}>{user ? user.likeCount : undefined}</span>
+              <div className = {(currDisplay === Constants.LIKES) ? "blueLine" : ""}></div>
+            </a>
+          </div>
+          {this.followButton()}
         </div>
-        {this.followButton()}
       </div>
     );
   }

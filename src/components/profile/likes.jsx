@@ -4,10 +4,14 @@ import {LIKES_FEED} from '../../constants/constants';
 
 //render feed using likes in here
 const Likes = ({}) => (
-	<div>
-		<div><h3>Likes</h3></div>
-		<Feed feedType={LIKES_FEED}/>
-	</div>
+      <div id="main-profile-display" className="ProfileTweetsPanel">
+        <div id="profile-tweets-header">
+          <div id="main-profile-display-header-btns">
+            <a>Likes</a>
+          </div>
+        </div>
+        <Feed feedType={LIKES_FEED}/>
+      </div>
 )
 
 module.exports = Likes;

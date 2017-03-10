@@ -21,14 +21,10 @@ class TweetingInterface extends React.Component {
     }
 	render(){
 		return (
-					   <form className = "TweetingInterface" onSubmit={this.handleSubmit.bind(this)}>
-				          <div className='new-tweet-content-container'>
+					   <form id = "tweeting-interface" onSubmit={this.handleSubmit.bind(this)}>				       
 				            <input type='text' onChange={this.updateTweetContent.bind(this)} value={this.state.newTweetContent}
-				              className='new-post-input' placeholder="Whats happening?"/>
-				          </div>
-				          <div className='post-tweet-btn-container'>
-				            <input type='submit' className='tweet-btn' value='Tweet'/>
-				          </div>
+				              id='new-post-input' placeholder="Whats happening?"/>				          
+				            <input type='submit' id='submit-tweet-btn' className="post-tweet-btn" value='Tweet'/>
 			          </form>
 		)
 	}

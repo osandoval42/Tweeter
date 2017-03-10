@@ -12,6 +12,7 @@ const WritingTweetReducer = (state = notTweetingStatus, action) => {
 		case WRITING_TWEET:
 			tweetingStatus = {isWriting: true}
 			tweetingStatus.initialContent = action.initialContent;
+			tweetingStatus.fullNameTo = action.fullNameTo;
 			return tweetingStatus;
 		case WRITING_REPLY:
 			tweetingStatus = {isWriting: true}

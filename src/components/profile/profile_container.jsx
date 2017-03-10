@@ -11,8 +11,8 @@ const mapDispatchToProps = (dispatch) => ({
 	getProfileUser: (username) => {
 		return dispatch(fetchProfileUser(username));
 	},
-	openTweetingInterface(initialContent){
-		return dispatch(openTweetingInterface(initialContent));
+	openTweetingInterface(initialContent, fullNameTo){
+		return dispatch(openTweetingInterface(initialContent, fullNameTo));
 	}
 });
 

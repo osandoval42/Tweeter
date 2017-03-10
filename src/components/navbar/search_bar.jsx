@@ -1,5 +1,6 @@
 import React from 'react';
 import actions from './search_bar_helper_actions';
+import {browserHistory} from 'react-router';
 
 const SearchBar = React.createClass({
   	getInitialState(){
@@ -20,11 +21,27 @@ const SearchBar = React.createClass({
   			this.setState({searchInput: input, matchedUsers: []});
   		}
   	},
+    fullName(user){
+      let names = []
+      if (user.firstName) {names.push(user.firstName)};
+      if (user.lastName) {names.push(user.lastName)};
+      return names.join(" ");
+    },
+    toUserProfile(username){
+      browserHistory.push(`/profile/${username}`);
+      this.setState({searchInput: "", matchedUsers: []});
+    },
   	autocompleted(){
-  		return (<ul>{
+  		return (<ul id="search-auto-complete">{
   			this.state.matchedUsers.map((user) => {
           const username = user.username;
-  				return (<li key={username}>{username}</li>);
+          const fullName = this.fullName(user);
+  				return (<li key={username} className="autocompleted-user" onClick={this.toUserProfile.bind(this, username)}>
+            <div className="autocompleted-img-container">
+              <img className="autocompleted-img" src="https://pbs.twimg.com/profile_images/578979277611274241/CgGnz4F-_400x400.png"/>
+            </div>
+            <h6 className="autocompleted-fullname  autocompleted-name">{fullName}</h6>
+            <span className="autocompleted-username  autocompleted-name">{`@${username}`}</span></li>);
   			})}
   		</ul>)
   	},
@@ -35,6 +52,7 @@ const SearchBar = React.createClass({
 		          <div className="search-bar-inputs">
 		            <input id="search-input" value={this.state.searchInput}
 		              onChange={this.updateSearch} placeholder="Search Twitter"
+                  autoComplete="off"
 		            />
 		          <button type="submit" id='search-submit' >
 		          	<i className="fa fa-search"></i>

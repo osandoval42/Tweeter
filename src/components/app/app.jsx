@@ -13,7 +13,7 @@ class App extends React.Component {
   		if (tweetingStatus.tweetReplyingTo){
   			return <ReplyingBox tweetReplyingTo={tweetingStatus.tweetReplyingTo}/>
   		} else if (tweetingStatus.isWriting){
-  			return <TweetingBox initialContent={tweetingStatus.initialContent}/>
+  			return <TweetingBox initialContent={tweetingStatus.initialContent} fullNameTo={tweetingStatus.fullNameTo}/>
   		}
   	}
 	render(){

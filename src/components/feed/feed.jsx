@@ -114,7 +114,7 @@ class Feed extends React.Component {
 										</div>
 										<h3 id="tweet-authorname">{this.fullNameOfAuthor(tweet)}</h3>
 										<span id="tweet-username">{`@${tweet.authorName}`}</span>
-										<span>created: {tweet.createdAt}</span>
+										<span id="tweet-time">&nbsp;{tweet.tweetTime}</span>
 										{this.authorRepliedTo(tweet)}
 										<br/>
 										<span id="tweet-content">{tweet.content}</span>

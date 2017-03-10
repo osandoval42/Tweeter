@@ -37,33 +37,42 @@ class Profile extends React.Component {
 	}
 	username(){
 		const username = this.props.profileUser.username;
-		const firstName = this.props.profileUser.username;
-		const lastName = this.props.profileUser.lastName;
-		return username ? <h3>user profile is of {username}, first: {firstName}, last: {lastName}</h3> : <h3>invalid user</h3>;
+		return username ? <h6 id="profile-username">{`@${username}`}</h6> : <h6>invalid user</h6>;
+	}
+	fullNameOfUser(user){
+      let names = []
+      if (user.firstName) {names.push(user.firstName)};
+      if (user.lastName) {names.push(user.lastName)};
+      return names.join(" ");
+	}
+	fullName(){
+		const fullName = this.fullNameOfUser.call(this, this.props.profileUser);
+		return (<h3 id="profile-fullname">{fullName}</h3>);
 	}
 	tweetToButton(){
 		const username = this.props.profileUser.username;
-		return username ? <a onClick={this.props.openTweetingInterface.bind(this, `@${username}`)}>tweet to {username}</a> : <a>invalid user</a>;
+		const fullNameTo = this.fullNameOfUser(this.props.profileUser);
+		return username ? <button id="tweet-to-btn" onClick={this.props.openTweetingInterface.bind(this, `@${username}`, fullNameTo)}>Tweet to {fullNameTo}</button> : <a>invalid user</a>;
 	}
 	render(){
 		
 		return (
 			<div>
 				<div className="top">
-					<h3>
-						Cover Photo
-					</h3>
-					<h3>
-						Profile Photo
-					</h3>
+		            <div id="cover-img-container">
+		              <img className="cover-img" src="https://pbs.twimg.com/profile_banners/25073877/1485301108/1500x500"/>
+		            </div>
+					<Panel params={this.props.params}/>
+				</div>
+				<div id="user-profile-img-container">
+		              <img className="user-profile-img" src="https://pbs.twimg.com/profile_images/1980294624/DJT_Headshot_V2_400x400.jpg"/>
+		        </div>
+				<div id="user-profile-info">
+					{this.fullName()}
 					{this.username()}
 					{this.tweetToButton()}
-					<Panel params={this.props.params}/>
-					<br/>
-					<br/>
-					<br/>
-					{this.mainDisplay()}
 				</div>
+					{this.mainDisplay()}
 			</div>
 		)
 	}

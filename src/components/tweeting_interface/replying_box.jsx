@@ -20,11 +20,12 @@ class ReplyingBox extends React.Component{
 	}
 	render(){
 		return (
-			<div className = "PageBlackout">
-			<h3>replying box</h3>
-			<h4>{this.props.tweetReplyingTo.content}</h4>
-				<a onClick={this.props.closeTweetingInterface}>Close Tweeting Interface</a>
-				<TweetingInterface tweetReplyingTo={this.props.tweetReplyingTo} initialContent={this.computeInitialContent.call(this)}/>
+			<div id = "page-blackout" onClick={this.props.closeTweetingInterface}>
+				<div id="replying-box">
+					<h5 id="replying-box-header">Compose new Reply</h5>
+					<h4>{this.props.tweetReplyingTo.content}</h4>
+					<TweetingInterface tweetReplyingTo={this.props.tweetReplyingTo} initialContent={this.computeInitialContent.call(this)}/>
+				</div>
 			</div>
 		)
 	}

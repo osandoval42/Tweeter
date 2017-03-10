@@ -7,10 +7,11 @@ export const resetTweets = () => ({
 	type: Constants.RESET_TWEETS
 })
 
-export const openTweetingInterface = (initialContent) => {
+export const openTweetingInterface = (initialContent, fullNameTo) => {
 	return {
 	type: Constants.WRITING_TWEET,
-	initialContent: initialContent
+	initialContent,
+	fullNameTo
 	};	
 }
 
