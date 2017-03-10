@@ -1,6 +1,7 @@
 import React from 'react';
 import Constants from '../../constants/constants';
 import * as TweetActions from '../../actions/tweet_actions';
+import {browserHistory} from 'react-router';
 
 
 class Feed extends React.Component { 
@@ -53,7 +54,8 @@ class Feed extends React.Component {
 		return repliedTo ? (<span>In reply to: {repliedTo.authorName}</span>) : undefined;
 	}
 	componentDidUpdate(prevProps){
-		if (prevProps.feedType != this.props.feedType){
+		if ((prevProps.feedType != this.props.feedType) ||
+			prevProps.profileUser != this.props.profileUser){
 			this.fetchTweets()
 		}
 	}
@@ -66,7 +68,7 @@ class Feed extends React.Component {
 	retweetButton(tweet){
 		const tweetId = tweet['_id'];
 		const currUser = this.props.currentUser
-		const retweetButton = <a onClick={this.props.retweet.bind(this, tweetId)}>retweet</a>
+		const retweetButton = <a onClick={this.props.retweet.bind(this, tweetId)}>retweet {this.getCount(tweet, "retweets")}</a>
 		let retweetId;
 		const retweets = tweet.retweets;
 		if (currUser){
@@ -75,7 +77,7 @@ class Feed extends React.Component {
 				if (bool) {retweetId = retweet['_id']}
 				return bool;
 			})){
-				return (<a onClick={this.props.unretweet.bind(this, retweetId)}>unretweet</a>)
+				return (<a onClick={this.props.unretweet.bind(this, retweetId)}>unretweet {this.getCount(tweet, "retweets")}</a>)
 			} else {
 				return retweetButton
 			}
@@ -88,9 +90,9 @@ class Feed extends React.Component {
 	likeButton(tweet){
 		const currUser = this.props.currentUser
 		if ((!tweet.likes) || currUser && tweet.likes.some((like) => { return (like.userId === currUser['_id'])})){
-			return <a onClick={this.props.toggleLike.bind(this, tweet['_id'])}>unlike</a>
+			return <a onClick={this.props.toggleLike.bind(this, tweet['_id'])}>unlike {this.getCount(tweet, "likes")}</a>
 		} else {
-			return <a onClick={this.props.toggleLike.bind(this, tweet['_id'])}>like</a>
+			return <a onClick={this.props.toggleLike.bind(this, tweet['_id'])}>like {this.getCount(tweet, "likes")}</a>
 		}
 	}
 	getCount(tweet, type){
@@ -99,6 +101,9 @@ class Feed extends React.Component {
 		} else {
 			return tweet[type].length;
 		}
+	}
+	toUser(tweet){
+		browserHistory.push(`/profile/${tweet.authorName}`);
 	}
 	render(){
 		const tweets = this.props.tweets;
@@ -109,20 +114,20 @@ class Feed extends React.Component {
 							return (
 								<li className="tweet relative clearfix" key={tweetId}>
 										{this.retweeter(tweet)}
-										<div id="tweet-img-container" className="clearfix">
+										<div id="tweet-img-container" className="clearfix" onClick={this.toUser.bind(this, tweet)}>
 											<img id="tweet-img" src="https://pbs.twimg.com/profile_images/578979277611274241/CgGnz4F-_400x400.png"/>
 										</div>
-										<h3 id="tweet-authorname">{this.fullNameOfAuthor(tweet)}</h3>
-										<span id="tweet-username">{`@${tweet.authorName}`}</span>
+										<h3 id="tweet-authorname" onClick={this.toUser.bind(this, tweet)}>{this.fullNameOfAuthor(tweet)}</h3>
+										<span id="tweet-username" onClick={this.toUser.bind(this, tweet)}>{`@${tweet.authorName}`}</span>
 										<span id="tweet-time">&nbsp;{tweet.tweetTime}</span>
 										{this.authorRepliedTo(tweet)}
 										<br/>
 										<span id="tweet-content">{tweet.content}</span>
 										<br/>
 										<div className="tweet-buttons">
-											<span className="tweet-inter-btn"><a onClick={this.props.openReplyingInterface.bind(this, tweet)}>reply</a> {this.getCount(tweet, "replies")}</span>
-											<span className="tweet-inter-btn">{this.retweetButton(tweet)} {this.getCount(tweet, "retweets")}</span>
-											<span className="tweet-inter-btn">{this.likeButton(tweet)} {this.getCount(tweet, "likes")}</span>
+											<span className="tweet-inter-btn"><a onClick={this.props.openReplyingInterface.bind(this, tweet)}>reply {this.getCount(tweet, "replies")}</a></span>
+											<span className="tweet-inter-btn">{this.retweetButton.call(this, tweet)}</span>
+											<span className="tweet-inter-btn">{this.likeButton.call(this, tweet)}</span>
 										</div>
 								</li>);
 						})}

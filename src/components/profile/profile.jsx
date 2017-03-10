@@ -32,6 +32,11 @@ class Profile extends React.Component {
 			}
 		}
 	}
+	componentDidUpdate(prevProps){
+		if (prevProps.params.username != this.props.params.username){
+			this.props.getProfileUser(this.props.params.username);
+		}
+	}
 	hasFetchedProfileUser(){
 		return (this.props.profileUser.username !== undefined)
 	}

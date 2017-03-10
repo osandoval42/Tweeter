@@ -21,7 +21,7 @@ class ProfileBox extends React.Component{
 		return (
 			<div id="profile-box" className="home-left-box">
 				<div id="top-half-profile-box" className="relative">				
-					<div id="profile-box-img-container">
+					<div id="profile-box-img-container" onClick={this.toProfile.bind(this, "")}>
 						<img id="profile-box-img" src="https://pbs.twimg.com/profile_images/578979277611274241/CgGnz4F-_400x400.png"/>
 					</div>
 					<a onClick={this.props.logout}> Logout</a>
@@ -39,7 +39,7 @@ class ProfileBox extends React.Component{
 							<span className="profile-stat-label">FOLLOWING</span>
 							<span className="profile-stat-content">{currentUser.usersBeingFollowed.length}</span>
 						</container>
-						<container className="profile-stat" onClick={this.toProfile.bind(this, "")}>
+						<container className="profile-stat" onClick={this.toProfile.bind(this, "/followers")}>
 							<span className="profile-stat-label">FOLLOWERS</span>
 							<span className="profile-stat-content">{currentUser.usersFollowing.length}</span>
 						</container>

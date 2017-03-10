@@ -31,11 +31,14 @@ class Navbar extends React.Component{
 			)
 		}
 	}
+	toHome(){
+		browserHistory.push('/')
+	}
 	render(){
 		return (
 			<header className="full-width block" id="header">
 				<ul id="nav-tabs">
-					<a>Home</a>
+					<a onClick={this.toHome}>Home</a>
 					<a id="notifications" className="relative block" onClick={this.toNotificationsPage.bind(this)}>{this.notificationCount()}Notifications</a>
 					<a>Messages</a>
 				</ul>

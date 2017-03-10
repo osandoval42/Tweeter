@@ -434,6 +434,7 @@ container:hover{
 	min-height: 75px; 
 	display: block;
 	position: relative;
+	cursor: pointer;
 }
 
 .tweet-inter-btn{
