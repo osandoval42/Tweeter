@@ -33,6 +33,7 @@ const mapDispatchToProps = (dispatch) => ({ //REVISE check that currUserId is ne
 		return dispatch(openReplyingInterface(originalTweet));
 	},
 	toggleLike(tweetId){
+		console.log("like toggled");
 		return dispatch(toggleLike(tweetId));
 	}
 });

@@ -39,8 +39,8 @@ class Panel extends React.Component{
           <div id="profile-panel-buttons">
             <a onClick = {this.changeDisplay.bind(this, "")}>
               <h6>TWEETS</h6>
-              <span className = {(!currDisplay) ? "highlighted" : ""}>{user? user.tweetCount : undefined}</span>
-              <div className = {(!currDisplay) ? "blueLine" : ""}></div>
+              <span className = {(!currDisplay || currDisplay === Constants.WITH_REPLIES) ? "highlighted" : ""}>{user? user.tweetCount : undefined}</span>
+              <div className = {(!currDisplay || currDisplay === Constants.WITH_REPLIES) ? "blueLine" : ""}></div>
             </a>
             <a onClick = {this.changeDisplay.bind(this, `/${Constants.FOLLOWING}`)}>
               <h6>FOLLOWING</h6> 
