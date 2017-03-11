@@ -3,7 +3,8 @@ import React from 'react';
 class TweetingInterface extends React.Component {
 	constructor(props) {
     	super(props);
-    	this.state = {newTweetContent: this.props.initialContent}
+    	let newTweetContent = this.props.initialContent ? this.props.initialContent : "";
+    	this.state = {newTweetContent: newTweetContent}
   	}
   	updateTweetContent(e){
 	    e.preventDefault()
@@ -20,11 +21,23 @@ class TweetingInterface extends React.Component {
 	    this.props.postTweet(newTweet);
     }
 	render(){
+		const charCount = 140 - this.state.newTweetContent.length
+		let disableBtn = ""
+		let overCount = ""
+		let btnIsDisabled = false;
+		if (charCount < 0){
+			disableBtn = " disable-btn";
+			overCount = " over-char-count";
+			btnIsDisabled = "disabled";
+		}
 		return (
 					   <form id = "tweeting-interface" onSubmit={this.handleSubmit.bind(this)}>				       
-				            <input type='text' onChange={this.updateTweetContent.bind(this)} value={this.state.newTweetContent}
-				              id='new-post-input' placeholder="Whats happening?"/>				          
-				            <input type='submit' id='submit-tweet-btn' className="post-tweet-btn" value='Tweet'/>
+				            <textarea onChange={this.updateTweetContent.bind(this)}
+				              id='new-post-input' placeholder="Whats happening?" value={this.state.newTweetContent}/>
+				              	<div id="char-count-container">
+					             	<span className={`char-count${overCount}`}>{charCount}</span>	
+					             </div>			          
+					            <input type='submit' disabled={btnIsDisabled} className={`submit-tweet-btn post-tweet-btn${disableBtn}`} value='Tweet'/>				             
 			          </form>
 		)
 	}

@@ -19,10 +19,13 @@ class ReplyingBox extends React.Component{
 		return namesTweetedAt.join(' ');
 	}
 	render(){
+		const tweet = this.props.tweetReplyingTo;
 		return (
-			<div id = "page-blackout" onClick={this.props.closeTweetingInterface}>
-				<div id="replying-box">
-					<h5 id="replying-box-header">Compose new Reply</h5>
+			<div id="tweeting-box-holder">
+				<div id = "page-blackout" onClick={this.props.closeTweetingInterface}>
+				</div>
+				<div id="tweeting-box">
+					<h5 id="tweeting-box-header">Compose new Reply</h5>
 					<h4>{this.props.tweetReplyingTo.content}</h4>
 					<TweetingInterface tweetReplyingTo={this.props.tweetReplyingTo} initialContent={this.computeInitialContent.call(this)}/>
 				</div>

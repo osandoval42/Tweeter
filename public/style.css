@@ -814,12 +814,25 @@ img{
 	color: rgb(20, 23, 26);
 }
 
-#page-blackout{
-	height: 100vh;
-	width: 100vw;
-	overflow: hidden;
+#tweeting-box-holder{
+	height: 2900px;
+	width: 1500px;
+	margin: 0 auto;
+	position: fixed;
 	background-color: rgba(0, 0, 0, 0.8);
-	z-index: 1000000;
+	margin-top: -60px;
+	z-index: 2;
+}
+
+#page-blackout{
+	height: 105%;
+	width: 100%;
+	position: fixed;
+	z-index: 2;
+}
+
+.stop-scroll{
+	overflow: hidden;
 }
 
 #tweeting-box{
@@ -829,7 +842,11 @@ img{
 	color: rgb(20, 23, 26);
 	font-size: 14px;
 	width: 590px;
-	margin-top: 20px;
+	margin-top: 200px;
+	z-index: 3;
+	position: fixed;
+	left: 50%;
+	margin-left: -295px;
 }
 
 #tweeting-box-header{
@@ -847,7 +864,7 @@ img{
 
 #tweeting-interface{
 	width: 100%;
-	padding: 9px 16px 13px 16px;
+	padding: 9px 0px 13px 16px;
 	background-color: #e8eff1;
 	border-bottom-right-radius: inherit;
 	border-bottom-left-radius: inherit;
@@ -859,16 +876,42 @@ img{
 	border-radius: 3px;
 	border: 1px solid rgb(158, 189, 199);
 	padding: 10px;
-	vertical-align: top;	
+	margin-right: 16px;
+	vertical-align: top;
+	word-break: break-word;	
 }
 
-#submit-tweet-btn{
-	margin-left: 495px;
-	margin-top: 9px;
-	padding: 8px 15px 8px 15px;
+
+.char-count{
+	display: inline-block;
+	color: #657786;
 	font-size: 14px;
 }
 
+#char-count-container{
+	margin-top: 12px;
+	margin-left: 449px;
+	width: 5px;
+	display: inline-block;
+}
+
+.submit-tweet-btn{
+	margin-top: 9px;
+	padding: 8px 15px 8px 15px;
+	font-size: 14px;
+	display: inline-block;
+	margin-left: 33px;
+}
+
+.disable-btn{
+	opacity: 0.2;	
+	border-color: transparent;
+	text-shadow: none;
+}
+
+.over-char-count{
+	color: #d40d12;
+}
 
 
 

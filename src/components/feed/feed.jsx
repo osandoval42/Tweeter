@@ -112,7 +112,7 @@ class Feed extends React.Component {
 						{   tweets.map((tweet) => {
 							const tweetId = tweet['_id']
 							return (
-								<li className="tweet relative clearfix" key={tweetId}>
+								<div className="tweet relative clearfix" key={tweetId}>
 										{this.retweeter(tweet)}
 										<div id="tweet-img-container" className="clearfix" onClick={this.toUser.bind(this, tweet)}>
 											<img id="tweet-img" src="https://pbs.twimg.com/profile_images/578979277611274241/CgGnz4F-_400x400.png"/>
@@ -129,7 +129,7 @@ class Feed extends React.Component {
 											<span className="tweet-inter-btn">{this.retweetButton.call(this, tweet)}</span>
 											<span className="tweet-inter-btn">{this.likeButton.call(this, tweet)}</span>
 										</div>
-								</li>);
+								</div>);
 						})}
 					</ul>
 		)
