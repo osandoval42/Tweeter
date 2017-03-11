@@ -17,8 +17,9 @@ class TweetingInterface extends React.Component {
 	    const tweetReplyingTo = this.props.tweetReplyingTo;
 	    if (tweetReplyingTo){
 	    	this.props.postReply(tweetReplyingTo, newTweet)
+	    } else {
+	    	this.props.postTweet(newTweet);
 	    }
-	    this.props.postTweet(newTweet);
     }
 	render(){
 		const charCount = 140 - this.state.newTweetContent.length

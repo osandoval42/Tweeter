@@ -68,7 +68,7 @@ class Tweet extends React.Component{
 			const tweet = this.props.tweet;
 			return (
 				<div className="tweet-buttons">
-					<span className="tweet-inter-btn"><a onClick={this.props.openReplyingInterface.bind(this, tweet)}>reply {this.getCount.call(this, "replies")}</a></span>
+					<span className="tweet-inter-btn"><a onClick={this.props.openReplyingInterface.bind(this, tweet)}>reply {tweet.replyCount == 0 ? "" : tweet.replyCount}</a></span>
 					<span className="tweet-inter-btn">{this.retweetButton.call(this)}</span>
 					<span className="tweet-inter-btn">{this.likeButton.call(this)}</span>
 				</div>

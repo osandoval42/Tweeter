@@ -231,7 +231,7 @@ h1 {
 	border-top-left-radius: inherit;
 	border-top-right-radius: inherit;
 	position: relative;
-	z-index: 2;
+	z-index: 1;
 }
 
 #bottom-half-profile-box{
@@ -241,7 +241,6 @@ h1 {
 	border-radius: inherit;
 	border-bottom-left-radius: inherit;
 	border-bottom-right-radius: inherit;
-	z-index: 1;
 }
 
 #profile-box-separator{
@@ -840,7 +839,7 @@ img{
 	height: 105%;
 	width: 100%;
 	position: fixed;
-	z-index: 2;
+	z-index: 500000;
 }
 
 .stop-scroll{
@@ -855,7 +854,7 @@ img{
 	font-size: 14px;
 	width: 590px;
 	margin-top: 200px;
-	z-index: 3;
+	z-index: 500001;
 	position: fixed;
 	left: 50%;
 	margin-left: -295px;
