@@ -224,6 +224,12 @@ h1 {
 	color: red;
 }
 
+#profile-box{
+	height: 195px;
+	border-radius: 6px;
+	border: 1px solid rgb(225, 232, 237);
+}
+
 #top-half-profile-box{
 	width: 100%;
 	height: 96px;
@@ -241,6 +247,7 @@ h1 {
 	border-radius: inherit;
 	border-bottom-left-radius: inherit;
 	border-bottom-right-radius: inherit;
+	border-bottom: inherit;
 }
 
 #profile-box-separator{
@@ -464,11 +471,7 @@ container:hover{
 	display: initial;
 }
 
-#profile-box{
-	height: 195px;
-	border-radius: 6px;
-	border: 1px solid rgb(225, 232, 237);
-}
+
 
 .session-form-container{
 	border: 1px solid rgba(0, 0, 0, 0.247);
