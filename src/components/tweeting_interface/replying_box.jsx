@@ -1,5 +1,6 @@
 import React from 'react';
 import TweetingInterface from './tweeting_interface_container';
+import Tweet from '../tweet/tweet_container';
 
 
 
@@ -26,7 +27,9 @@ class ReplyingBox extends React.Component{
 				</div>
 				<div id="tweeting-box">
 					<h5 id="tweeting-box-header">Compose new Reply</h5>
-					<h4>{this.props.tweetReplyingTo.content}</h4>
+					<div id="tweet-replying-to-container">
+						<Tweet tweet={tweet} isReplying={true}/>
+					</div>
 					<TweetingInterface tweetReplyingTo={this.props.tweetReplyingTo} initialContent={this.computeInitialContent.call(this)}/>
 				</div>
 			</div>

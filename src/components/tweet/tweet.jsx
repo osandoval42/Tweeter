@@ -61,6 +61,20 @@ class Tweet extends React.Component{
 			return retweetButton;
 		}
 	}
+	tweetButtons(){
+		if (this.props.isReplying){
+			return undefined;
+		} else {
+			const tweet = this.props.tweet;
+			return (
+				<div className="tweet-buttons">
+					<span className="tweet-inter-btn"><a onClick={this.props.openReplyingInterface.bind(this, tweet)}>reply {this.getCount.call(this, "replies")}</a></span>
+					<span className="tweet-inter-btn">{this.retweetButton.call(this)}</span>
+					<span className="tweet-inter-btn">{this.likeButton.call(this)}</span>
+				</div>
+			)
+		}
+	}
 	render(){
 		const tweet = this.props.tweet;
 		const tweetId = tweet['_id'];
@@ -76,11 +90,7 @@ class Tweet extends React.Component{
 				<br/>
 				<span id="tweet-content">{tweet.content}</span>
 				<br/>
-				<div className="tweet-buttons">
-					<span className="tweet-inter-btn"><a onClick={this.props.openReplyingInterface.bind(this, tweet)}>reply {this.getCount.call(this, "replies")}</a></span>
-					<span className="tweet-inter-btn">{this.retweetButton.call(this)}</span>
-					<span className="tweet-inter-btn">{this.likeButton.call(this)}</span>
-				</div>
+				{this.tweetButtons.call(this)}
 		</div>)
 	}
 }

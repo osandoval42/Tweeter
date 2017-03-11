@@ -344,7 +344,7 @@ container:hover{
 
 
 #tweet-img-container{
-	margin-left: 7px;
+	margin-left: 12px;
 	margin-top: 9px;
 	width: 48px;
 	height: 48px;
@@ -423,7 +423,7 @@ container:hover{
 	justify-content: space-between;
 	position: absolute;
 	bottom: 10px;
-	left: 66px;
+	left: 71px;
 }
 
 .tweet{
@@ -436,6 +436,18 @@ container:hover{
 	position: relative;
 	cursor: pointer;
 }
+
+#tweet-replying-to-container .tweet{
+	border: solid 0px transparent;
+	min-height: 75px;
+}
+
+#tweet-replying-to-container{
+	background-color: white;
+	padding-top: 10px;
+	border-bottom: 1px solid rgba(13, 91, 115, 0.247059);
+}
+
 
 .tweet-inter-btn{
 	color: rgb(172, 186, 196);
