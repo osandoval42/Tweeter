@@ -27,7 +27,10 @@ const populateTweets = (tweetsArr) => {
 	return newTweetsColl;
 }
 
-const tweetBelongsToCurrColl = (coll, tweet) => {
+const tweetBelongsToCurrColl = (coll, tweet, isOnHomePage) => {
+	if (isOnHomePage){
+		return true;
+	}
 	if (coll.length === 0){
 		return false;
 	}
@@ -53,7 +56,7 @@ const TweetReducer = (state = tweets, action) => {
 		case RECEIVE_NEW_TWEET:
 			stateDup = state.dup()
 			tweet = action.tweet;
-			if (tweetBelongsToCurrColl(stateDup, tweet)){
+			if (tweetBelongsToCurrColl(stateDup, tweet, action.isOnHomePage)){
 				stateDup.insertNewestNodeYet(tweet['_id'], tweet);
 			}
 			return stateDup;

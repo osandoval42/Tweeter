@@ -8,11 +8,14 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-	postTweet: (tweet) => {
-		return dispatch(postTweet(tweet));
+	postTweet: (tweet, isOnHomePage) => {
+		return dispatch(postTweet(tweet, isOnHomePage));
 	},
 	postReply: (originalTweet, replyContent) => {
 		return dispatch(replyTweet(originalTweet, replyContent))
+	},
+	closeTweetingInterface: () => {
+		return dispatch(closeTweetingInterface());
 	}
 });
 

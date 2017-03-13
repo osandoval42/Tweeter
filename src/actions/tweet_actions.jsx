@@ -43,18 +43,16 @@ export const closeTweetingInterface = () => {
 	};	
 }
 
-export const postTweet = (newTweet) => dispatch => {
+export const postTweet = (newTweet, isOnHomePage) => dispatch => {
 	APIUtil.postTweet(newTweet)
 		.then(newTweet => {
-			dispatch(closeTweetingInterface()); //revise provide success feedback
-			dispatch(receiveNewTweet(newTweet))}), 
+			dispatch(receiveNewTweet(newTweet, isOnHomePage))}), 
 		err => dispatch(receiveErrors(err.responseJSON))
 };
 
 export const replyTweet = (originalTweet, replyContent) => dispatch => {
 	APIUtil.replyTweet(originalTweet, replyContent)
 		.then(updatedOriginalTweet => {
-			dispatch(closeTweetingInterface()); //revise provide success feedback
 			dispatch(receiveUpdatedTweet(updatedOriginalTweet))}), 
 		err => dispatch(receiveErrors(err.responseJSON))
 };
@@ -93,9 +91,10 @@ export const receiveTweets = tweets => ({
 	tweets
 });
 
-export const receiveNewTweet = tweet => ({
+export const receiveNewTweet = (tweet, isOnHomePage) => ({
 	type: Constants.RECEIVE_NEW_TWEET,
-	tweet
+	tweet,
+	isOnHomePage
 });
 
 export const receiveUpdatedTweet = tweet => ({

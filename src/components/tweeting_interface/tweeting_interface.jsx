@@ -1,4 +1,5 @@
 import React from 'react';
+import {browserHistory} from 'react-router';
 
 class TweetingInterface extends React.Component {
 	constructor(props) {
@@ -17,9 +18,19 @@ class TweetingInterface extends React.Component {
 	    const tweetReplyingTo = this.props.tweetReplyingTo;
 	    if (tweetReplyingTo){
 	    	this.props.postReply(tweetReplyingTo, newTweet)
+	    	this.props.closeTweetingInterace();
 	    } else {
-	    	this.props.postTweet(newTweet);
+	    	const isOnHomePage = (window.location.pathname === "/");
+	    	this.props.postTweet(newTweet, isOnHomePage);
+	    	if (this.props.closeInterfaceFromHome){
+				this.props.closeInterfaceFromHome();
+			}
+	    		this.props.closeTweetingInterface();
 	    }
+    }
+    componentDidMount(){
+    	const tweetForm = document.getElementsByClassName("new-post-input")[0];
+    	tweetForm.focus()
     }
 	render(){
 		const charCount = 140 - this.state.newTweetContent.length
@@ -31,14 +42,24 @@ class TweetingInterface extends React.Component {
 			overCount = " over-char-count";
 			btnIsDisabled = "disabled";
 		}
+		let feedInterface = "";
+		let feedSubmitTweetBtn = "";
+		let feedInterfaceInput = "";
+		let feedCharContainer = "";
+		if (this.props.closeInterfaceFromHome){
+			feedInterface = " feed-tweeting-interface";
+			feedInterfaceInput = " feed-interface-input"
+			feedSubmitTweetBtn = " feed-submit-tweet-btn";
+			feedCharContainer = " feed-char-count-container"
+		}
 		return (
-					   <form id = "tweeting-interface" onSubmit={this.handleSubmit.bind(this)}>				       
+					   <form className = {`tweeting-interface${feedInterface}`} onSubmit={this.handleSubmit.bind(this)}>				       
 				            <textarea onChange={this.updateTweetContent.bind(this)}
-				              id='new-post-input' placeholder="Whats happening?" value={this.state.newTweetContent}/>
-				              	<div id="char-count-container">
+				              className ={`new-post-input ${feedInterfaceInput}`} placeholder="Whats happening?" value={this.state.newTweetContent}/>
+				              	<div className={`char-count-container${feedCharContainer}`}>
 					             	<span className={`char-count${overCount}`}>{charCount}</span>	
 					             </div>			          
-					            <input type='submit' disabled={btnIsDisabled} className={`submit-tweet-btn post-tweet-btn${disableBtn}`} value='Tweet'/>				             
+					            <input type='submit' disabled={btnIsDisabled} className={`submit-tweet-btn post-tweet-btn${disableBtn}${feedSubmitTweetBtn}`} value='Tweet'/>				             
 			          </form>
 		)
 	}
