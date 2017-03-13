@@ -60,7 +60,7 @@ class Profile extends React.Component {
 		return username ? <button id="tweet-to-btn" onClick={this.props.openTweetingInterface.bind(this, `@${username}`, fullNameTo)}>Tweet to {fullNameTo}</button> : <a>invalid user</a>;
 	}
 	render(){
-		
+		const user = this.props.profileUser;
 		return (
 			<div>
 				<div className="top">

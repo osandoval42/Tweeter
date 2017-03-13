@@ -26,7 +26,7 @@ class ProfileTweets extends React.Component{
   render() {
     const feedType = (this.state.currDisplay === Constants.WITH_REPLIES) ? Constants.PROFILE_FEED : Constants.NON_REPLY_PROFILE_FEED;
     return (
-      <div id="main-profile-display" className="ProfileTweetsPanel">
+      <div id="main-profile-display">
         <div id="profile-tweets-header">
           <div id="main-profile-display-header-btns">
             <a onClick = {this.changeDisplay.bind(this, undefined)} className = {(!this.state.currDisplay) ? "highlighted" : ""}>Tweets</a>

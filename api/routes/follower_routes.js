@@ -27,7 +27,7 @@ const configFollowerRoutes = (router) => {
 	})
 	router.post('/follow', (req, res) => { //REVISE protect CSRF
 		const currUser = req.user;
-		if (RouteHelpers.ensureLoggedIn(currUser)){
+		if (RouteHelpers.ensureLoggedIn(currUser, res)){
 			const currUserId = currUser['_id'];
 			const strUserId = req.body.toFollowId;
 			const toFollowId = mongoose.Types.ObjectId(strUserId);

@@ -731,7 +731,7 @@ img{
 
 .profile-follow-btn{
 	border-radius: 4px;
-	margin-left: 100px;
+	margin-left: 453px;
 	margin-top: 10px;
 	width: 99px;
 	height: 37px;
@@ -793,10 +793,10 @@ img{
 }
 
 #main-profile-display{
-	width: 588px
 	height: 1000px;
 	float: left;
 	margin-top: 10px;
+	margin-left: -2px;
 }
 
 #profile-tweets-header{
@@ -925,6 +925,125 @@ img{
 
 .over-char-count{
 	color: #d40d12;
+}
+
+#following-feed{
+	max-width: 990px;
+	top: 477px;
+	left: 300px;
+	position: absolute;
+}
+
+.user-box{
+	width: 288px;
+	height: 281px;
+	background-color: white;
+	border-radius: 5px;
+	border: 1px solid rgb(230, 236, 240);
+	float: left;
+	margin-left: 11px;
+	margin-bottom: 11px;
+	position: relative;
+}
+
+.user-box-img-container{
+	position: absolute;
+	border-radius: 6px;
+	border: 3px solid white;
+	height: 70px;
+	width: 70px;
+	cursor: pointer;
+	top: 69px;
+	left: 12px;
+}
+
+.user-follow-type-btn{
+	border-radius: 4px;
+	margin-left: 100px;
+	margin-top: 10px;
+	width: 99px;
+	height: 33px;
+	float: left;
+	padding: 5px 12px 8px 12px;
+	font-weight: bold;
+	font-size: 13px;
+	position: absolute;
+	left: 64px;
+	top: 94px;
+}
+
+.user-box-cover-img-container{
+	width: 100%;
+	height: 96px;
+	border-top-right-radius: inherit;
+	border-top-left-radius: inherit;
+	cursor: pointer;
+}
+
+.user-box-separator{
+	height: 1px;
+	width: 100%;
+	background-color: rgb(245, 248, 250);
+}
+
+.user-following-btn{
+	background-color: #1da1f2;
+	border: 1px solid #3b88c3;
+	box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15);
+	color: white;
+}
+
+.user-follow-btn{
+	border: 1px solid #e1e8ed;
+	color: #292f33;
+	background-color: #f5f8fa;
+	background-image: linear-gradient(#fff, #f5f8fa);
+}
+
+.user-following-btn:hover{
+	cursor: pointer;
+	border: 1px solid #1da1f2;
+	background-color: #e81c4f;
+	color: white;
+	text-decoration: none;
+}
+
+.user-following-btn:hover span {
+	display: none;
+}
+.user-following-btn:hover:after{
+	content:"Unfollow";
+}
+
+.user-follow-btn:hover{
+	cursor: pointer;
+	background-color: #e1e8ed;
+	border: 1px solid #e1e8ed;
+	background-image: linear-gradient(#fff, #e1e8ed);
+}
+
+.userbox-username{
+	margin-top: 4px;
+	margin-left: 15px;
+	color: rgb(102, 117, 127);
+	font-size: 12px;
+}
+
+.userbox-username:hover{
+	text-decoration: underline;
+}
+
+.userbox-fullname:hover{
+	text-decoration: underline;
+}
+
+.userbox-fullname{
+	margin-top: 49px;
+	margin-left: 15px;
+	color: rgb(20, 23, 26);
+	font-size: 18px;
+	font-weight: bold;
+	cursor: pointer;
 }
 
 
