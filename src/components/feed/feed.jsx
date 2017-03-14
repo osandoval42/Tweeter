@@ -53,8 +53,9 @@ class Feed extends React.Component {
 	}
 	render(){
 		const tweets = this.props.tweets;
+		let nonHomeFeed = this.props.isOnHomePage ? "" : " non-home-feed";
 		return (
-					<ul id="feed">
+					<ul className={`feed${nonHomeFeed}`}>
 						{   tweets.map((tweet) => {
 							const tweetId = tweet['_id']
 							return (<Tweet key={tweetId} tweet={tweet}/>);

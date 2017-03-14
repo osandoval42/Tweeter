@@ -33,7 +33,7 @@ class HomeToBe extends React.Component {
 			{this.props.currentUser ? <ProfileBox/> : <SessionForm/>}
 			<div id="home-feed">
 				{this.tweetInterface.call(this)}
-				<Feed feedType = {Constants.CURR_USER_FEED}/>
+				<Feed feedType = {Constants.CURR_USER_FEED} isOnHomePage={true}/>
 				}
 			</div>
 		</div>
