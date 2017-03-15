@@ -39,6 +39,8 @@ const configUserRoutes = (router) => { //REVISE disallow blank string
 		}
 	})
 	router.post('/upload_profile_img', (req, res) => {
+		console.log("route hit");
+		console.log(`profile img is ${req.body.profileImg}`);
 		const currUser = req.user;
 		if (RouteHelpers.ensureLoggedIn(currUser, res)){
 			const currUserId = currUser['_id'];

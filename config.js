@@ -35,8 +35,8 @@ export default {
   	  return mongoose.connection;
   },
   configRequestParser(server){
-	  server.use(bodyParser.json());
-	  server.use(bodyParser.urlencoded({ extended: true }));
+	  server.use(bodyParser.json({limit: '5mb'}));
+	  server.use(bodyParser.urlencoded({ extended: true, limit: '5mb'}));
 	  server.use(cookieParser());
 
 	  server.use(expressValidator({

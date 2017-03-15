@@ -240,7 +240,7 @@ h1 {
 }
 
 #profile-box-img{
-  border-radius: inherit;
+  border-radius: 4px;
 }
 
 #profile-box-img-container{
@@ -750,6 +750,10 @@ img{
 	top: 299px;
 	left: 32px;
 	background-color: #1DA1F2;
+}
+
+#user-profile-img-container img {
+	border-radius: 6px;
 }
 
 #user-profile-info{
