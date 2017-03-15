@@ -273,13 +273,18 @@ Tweet.replyTweet = (content, currUserId, originalTweet, cb) => { //REVISE disall
 }
 
 //EVERYTHING BELOW IS FACILITATES TWEET RENDERING
-const getAuthorNameAndNext = (tweet, next, finalCB, tweetToReturn) => {
+const getAuthorInfoAndNext = (tweet, next, finalCB, tweetToReturn) => {
 			User.getUserById(tweet.authorId, (err, user) => {
 				if (err) {throw err;} //REVISE
 				tweet.authorName = user.username;
 				tweet.firstName = user.firstName;
 				tweet.lastName = user.lastName;
-				determineIfRetweet(tweet, next, finalCB, tweetToReturn)
+				tweet.user = user.toObject();
+				Tweet.getTweetCount(user['_id'], (err, count) => {
+					if (err) {throw err;}
+					tweet.user.tweetCount = count;
+					determineIfRetweet(tweet, next, finalCB, tweetToReturn);
+				})
 			})
 }
 
@@ -298,11 +303,11 @@ const getTweetRepliedToAndNext = (tweet, next, finalCB) => {
 					firstName: user.firstName,
 					lastName: user.lastName
 				};
-				getAuthorNameAndNext(tweet, next, finalCB);
+				getAuthorInfoAndNext(tweet, next, finalCB);
 			})
 		})
 	} else {
-		getAuthorNameAndNext(tweet, next, finalCB);
+		getAuthorInfoAndNext(tweet, next, finalCB);
 	}
 }
 
@@ -313,7 +318,7 @@ const determineIfRetweet = (tweet, next, finalCB, tweetToReturn) => {
 			if (err) {throw err;} //REVISE
 			const jsonOriginalTweet = originalTweet.toObject();
 			tweet.originalTweet = jsonOriginalTweet;
-			getAuthorNameAndNext(jsonOriginalTweet, next, finalCB, tweetToReturn);
+			getAuthorInfoAndNext(jsonOriginalTweet, next, finalCB, tweetToReturn);
 		})
 	} else {
 		getLikesAndNext(tweet, next, finalCB, tweetToReturn);

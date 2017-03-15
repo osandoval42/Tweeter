@@ -37,6 +37,30 @@ class User extends React.Component {
 		browserHistory.push(`/profile/${this.props.user.username}`);
 	}
 	//add user list
+	toProfile(subsection){
+		browserHistory.push(`/profile/${this.props.user.username}${subsection}`)
+	}
+	userStats(){
+		if (this.props.isHoverBox){
+			const user = this.props.user;
+			return (
+				<div className="user-box-stats">
+					<container className="profile-stat" onClick={this.toProfile.bind(this, "")}>
+						<span className="profile-stat-label">TWEETS</span>
+						<span className="profile-stat-content">{user.tweetCount}</span>
+					</container>
+					<container className="profile-stat" onClick={this.toProfile.bind(this, "/following")}>
+						<span className="profile-stat-label">FOLLOWING</span>
+						<span className="profile-stat-content">{user.usersBeingFollowed.length}</span>
+					</container>
+					<container className="profile-stat" onClick={this.toProfile.bind(this, "/followers")}>
+						<span className="profile-stat-label">FOLLOWERS</span>
+						<span className="profile-stat-content">{user.usersFollowing.length}</span>
+					</container>
+				</div>
+			)
+		}
+	}
 	render(){
 		const user = this.props.user;
 
@@ -52,6 +76,7 @@ class User extends React.Component {
 			<h4 className="userbox-fullname" onClick={this.toUser.bind(this)}>{this.fullNameOfUser.call(this)}</h4>
 			<h6 className="userbox-username" onClick={this.toUser.bind(this)}>@{user.username}</h6>
 			{this.followButton()}
+			{this.userStats.call(this)}
 		</div>
 		)
 	}

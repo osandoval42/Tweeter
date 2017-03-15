@@ -294,6 +294,7 @@ h1 {
 	left: 12px;
 }
 
+
 container:hover{
 	cursor: pointer;
 }
@@ -342,8 +343,6 @@ container:hover{
 	justify-content: space-between;
 	width: 897px;
 }
-
-
 
 #tweet-img-container{
 	margin-left: 12px;
@@ -1107,6 +1106,58 @@ img{
 .over-char-count{
 	color: #d40d12;
 }
+
+.user-box-stats{
+		display: flex;
+		justify-content: space-between;
+		margin-top: 10px;
+		width: 82%;
+		margin: 0 auto;
+		padding-top: 56px;
+}
+
+.user-photo-hover{
+	position: absolute;
+	top: 60px;
+	left: 0px;
+	overflow: visible;
+	z-index: 1;
+}
+
+.username-hover{
+	position: absolute;
+	top: 26px;
+	left: 177px;
+	overflow: visible;
+	z-index: 1;
+}
+
+.fullname-hover{
+	position: absolute;
+	top: 26px;
+	left: 58px;
+	overflow: visible;
+	z-index: 1;
+}
+
+.username-hover{
+
+}
+
+.fullname-hover{
+
+}
+
+.user-box-container{
+	display: none;
+}
+
+.none{
+	display: none;
+}
+
+
+
 
 
 

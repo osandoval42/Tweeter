@@ -51,6 +51,24 @@ class Feed extends React.Component {
 			this.fetchTweets()
 		}
 	}
+	hideUserBoxesOfTweet(tweetId){
+		const tweetEl = document.getElementById(tweetId);
+		let userboxes = [];
+		userboxes.push(tweetEl.getElementsByClassName("user-photo-hover")[0]);
+		userboxes.push(tweetEl.getElementsByClassName("username-hover")[0]);
+		userboxes.push(tweetEl.getElementsByClassName("fullname-hover")[0]);
+		userboxes.forEach((userBox) => {
+			userBox.style.display = "none";
+		})
+	}
+	hideUserBoxesOfOtherTweets(tweetWithUserBoxDisplayedId){
+		const tweets = this.props.tweets;
+		tweets.forEach((tweetId) => {
+			if (tweetId !== tweetWithUserBoxDisplayedId){
+				this.hideUserBoxesOfTweet(tweetId);
+			}
+		})
+	}
 	render(){
 		const tweets = this.props.tweets;
 		let nonHomeFeed = this.props.isOnHomePage ? "" : " non-home-feed";
@@ -58,7 +76,7 @@ class Feed extends React.Component {
 					<ul className={`feed${nonHomeFeed}`}>
 						{   tweets.map((tweet) => {
 							const tweetId = tweet['_id']
-							return (<Tweet key={tweetId} tweet={tweet}/>);
+							return (<Tweet key={tweetId} hideUserBoxesOfOtherTweets={this.hideUserBoxesOfOtherTweets.bind(this)} tweet={tweet}/>);
 						})}
 					</ul>
 		)

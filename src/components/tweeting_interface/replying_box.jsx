@@ -5,6 +5,9 @@ import Tweet from '../tweet/tweet_container';
 
 
 class ReplyingBox extends React.Component{
+	constructor(props) {
+		super(props);
+	}
 	computeInitialContent(){
 		const tweet = this.props.tweetReplyingTo
 		const nameStringsTweetedAt = tweet.content.split('@').slice(1)
