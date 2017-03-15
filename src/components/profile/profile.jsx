@@ -110,15 +110,15 @@ class Profile extends React.Component {
 	}
 	render(){
 		const user = this.props.profileUser;
-		const profileImg = user.profileImg ? user.profileImg : "https://pbs.twimg.com/profile_images/1980294624/DJT_Headshot_V2_400x400.jpg";
-		const coverImg = user.coverImg ? <img className="cover-img" src={user.coverImg}/> : undefined;
+		const profileImg = user.profileImg ? user.profileImg : "http://clipart-library.com/image_gallery/396306.png";
+		const coverImg = user.coverImg ? user.coverImg : "http://wallpaper-gallery.net/images/twitter-wallpaper/twitter-wallpaper-15.jpg";
 		return (
 			<div>
 				{this.profileImgUpload()}
 				{this.coverImgUpload()}
 				<div className="top">
 		            <div id="cover-img-container">
-		              {coverImg}
+		              <img className="cover-img" src={coverImg}/>
 		            </div>
 					<Panel params={this.props.params}/>
 				</div>

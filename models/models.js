@@ -92,7 +92,7 @@ const getFollowing = (userID, callback, type) => {
 		const followingIDs = userOfInterest[type];
 		User.find({
 			'_id': { $in: followingIDs}
-		}).select('username firstName lastName').exec(callback);
+		}).select('username firstName lastName profileImg coverImg').exec(callback);
 	})
 }
 

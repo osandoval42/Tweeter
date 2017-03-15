@@ -252,6 +252,7 @@ h1 {
 	top:66px;
 	left: 10px;
 	cursor: pointer;
+	background-color: #1DA1F2;
 }
 
 #profile-box-fullname{
@@ -353,6 +354,7 @@ container:hover{
 	border: solid, 1px, white;
 	float: left;
 	margin-right:10px;
+	background-color: #1DA1F2;
 }
 
 #tweet-img{
@@ -562,6 +564,7 @@ container:hover{
 	margin-left: 10px;
 	margin-top: 8px;
 	margin-bottom: 0px;
+	background-color: #1DA1F2;
 }
 
 .autocompleted-fullname{
@@ -618,6 +621,7 @@ img{
 	box-shadow: inset 0 0 0 1px rgba(0,0,0,0.1);
 	height: 32px;
 	width: 32px;
+	background-color: #1DA1F2;
 }
 
 #cover-img-container{
@@ -626,7 +630,6 @@ img{
 	z-index: -1000;
 	position: absolute;
 	top: 20px;
-	background-color: #1DA1F2;
 }
 
 #panel{
@@ -727,7 +730,7 @@ img{
 
 .profile-follow-btn{
 	border-radius: 4px;
-	margin-left: 453px;
+	margin-left: 153px;
 	margin-top: 10px;
 	width: 99px;
 	height: 37px;
@@ -746,6 +749,7 @@ img{
 	position: absolute;
 	top: 299px;
 	left: 32px;
+	background-color: #1DA1F2;
 }
 
 #user-profile-info{
@@ -901,6 +905,7 @@ img{
 	cursor: pointer;
 	top: 69px;
 	left: 12px;
+	background-color: #1DA1F2;
 }
 
 .user-follow-type-btn{

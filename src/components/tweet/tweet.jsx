@@ -197,11 +197,13 @@ class Tweet extends React.Component{
 	render(){
 		let tweet = this.props.tweet;
 		const tweetId = tweet['_id'];
+		const user = tweet.user;
+		const profileImg = user.profileImg ? user.profileImg : "http://clipart-library.com/image_gallery/396306.png";
 		return (<div id={tweetId} className="tweet relative clearfix" key={tweetId}>
 				{this.retweeter.call(this)}
 				<div id="tweet-img-container" className="clearfix" onClick={this.toUser.bind(this)} 
 					onMouseEnter={this.displayUserBox.bind(this, Constants.USER_PHOTO)} onMouseLeave={this.hideUserBox.bind(this, Constants.USER_PHOTO)}>
-					<img id="tweet-img" src="https://pbs.twimg.com/profile_images/578979277611274241/CgGnz4F-_400x400.png"/>
+					<img id="tweet-img" src={profileImg}/>
 				</div>
 				<h3 id="tweet-authorname" onClick={this.toUser.bind(this)} onMouseEnter={this.displayUserBox.bind(this, Constants.FULLNAME)} 
 				onMouseLeave={this.hideUserBox.bind(this, Constants.FULLNAME)}>{this.fullNameOfAuthor.call(this)}</h3>

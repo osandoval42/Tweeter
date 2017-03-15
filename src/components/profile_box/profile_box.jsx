@@ -18,11 +18,12 @@ class ProfileBox extends React.Component{
 	render(){
 		const currentUser = this.props.currentUser;
 		if (currentUser){
+		const profileImg = currentUser.profileImg ? currentUser.profileImg : "http://clipart-library.com/image_gallery/396306.png";
 		return (
 			<div id="profile-box" className="home-left-box">
 				<div id="top-half-profile-box" className="relative">				
 					<div id="profile-box-img-container" onClick={this.toProfile.bind(this, "")}>
-						<img id="profile-box-img" src="https://pbs.twimg.com/profile_images/578979277611274241/CgGnz4F-_400x400.png"/>
+						<img id="profile-box-img" src={profileImg}/>
 					</div>
 					<a onClick={this.props.logout}> Logout</a>
 				</div>

@@ -63,15 +63,16 @@ class User extends React.Component {
 	}
 	render(){
 		const user = this.props.user;
-
+		const profileImg = user.profileImg ? user.profileImg : "http://clipart-library.com/image_gallery/396306.png";
+		const coverImg = user.coverImg ? user.coverImg : "http://wallpaper-gallery.net/images/twitter-wallpaper/twitter-wallpaper-15.jpg";
 		return (
 		<div className="user-box">
 			<div className="user-box-cover-img-container" onClick={this.toUser.bind(this)}>
-				<img  src="https://pbs.twimg.com/profile_banners/25073877/1485301108/1500x500"/>
+				<img src={coverImg}/>
 			</div>
 			<div></div>
 			<div className="user-box-img-container" onClick={this.toUser.bind(this)}>
-				<img  src="https://pbs.twimg.com/profile_images/578979277611274241/CgGnz4F-_400x400.png"/>
+				<img src={profileImg}/>
 			</div>
 			<h4 className="userbox-fullname" onClick={this.toUser.bind(this)}>{this.fullNameOfUser.call(this)}</h4>
 			<h6 className="userbox-username" onClick={this.toUser.bind(this)}>@{user.username}</h6>
