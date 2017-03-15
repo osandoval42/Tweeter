@@ -568,9 +568,26 @@ User.createUserWithPromise = (newUser) => {
 
 User.clearNotifications = (userId, cb) => {
 	User.getUserById(userId, (err, user) => {
+		if (err){throw err;}
 		user.notifications.forEach((notification) => {
 			notification.userHasSeen = true;
 		})
 		user.save(cb)
+	})
+}
+
+User.uploadProfileImg = (userId, profileImg, cb) => {
+	User.getUserById(userId, (err, user) => {
+		if (err){throw err;}
+		user.profileImg = profileImg;
+		user.save(cb);
+	})
+}
+
+User.uploadCoverImg = (userId, coverImg, cb) => {
+	User.getUserById(userId, (err, user) => {
+		if (err){throw err;}
+		user.coverImg = coverImg;
+		user.save(cb);
 	})
 }

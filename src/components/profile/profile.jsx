@@ -65,15 +65,14 @@ class Profile extends React.Component {
     	reader.onloadend = () => {
     		const result = reader.result;
     		if (this.isImage(result)){
-    			const base64Result = this.resultStr(result);
-    			console.log(`reader result is ${base64Result}`);
     			if (type === Constants.PROFILE_IMG){
-
+    				let profileImg = document.getElementsByClassName("user-profile-img")[0];
+    				this.props.uploadProfileImg(result);
     			} else {
-   
+   					this.props.uploadCoverImg(result);
     			}
     		} else {
-    			alert("Must upload file image");
+    			alert("Must upload image (jpeg or png)");
     		}
     	}
     	if(file){
@@ -81,10 +80,6 @@ class Profile extends React.Component {
     	}else{
     	
     	}
-	}
-	resultStr(result){
-		const commaIndex = result.indexOf(',');
-		return result.substr(commaIndex + 1);
 	}
 	isImage(result){
 		const colonIndex = result.indexOf(':');
@@ -115,18 +110,20 @@ class Profile extends React.Component {
 	}
 	render(){
 		const user = this.props.profileUser;
+		const profileImg = user.profileImg ? user.profileImg : "https://pbs.twimg.com/profile_images/1980294624/DJT_Headshot_V2_400x400.jpg";
+		const coverImg = user.coverImg ? <img className="cover-img" src={user.coverImg}/> : undefined;
 		return (
 			<div>
 				{this.profileImgUpload()}
 				{this.coverImgUpload()}
 				<div className="top">
 		            <div id="cover-img-container">
-		              <img className="cover-img" src="https://pbs.twimg.com/profile_banners/25073877/1485301108/1500x500"/>
+		              {coverImg}
 		            </div>
 					<Panel params={this.props.params}/>
 				</div>
 				<div id="user-profile-img-container">
-		              <img className="user-profile-img" src="https://pbs.twimg.com/profile_images/1980294624/DJT_Headshot_V2_400x400.jpg"/>		       
+		              <img className="user-profile-img" src={profileImg}/>		       
 		        </div>
 				<div id="user-profile-info">
 					{this.fullName()}

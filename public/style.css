@@ -626,6 +626,7 @@ img{
 	z-index: -1000;
 	position: absolute;
 	top: 20px;
+	background-color: #1DA1F2;
 }
 
 #panel{

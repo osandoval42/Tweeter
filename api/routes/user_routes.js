@@ -38,6 +38,36 @@ const configUserRoutes = (router) => { //REVISE disallow blank string
 			})
 		}
 	})
+	router.post('/upload_profile_img', (req, res) => {
+		const currUser = req.user;
+		if (RouteHelpers.ensureLoggedIn(currUser, res)){
+			const currUserId = currUser['_id'];
+			const profileImg = req.body.profileImg;
+			User.uploadProfileImg(currUserId, profileImg, (err, updatedUser) => {
+				if (err) { 
+					return res.status(401).send({"ok": false}); 
+				}
+				else { 
+					res.send(updatedUser);
+				}
+			})
+		}
+	})
+	router.post('/upload_cover_img', (req, res) => {
+		const currUser = req.user;
+		if (RouteHelpers.ensureLoggedIn(currUser, res)){
+			const currUserId = currUser['_id'];
+			const coverImg = req.body.coverImg;
+			User.uploadCoverImg(currUserId, coverImg, (err, updatedUser) => {
+				if (err) { 
+					return res.status(401).send({"ok": false}); 
+				}
+				else { 
+					res.send(updatedUser);
+				}
+			})
+		}
+	})
 }
 
 /*

@@ -41,3 +41,19 @@ module.exports.clearNotifications = () => {
 		url: `/api/clear_notifications`,
 	});
 }
+
+module.exports.uploadProfileImg = (profileImg) => {
+	return $.ajax({
+		method: 'POST',
+		url: `/api/upload_profile_img`,
+		data: {profileImg}
+	});
+}
+
+module.exports.uploadCoverImg = (coverImg) => {
+	return $.ajax({
+		method: 'POST',
+		url: `/api/upload_cover_img`,
+		data: {coverImg}
+	});
+}

@@ -30,6 +30,12 @@ var UserSchema = mongoose.Schema({
 		index: true,
 		sparse: true //REVISE DELETE
 	},
+	profileImg: {
+		type: String
+	},
+	coverImg: {
+		type: String
+	}, 
 	usersBeingFollowed: [mongoose.Schema.Types.ObjectId],
 	usersFollowing: [mongoose.Schema.Types.ObjectId],
 	notifications: {type: Array, "default": []}
