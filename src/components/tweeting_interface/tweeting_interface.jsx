@@ -18,7 +18,7 @@ class TweetingInterface extends React.Component {
 	    const tweetReplyingTo = this.props.tweetReplyingTo;
 	    if (tweetReplyingTo){
 	    	this.props.postReply(tweetReplyingTo, newTweet)
-	    	this.props.closeTweetingInterace();
+	    	this.props.closeTweetingInterface();
 	    } else {
 	    	const isOnHomePage = (window.location.pathname === "/");
 	    	this.props.postTweet(newTweet, isOnHomePage);

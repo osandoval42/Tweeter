@@ -326,6 +326,17 @@ container:hover{
 	position: relative;
 }
 
+.notifications{
+	width: 588px;
+	margin: 0 auto;
+}
+
+.notification-feed{
+	width:100%;
+	display: block;
+	position: relative;
+}
+
 .non-home-feed{
 	width: 588px;
 	position: relative;
@@ -402,7 +413,7 @@ container:hover{
 	left-margin: 2px;
 }
 
-#retweeter-name{
+.top-of-tweet{
 	margin-left: 66px;
 	margin-top: 7px;
 	color: rgb(136, 153, 166);
@@ -439,6 +450,30 @@ container:hover{
 	position: relative;
 	cursor: pointer;
 }
+
+.follow-notification{
+	border-bottom: solid 1px rgb(225, 232, 237);
+	border-left: solid 1px rgb(225, 232, 237);
+	border-right: solid 1px rgb(225, 232, 237);
+	background-color: white;
+	min-height: 50px; 
+	display: block;
+	position: relative;
+	cursor: pointer;
+}
+
+.follow-notif-profile-img-container{
+	border-radius: 4px;
+	height: 28px;
+	width: 28px;
+	background-color: #1DA1F2;
+}
+
+.follow-notif-profile-img-container img{
+	border-radius: 3px;
+}
+
+
 
 #tweet-replying-to-container .tweet{
 	border: solid 0px transparent;

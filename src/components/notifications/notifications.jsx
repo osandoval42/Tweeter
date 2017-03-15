@@ -1,4 +1,6 @@
 import React from 'react';
+import Tweet from '../tweet/tweet';
+import FollowNotification from './follow_notification';
 
 const Constants = {
   FOLLOW: "FOLLOW",
@@ -16,14 +18,15 @@ class Notifications extends React.Component {
     const currUser = this.props.currentUser;
     if (currUser){
       const notifications = currUser.notifications.slice().reverse()
-      return (<ul>
+      return (<ul className="notification-feed">
         {notifications.map((notification) => {
           if (notification.type === Constants.FOLLOW){
             const follower = notification.follower
-            return <li key={follower['_id']}>You were followed by {follower.username}</li>
+            follower.profileImg = follower.profileImg || "http://clipart-library.com/image_gallery/396306.png";
+            return <FollowNotification key={follower['_id']} follower={follower}/>
           } else if (notification.type === Constants.MENTION){
             const tweet = notification.tweet;
-            return <li key={tweet['_id']}>You were mentioned by {tweet.authorName} in tweet {tweet.content}</li>
+            return <Tweet key={tweet['_id']} tweet={tweet}/>
           }
         })}
       </ul>)
@@ -33,7 +36,7 @@ class Notifications extends React.Component {
   }
 	render(){
 		return (
-			<div className = "Notifications">
+			<div className = "notifications">
         {this.displayNotifications.call(this)}
 			</div>
 		)

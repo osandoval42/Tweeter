@@ -137,13 +137,12 @@ Tweet.postTweet = (content, currUserId, cb) => {
 		newPost.save((err, newTweet) => {
 			User.getUserById(newTweet.authorId, (err, user) => {
 				if (err) {return cb(true);}
-				const tweetJson = newTweet.toObject();
-				tweetJson.authorName = user.username;
-				tweetJson.firstName = user.firstName;
-				tweetJson.lastName = user.lastName;
-				Tweet.createMentionNotifications(newTweet, (success) => {
-					if (success){cb(err, tweetJson);} else {cb(true);}
-				})	
+				Tweet.getTweetByIdWithAllInfo(newTweet['_id'], (err, formattedNewTweet) => {
+					if (err) {return cb(true);}
+					Tweet.createMentionNotifications(formattedNewTweet, (success) => {
+						if (success){cb(err, formattedNewTweet);} else {cb(true);}
+					})	
+				})
 			})
 		});
 	});

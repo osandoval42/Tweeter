@@ -25,7 +25,9 @@ const Constants = {
 	FULLNAME: "FULLNAME",
 	USER_PHOTO: "USER_PHOTO",
 	PROFILE_IMG: "PROFILE_IMG",
-	COVER_IMG: "COVER_IMG"
+	COVER_IMG: "COVER_IMG",
+	FOLLOW: "FOLLOW",
+	MENTION: "MENTION"
 }
 
 module.exports = Constants;

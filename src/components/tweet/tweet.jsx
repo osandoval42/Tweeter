@@ -9,7 +9,7 @@ class Tweet extends React.Component{
 	}
 	retweeter(){
 		const retweeter = this.props.tweet.retweetAuthorName;
-		return (retweeter) ? (<span id="retweeter-name">{`@${retweeter} Retweeted`}</span>) : undefined;
+		return (retweeter) ? (<span className="top-of-tweet">{`@${retweeter} Retweeted`}</span>) : undefined;
 	}
 	toUser(tweet){
 		browserHistory.push(`/profile/${this.props.tweet.authorName}`);
@@ -24,7 +24,7 @@ class Tweet extends React.Component{
 	authorRepliedTo(){
 		const tweet = this.props.tweet;
 		const repliedTo = tweet.tweetRepliedTo;
-		return repliedTo ? (<span>In reply to: {repliedTo.authorName}</span>) : undefined;
+		return repliedTo ? (<span className="top-of-tweet">In reply to @{repliedTo.authorName}</span>) : undefined;
 	}
 	getCount(type){
 		const tweet = this.props.tweet;
@@ -201,6 +201,7 @@ class Tweet extends React.Component{
 		const profileImg = user.profileImg ? user.profileImg : "http://clipart-library.com/image_gallery/396306.png";
 		return (<div id={tweetId} className="tweet relative clearfix" key={tweetId}>
 				{this.retweeter.call(this)}
+				{this.authorRepliedTo.call(this)}
 				<div id="tweet-img-container" className="clearfix" onClick={this.toUser.bind(this)} 
 					onMouseEnter={this.displayUserBox.bind(this, Constants.USER_PHOTO)} onMouseLeave={this.hideUserBox.bind(this, Constants.USER_PHOTO)}>
 					<img id="tweet-img" src={profileImg}/>
@@ -210,7 +211,6 @@ class Tweet extends React.Component{
 				<span id="tweet-username" onClick={this.toUser.bind(this)} onMouseEnter={this.displayUserBox.bind(this, Constants.USERNAME)}
 				onMouseLeave={this.hideUserBox.bind(this, Constants.USERNAME)}> {`@${tweet.authorName}`} </span>
 				<span id="tweet-time">&nbsp;{tweet.tweetTime}</span>
-				{this.authorRepliedTo.call(this)}
 				<br/>
 				<span id="tweet-content">{tweet.content}</span>
 				<br/>
