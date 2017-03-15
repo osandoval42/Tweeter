@@ -580,7 +580,18 @@ User.uploadProfileImg = (userId, profileImg, cb) => {
 	User.getUserById(userId, (err, user) => {
 		if (err){throw err;}
 		user.profileImg = profileImg;
-		user.save(cb);
+		user.save((err, updatedUser) => {
+			Tweet.getTweetCount(userId, (err, count) => {
+				if (err){throw err;}
+				let userObj = user.toObject();
+				userObj.tweetCount = count;
+				Like.count({userId: userId}, (err, count)=> {
+					if (err){throw err;}
+					userObj.likeCount = count;
+					cb(err, userObj);
+				})
+			})
+		});
 	})
 }
 

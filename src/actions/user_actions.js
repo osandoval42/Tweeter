@@ -61,13 +61,20 @@ export const fetchUsersBeingFollowed = (followerId) => dispatch => {
 
 export const uploadProfileImg = (profileImg) => dispatch => {
 	APIUtil.uploadProfileImg(profileImg)
-		.then(user => dispatch(receiveProfileUser(user))), 
+		.then((user) => {
+			dispatch(receiveProfileUser(user));
+			dispatch(receiveCurrentUser(user));
+		}), 
 		err => dispatch(receiveErrors(err.responseJSON))
 };
 
 export const uploadCoverImg = (coverImg) => dispatch => {
 	APIUtil.uploadCoverImg(coverImg)
-		.then(user => dispatch(receiveProfileUser(user))), 
+		.then((user) => {
+			dispatch(receiveProfileUser(user));
+			dispatch(receiveCurrentUser(user));
+		}), 
 		err => dispatch(receiveErrors(err.responseJSON))
 };
+
 
