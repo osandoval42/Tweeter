@@ -4,7 +4,8 @@ import {fetchProfileUser} from '../../actions/user_actions';
 import {openTweetingInterface} from '../../actions/tweet_actions';
 
 const mapStateToProps = (state) => ({
-	profileUser: state.profileUser
+	profileUser: state.profileUser,
+	currUser: state.session.currentUser
 });
 
 const mapDispatchToProps = (dispatch) => ({

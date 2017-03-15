@@ -1156,6 +1156,42 @@ img{
 	display: none;
 }
 
+#profile-img-upload-container{
+	position: absolute;
+	top: 471px;
+	left: 200px;
+	z-index: 20;
+}
+
+#cover-img-upload-container{
+	position: absolute;
+	top: 66px;
+	left: 10px;
+	z-index: 20;
+}
+
+.inputfile{
+	width: 0.1px;
+	height: 0.1px;
+	opacity: 0;
+	overflow: hidden;
+	position: absolute;
+	z-index: -1;
+}
+
+.img-upload-label{
+	font-weight: 700;
+	background-color: rgba(0, 0, 0, 0);
+	display: inline-block;
+	cursor: pointer;
+}
+
+.img-upload-label i{
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 18px;
+}
+
+
 
 
 
