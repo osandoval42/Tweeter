@@ -50,8 +50,17 @@ const Constants = {
 	MENTION: "MENTION"
 }
 
-User.createFollowNotification = (followedId, follower, cb) => { //REVISE protect against multiple follow
+function fullNameOfUser(user){
+      let names = []
+      if (user.firstName) {names.push(user.firstName)};
+      if (user.lastName) {names.push(user.lastName)};
+      return names.join(" ");
+}
+
+User.createFollowNotification = (followedId, followerModel, cb) => { //REVISE protect against multiple follow
 	User.getUserById(followedId, (err, followedUser) => {
+		const follower = followerModel.toObject();
+		follower.fullName = fullNameOfUser(follower);
 		const followNotification = {
 			type: Constants.FOLLOW,
 			follower,
@@ -135,7 +144,6 @@ Tweet.postTweet = (content, currUserId, cb) => {
 			tweetedAt: tweetedAtIds
 		})
 		newPost.save((err, newTweet) => {
-			User.getUserById(newTweet.authorId, (err, user) => {
 				if (err) {return cb(true);}
 				Tweet.getTweetByIdWithAllInfo(newTweet['_id'], (err, formattedNewTweet) => {
 					if (err) {return cb(true);}
@@ -143,7 +151,6 @@ Tweet.postTweet = (content, currUserId, cb) => {
 						if (success){cb(err, formattedNewTweet);} else {cb(true);}
 					})	
 				})
-			})
 		});
 	});
 }
@@ -263,17 +270,24 @@ Tweet.replyTweet = (content, currUserId, originalTweet, cb) => { //REVISE disall
 			newPost.save((err, newReply) => {
 				if (err){return (cb(true));}
 				const originalId = mongoose.Types.ObjectId(originalTweet['_id']);
-				Tweet.createMentionNotifications(newReply, (success) => {
-					if (success){Tweet.getTweetByIdWithAllInfo(originalId, cb);} else {cb(true);}
-				})	
+				Tweet.getTweetByIdWithAllInfo(originalId, (err, formattedTweet) => {
+					if (err){return (cb(true));}
+					Tweet.createMentionNotifications(formattedTweet, (success) => {
+						if (success) {return cb(null, formattedTweet);} 
+						else {return cb(true);}
+					})
+				})
 			});
 		})
 	})
 }
 
 //EVERYTHING BELOW IS FACILITATES TWEET RENDERING
+//need _id username, firstname, lastname, coverphoto, profilephoto
+//usersBeingfollowed
+//usersFollowing
 const getAuthorInfoAndNext = (tweet, next, finalCB, tweetToReturn) => {
-			User.getUserById(tweet.authorId, (err, user) => {
+			User.findById(tweet.authorId, 'username firstName lastName coverPhoto profilePhoto usersBeingFollowed usersFollowing', (err, user) => {
 				if (err) {throw err;} //REVISE
 				tweet.authorName = user.username;
 				tweet.firstName = user.firstName;
@@ -300,7 +314,8 @@ const getTweetRepliedToAndNext = (tweet, next, finalCB) => {
 					content: tweetRepliedTo.content,
 					authorName: user.username,
 					firstName: user.firstName,
-					lastName: user.lastName
+					lastName: user.lastName,
+					user: {profileImg: user.profileImg}
 				};
 				getAuthorInfoAndNext(tweet, next, finalCB);
 			})
@@ -445,13 +460,13 @@ const follow = (followerID, toFollowId, cb) => {
 				User.findByIdAndUpdate(
 					followerID,
 					{$push: {usersBeingFollowed: toFollowId}},
-					{safe: true, new: true, fields: {username: 1, usersBeingFollowed: 1, usersFollowing: 1, notifications: 1}},
-					function(err, model){
-						User.createFollowNotification(toFollowId, model, (err, _) => {
+					{safe: true, new: true, fields: {username: 1, usersBeingFollowed: 1, usersFollowing: 1, firstName: 1, lastName: 1, notifications: 1}},
+					function(err, follower){
+						User.createFollowNotification(toFollowId, follower, (err, _) => {
 							if (err){
 								cb(true);
 							} else {
-								cb(null, model);
+								cb(null, follower);
 							}
 						})
 					}

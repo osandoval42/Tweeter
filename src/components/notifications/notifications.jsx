@@ -1,5 +1,5 @@
 import React from 'react';
-import Tweet from '../tweet/tweet';
+import Tweet from '../tweet/tweet_container';
 import FollowNotification from './follow_notification';
 
 const Constants = {

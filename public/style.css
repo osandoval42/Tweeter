@@ -329,6 +329,7 @@ container:hover{
 .notifications{
 	width: 588px;
 	margin: 0 auto;
+	margin-top: 10px;
 }
 
 .notification-feed{
@@ -460,16 +461,33 @@ container:hover{
 	display: block;
 	position: relative;
 	cursor: pointer;
+	position: relative;
 }
 
-.follow-notif-profile-img-container{
+.follow-notification h3{
+	font-size: 15px;
+	display: inline-block;
+	position: absolute;
+	top: 15px;
+	left: 68px;
+}
+
+.follow-notification > h3 > span{
+	color: black;
+	font-weight: bold;
+}
+
+.follower-notif-profile-img-container{
 	border-radius: 4px;
-	height: 28px;
-	width: 28px;
+	height: 29px;
+	width: 29px;
 	background-color: #1DA1F2;
+	display: inline-block;
+	margin-left: 12px;
+	margin-top: 9px;
 }
 
-.follow-notif-profile-img-container img{
+.follower-notif-profile-img-container img{
 	border-radius: 3px;
 }
 
