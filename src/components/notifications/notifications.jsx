@@ -37,6 +37,7 @@ class Notifications extends React.Component {
 	render(){
 		return (
 			<div className = "notifications">
+        <h1>Notifications</h1>
         {this.displayNotifications.call(this)}
 			</div>
 		)
