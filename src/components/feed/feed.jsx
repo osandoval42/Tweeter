@@ -8,8 +8,13 @@ class Feed extends React.Component {
 	constructor(props) {
 		super(props);
 		this.fetchTweets();
+		this.feedListener = setInterval(this.fetchMoreTweetsIfAtBottomOfScroll.bind(this), 2000);
+		this.oldScrollHeight = 0;
 	}
-	fetchTweets(){
+	componentWillUnmount(){
+		clearInterval(this.feedListener)
+	}
+	fetchTweets(lastTweetFetchedId){
 		const profileUser = this.props.profileUser;
 		let profileUserId;
 		if (profileUser){
@@ -18,24 +23,24 @@ class Feed extends React.Component {
 		switch (this.props.feedType){
 			case Constants.LIKES_FEED:{
 				if (profileUserId){
-					this.props.getLikedTweets(profileUserId);
+					this.props.getLikedTweets(profileUserId, lastTweetFetchedId);
 				} else {
 					TweetActions.resetTweets();
 				}
 				break;}
 			case Constants.CURR_USER_FEED:{
-				this.props.getCurrUserFeedTweets();
+				this.props.getCurrUserFeedTweets(lastTweetFetchedId);
 				break;}
 			case Constants.PROFILE_FEED:{
 				if (profileUserId){
-					this.props.getAllProfileTweets(profileUserId);	
+					this.props.getAllProfileTweets(profileUserId, lastTweetFetchedId);	
 				} else {
 					TweetActions.resetTweets();
 				}
 				break;}
 			case Constants.NON_REPLY_PROFILE_FEED:{
 				if (profileUserId){
-					this.props.getNonReplyProfileTweets(profileUserId);
+					this.props.getNonReplyProfileTweets(profileUserId, lastTweetFetchedId);
 				} else {
 					TweetActions.resetTweets();
 				}
@@ -69,16 +74,35 @@ class Feed extends React.Component {
 			}
 		})
 	}
+	fetchMoreTweetsIfAtBottomOfScroll(){
+		const feed = document.getElementsByClassName('feed')[0];
+		const scrollTop = feed.scrollTop;
+		const scrollHeight = feed.scrollHeight;
+		const windowHeight = feed.clientHeight;
+		const scrollOffset = 10;
+		if ((scrollTop >= (scrollHeight - (windowHeight + scrollOffset))) && 
+			scrollHeight > this.oldScrollHeight){
+			this.oldScrollHeight = scrollHeight;
+			const tweets = document.getElementById('feed-content');
+			const lastTweetFetched = tweets.lastChild;
+			if (lastTweetFetched){
+				const lastTweetFetchedId = lastTweetFetched.id;
+				this.fetchTweets(lastTweetFetchedId);
+			}
+		}
+	}
 	render(){
 		const tweets = this.props.tweets;
 		let nonHomeFeed = this.props.isOnHomePage ? "" : " non-home-feed";
 		return (
-					<ul className={`feed${nonHomeFeed}`}>
+					<div className={`feed${nonHomeFeed}`}>
+						<ul id="feed-content">
 						{   tweets.map((tweet) => {
 							const tweetId = tweet['_id']
 							return (<Tweet key={tweetId} hideUserBoxesOfOtherTweets={this.hideUserBoxesOfOtherTweets.bind(this)} tweet={tweet}/>);
 						})}
-					</ul>
+						</ul>
+					</div>
 		)
 	}
 };

@@ -57,39 +57,38 @@ export const replyTweet = (originalTweet, replyContent) => dispatch => {
 		err => dispatch(receiveErrors(err.responseJSON))
 };
 
-export const fetchAllTweets = () => dispatch => {
+export const fetchAllTweets = (lastTweetFetchedId) => dispatch => {
 	dispatch(resetTweets())
-	APIUtil.fetchAllTweets()
+	APIUtil.fetchAllTweets(lastTweetFetchedId)
 		.then(tweets => dispatch(receiveTweets(tweets))), 
 		err => dispatch(receiveErrors(err.responseJSON))
 };
 
-export const fetchTweetsUserLikes = (likerId) => dispatch => {
+export const fetchNonReplyProfileTweets = (currUserId, lastTweetFetchedId) => dispatch => {
 	dispatch(resetTweets())
-	APIUtil.fetchTweetsUserLikes(likerId)
+	APIUtil.fetchNonReplyProfileTweets(currUserId, lastTweetFetchedId)
 		.then(tweets => dispatch(receiveTweets(tweets))), 
 		err => dispatch(receiveErrors(err.responseJSON))
 };
 
-
-export const fetchNonReplyProfileTweets = (currUserId) => dispatch => {
+export const fetchAllUserProfileTweets = (currUserId, lastTweetFetchedId) => dispatch => {
 	dispatch(resetTweets())
-	APIUtil.fetchNonReplyProfileTweets(currUserId)
+	APIUtil.fetchAllUserProfileTweets(currUserId, lastTweetFetchedId)
 		.then(tweets => dispatch(receiveTweets(tweets))), 
 		err => dispatch(receiveErrors(err.responseJSON))
 };
 
-export const fetchAllUserProfileTweets = (currUserId) => dispatch => {
-	dispatch(resetTweets())
-	APIUtil.fetchAllUserProfileTweets(currUserId)
-		.then(tweets => dispatch(receiveTweets(tweets))), 
-		err => dispatch(receiveErrors(err.responseJSON))
-};
-
-export const receiveTweets = tweets => ({
+export const receiveTweets = tweetObj => ({
 	type: Constants.RECEIVE_TWEETS,
-	tweets
+	tweetObj
 });
+
+export const fetchTweetsUserLikes = (likerId, lastTweetFetchedId) => dispatch => {
+	dispatch(resetTweets())
+	APIUtil.fetchTweetsUserLikes(likerId, lastTweetFetchedId)
+		.then(tweets => dispatch(receiveTweets(tweets))), 
+		err => dispatch(receiveErrors(err.responseJSON))
+};
 
 export const receiveNewTweet = (tweet, isOnHomePage) => ({
 	type: Constants.RECEIVE_NEW_TWEET,

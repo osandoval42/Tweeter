@@ -321,9 +321,15 @@ container:hover{
 
 .feed{
 	width: 100%;
-	height: 900px;
 	display: block;
 	position: relative;
+	height: 400px;
+	overflow: auto;
+	overflow-x: hidden;
+}
+
+#feed-content{
+
 }
 
 .notifications{
@@ -359,7 +365,7 @@ container:hover{
 
 #home-feed{
 	width: 588px;
-	height: 1000px;
+	height: 800px;
 	display: inline-block;
 	position: relative;
 	margin-top: 11px;
@@ -864,7 +870,7 @@ img{
 }
 
 #main-profile-display{
-	height: 1000px;
+	height: 800px;
 	float: left;
 	margin-top: 10px;
 	margin-left: -2px;

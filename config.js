@@ -109,6 +109,8 @@ export default {
 				currUser.firstName = req.user.firstName;
 				currUser.lastName = req.user.lastName;
 				currUser.notifications = req.user.notifications;
+				currUser.profileImg = req.user.profileImg;
+				currUser.coverImg = req.user.coverImg;
 				currUser["_id"] = req.user["_id"];
 				Tweet.getTweetCount(req.user['_id'], (err, tweetCount) => {
 					currUser.tweetCount = tweetCount;

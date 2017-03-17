@@ -10,21 +10,20 @@ const tweets = new LimitLessLRUCache();
 
 //unecessary for person tweets as each key happens once
 
-const populateTweets = (tweetsArr) => {
-	const newTweetsColl = new LimitLessLRUCache();
+const addTweets = (state, tweetsArr) => {
 	tweetsArr.forEach((tweet) => {
 		let originalTweet = tweet.originalTweet;
 		let id;
 		if (originalTweet){
 			id = originalTweet['_id']
 			originalTweet.retweetAuthorName = tweet.authorName;
-			newTweetsColl.insertOldestNodeYet(id, originalTweet);
+			state.insertOldestNodeYet(id, originalTweet);
 		} else {
 			id = tweet['_id'];
-			newTweetsColl.insertOldestNodeYet(id, tweet);
+			state.insertOldestNodeYet(id, tweet);
 		}
 	})
-	return newTweetsColl;
+	return state;
 }
 
 const tweetBelongsToCurrColl = (coll, tweet, isOnHomePage) => {
@@ -52,7 +51,13 @@ const TweetReducer = (state = tweets, action) => {
 	let tweet;
 	switch(action.type){
 		case RECEIVE_TWEETS:
-			return populateTweets(action.tweets);
+			if (action.tweetObj.areAdditionalTweets){
+				stateDup = state.dup()
+				return addTweets(stateDup, action.tweetObj.tweets);
+			} else {
+				let newColl = new LimitLessLRUCache();
+				return addTweets(newColl, action.tweetObj.tweets)
+			}
 		case RECEIVE_NEW_TWEET:
 			stateDup = state.dup()
 			tweet = action.tweet;

@@ -94,7 +94,23 @@ const configTweetRoutes = (router) => {
 					return res.status(401).send({"ok": false}); 
 				}
 				else { 
-					res.send(tweets);
+					let tweetsObj = {tweets, areAdditionalTweets: lastDownloadedTweetId ? true : false};
+					res.send(tweetsObj);
+				}
+		})
+	}),
+	router.get('/tweets_user_likes', (req, res) => {
+		const userIdStr = req.query.userId;
+		const userId = userIdStr ? mongoose.Types.ObjectId(userIdStr) : undefined;
+		const lastDownloadedTweetIdStr = req.query.lastId;
+		const lastDownloadedTweetId = lastDownloadedTweetIdStr ? mongoose.Types.ObjectId(lastDownloadedTweetIdStr) : undefined;
+		Tweet.likedTweets(userId, lastDownloadedTweetId, (err, tweets) => {
+				if (err) { 
+					return res.status(401).send({"ok": false}); 
+				}
+				else { 
+					let tweetsObj = {tweets, areAdditionalTweets: lastDownloadedTweetId ? true : false};
+					res.send(tweetsObj);
 				}
 		})
 	}),
@@ -108,7 +124,8 @@ const configTweetRoutes = (router) => {
 					return res.status(401).send({"ok": false}); 
 				}
 				else { 
-					res.send(tweets);
+					let tweetsObj = {tweets, areAdditionalTweets: lastDownloadedTweetId ? true : false};
+					res.send(tweetsObj);
 				}
 		})
 	}),
@@ -122,7 +139,8 @@ const configTweetRoutes = (router) => {
 					return res.status(401).send({"ok": false}); 
 				}
 				else { 
-					res.send(tweets);
+					let tweetsObj = {tweets, areAdditionalTweets: lastDownloadedTweetId ? true : false};
+					res.send(tweetsObj);
 				}
 		})
 	})
@@ -137,20 +155,6 @@ const configTweetRoutes = (router) => {
 				}
 				else { 
 					res.send(replies);
-				}
-		})
-	}),
-	router.get('/tweets_user_likes', (req, res) => {
-		const userIdStr = req.query.userId;
-		const userId = userIdStr ? mongoose.Types.ObjectId(userIdStr) : undefined;
-		const lastDownloadedTweetIdStr = req.query.lastId;
-		const lastDownloadedTweetId = lastDownloadedTweetIdStr ? mongoose.Types.ObjectId(lastDownloadedTweetIdStr) : undefined;
-		Tweet.likedTweets(userId, lastDownloadedTweetId, (err, tweets) => {
-				if (err) { 
-					return res.status(401).send({"ok": false}); 
-				}
-				else { 
-					res.send(tweets);
 				}
 		})
 	})

@@ -34,7 +34,6 @@ class HomeToBe extends React.Component {
 			<div id="home-feed">
 				{this.tweetInterface.call(this)}
 				<Feed feedType = {Constants.CURR_USER_FEED} isOnHomePage={true}/>
-				}
 			</div>
 		</div>
 		)

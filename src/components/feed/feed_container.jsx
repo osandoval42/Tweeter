@@ -10,17 +10,17 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({ //REVISE check that currUserId is needed for all functions
-	getCurrUserFeedTweets: () => {
-		return dispatch(fetchAllTweets());
+	getCurrUserFeedTweets: (lastTweetFetchedId) => {
+		return dispatch(fetchAllTweets(lastTweetFetchedId));
 	},
-	getNonReplyProfileTweets: (currUserId) => {
-		return dispatch(fetchNonReplyProfileTweets(currUserId));
+	getNonReplyProfileTweets: (currUserId, lastTweetFetchedId) => {
+		return dispatch(fetchNonReplyProfileTweets(currUserId, lastTweetFetchedId));
 	},
-	getAllProfileTweets: (currUserId) => {
-		return dispatch(fetchAllUserProfileTweets(currUserId));
+	getAllProfileTweets: (currUserId, lastTweetFetchedId) => {
+		return dispatch(fetchAllUserProfileTweets(currUserId, lastTweetFetchedId));
 	},
-	getLikedTweets: (currUserId) => {
-		return dispatch(fetchTweetsUserLikes(currUserId))
+	getLikedTweets: (currUserId, lastTweetFetchedId) => {
+		return dispatch(fetchTweetsUserLikes(currUserId, lastTweetFetchedId))
 	}
 });
 

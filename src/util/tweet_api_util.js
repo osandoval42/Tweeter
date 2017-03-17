@@ -1,28 +1,32 @@
-export const fetchAllTweets = () => { //REVISE ADD LAST ID
+export const fetchAllTweets = (lastId) => { //REVISE ADD LAST ID
+  const lastIdQuery = lastId ? `?lastId=${lastId}` : "";
   return $.ajax({
     method: 'GET',
-    url: '/api/feed_tweets',
+    url: `/api/feed_tweets${lastIdQuery}`,
   });
 };
 
-export const fetchAllUserProfileTweets = (userId) => { //REVISE ADD LAST ID
+export const fetchAllUserProfileTweets = (userId, lastId) => { //REVISE ADD LAST ID
+  const lastIdQuery = lastId ? `&lastId=${lastId}` : "";
   return $.ajax({
     method: 'GET',
-    url: `/api/user_tweets?userId=${userId}`,
+    url: `/api/user_tweets?userId=${userId}${lastIdQuery}`,
   });
 };
 
-export const fetchNonReplyProfileTweets = (userId) => { //REVISE ADD LAST ID
+export const fetchNonReplyProfileTweets = (userId, lastId) => { //REVISE ADD LAST ID
+  const lastIdQuery = lastId ? `&lastId=${lastId}` : "";
   return $.ajax({
     method: 'GET',
-    url: `/api/user_tweets_without_replies?userId=${userId}`,
+    url: `/api/user_tweets_without_replies?userId=${userId}${lastIdQuery}`,
   });
 };
 
-export const fetchTweetsUserLikes = (userId) => { //REVISE ADD LAST ID
+export const fetchTweetsUserLikes = (userId, lastId) => { //REVISE ADD LAST ID
+  const lastIdQuery = lastId ? `&lastId=${lastId}` : "";
   return $.ajax({
     method: 'GET',
-    url: `/api/tweets_user_likes?userId=${userId}`,
+    url: `/api/tweets_user_likes?userId=${userId}${lastIdQuery}`,
   });
 };
 
