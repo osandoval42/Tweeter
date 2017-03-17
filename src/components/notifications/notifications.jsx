@@ -22,7 +22,6 @@ class Notifications extends React.Component {
         {notifications.map((notification) => {
           if (notification.type === Constants.FOLLOW){
             const follower = notification.follower
-            follower.profileImg = follower.profileImg || "http://clipart-library.com/image_gallery/396306.png";
             return <FollowNotification key={follower['_id']} follower={follower}/>
           } else if (notification.type === Constants.MENTION){
             const tweet = notification.tweet;

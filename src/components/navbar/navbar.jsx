@@ -24,7 +24,7 @@ class Navbar extends React.Component{
 	myProfileImg(){
 		const currUser = this.props.currentUser;
 		if (currUser){
-			const profileImg = currUser.profileImg ? currUser.profileImg : "http://clipart-library.com/image_gallery/396306.png";
+			const profileImg = currUser.profileImg
 			return (
 				<div id="my-profile-img-container">
 					<img id="my-profile-img" src={profileImg}/>

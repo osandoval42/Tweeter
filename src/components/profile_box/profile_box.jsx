@@ -18,7 +18,7 @@ class ProfileBox extends React.Component{
 	render(){
 		const currentUser = this.props.currentUser;
 		if (currentUser){
-		const profileImg = currentUser.profileImg ? currentUser.profileImg : "http://clipart-library.com/image_gallery/396306.png";
+		const profileImg = currentUser.profileImg;
 		return (
 			<div id="profile-box" className="home-left-box">
 				<div id="top-half-profile-box" className="relative">				

@@ -2,6 +2,8 @@ var mongoose = require('mongoose');
 import es6Promise from 'es6-promise';
 mongoose.Promise = es6Promise.Promise;
 
+import Default from './util/default';
+
 var UserSchema = mongoose.Schema({
 	//REVISE add profile pic and cover pic
 	firstName: {
@@ -31,10 +33,12 @@ var UserSchema = mongoose.Schema({
 		sparse: true //REVISE DELETE
 	},
 	profileImg: {
-		type: String
+		type: String,
+		"default": Default.profileImg
 	},
 	coverImg: {
-		type: String
+		type: String,
+		"default": Default.coverImg
 	}, 
 	usersBeingFollowed: [mongoose.Schema.Types.ObjectId],
 	usersFollowing: [mongoose.Schema.Types.ObjectId],

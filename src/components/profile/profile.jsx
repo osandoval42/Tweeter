@@ -67,8 +67,10 @@ class Profile extends React.Component {
     		if (this.isImage(result)){
     			if (type === Constants.PROFILE_IMG){
     				let profileImg = document.getElementsByClassName("user-profile-img")[0];
+    				console.log(`result is ${result}`);
     				this.props.uploadProfileImg(result);
     			} else {
+    				console.log(`result is ${result}`);
    					this.props.uploadCoverImg(result);
     			}
     		} else {
@@ -110,8 +112,8 @@ class Profile extends React.Component {
 	}
 	render(){
 		const user = this.props.profileUser;
-		const profileImg = user.profileImg ? user.profileImg : "http://clipart-library.com/image_gallery/396306.png";
-		const coverImg = user.coverImg ? user.coverImg : "http://wallpaper-gallery.net/images/twitter-wallpaper/twitter-wallpaper-15.jpg";
+		const profileImg = user.profileImg;
+		const coverImg = user.coverImg;
 		return (
 			<div>
 				{this.profileImgUpload()}

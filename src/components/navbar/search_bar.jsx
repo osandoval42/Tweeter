@@ -36,7 +36,7 @@ const SearchBar = React.createClass({
   			this.state.matchedUsers.map((user) => {
           const username = user.username;
           const fullName = this.fullName(user);
-          const profileImg = user.profileImg ? user.profileImg : "http://clipart-library.com/image_gallery/396306.png";
+          const profileImg = user.profileImg;
   				return (<li key={username} className="autocompleted-user" onClick={this.toUserProfile.bind(this, username)}>
             <div className="autocompleted-img-container">
               <img className="autocompleted-img" src={profileImg}/>

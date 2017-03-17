@@ -287,7 +287,7 @@ Tweet.replyTweet = (content, currUserId, originalTweet, cb) => { //REVISE disall
 //usersBeingfollowed
 //usersFollowing
 const getAuthorInfoAndNext = (tweet, next, finalCB, tweetToReturn) => {
-			User.findById(tweet.authorId, 'username firstName lastName coverPhoto profilePhoto usersBeingFollowed usersFollowing', (err, user) => {
+			User.findById(tweet.authorId, 'username firstName lastName coverImg profileImg usersBeingFollowed usersFollowing', (err, user) => {
 				if (err) {throw err;} //REVISE
 				tweet.authorName = user.username;
 				tweet.firstName = user.firstName;

@@ -62,7 +62,6 @@ class WhoToFollow extends React.Component {
 					{Object.keys(whoToFollowIdxs).map((idx) => {
 						const potentialFollowed = this.props.whoToFollow[idx];
 						const toPotentialFollowed = this.toUser.bind(this, potentialFollowed.username);
-						potentialFollowed.profileImg = potentialFollowed.profileImg || "http://clipart-library.com/image_gallery/396306.png";
 						return (
 							<div key={potentialFollowed['_id']}className="who-to-follow-user">
 								<div className="who-to-follow-img-container" onClick={toPotentialFollowed}>

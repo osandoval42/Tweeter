@@ -198,7 +198,7 @@ class Tweet extends React.Component{
 		let tweet = this.props.tweet;
 		const tweetId = tweet['_id'];
 		const user = tweet.user;
-		const profileImg = user.profileImg ? user.profileImg : "http://clipart-library.com/image_gallery/396306.png";
+		const profileImg = user.profileImg;
 		return (<div id={tweetId} className="tweet relative clearfix" key={tweetId}>
 				{this.retweeter.call(this)}
 				{this.authorRepliedTo.call(this)}
