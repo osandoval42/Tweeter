@@ -1,4 +1,5 @@
 import React from 'react';
+import {browserHistory} from 'react-router';
 
 class WhoToFollow extends React.Component { 
 	constructor(props) {
@@ -19,14 +20,29 @@ class WhoToFollow extends React.Component {
 		this.setState({whoToFollowIdx: newIdx});
 	}
 	followedBy(potentialFollowed){
-		const username = potentialFollowed.followerWhoWeFollow;
-		if (username){
-			return (<span className="followed-by-mutual">Followed By <span className="mutual-follower-username">{username}</span></span>);
+		const user = potentialFollowed.followerWhoWeFollow;
+		if (user){
+			return (<span className="followed-by-mutual">Followed By <span className="mutual-follower-username" onClick={this.toUser.bind(this, user.username)}>{user.fullName}</span></span>);
 		}
 	}
-	followUser(){
-		//follow user
-		//delete user from store
+	componentWillUpdate(nextProps){
+		if (nextProps.whoToFollow.length < this.props.whoToFollow.length){
+			const oneLowerIdx = this.state.whoToFollowIdx - 1;
+			if (oneLowerIdx < nextProps.whoToFollow.length && oneLowerIdx >= 0){
+				this.setState({whoToFollowIdx: oneLowerIdx})
+			} else {
+				this.setState({whoToFollowIdx: 0})
+			}
+		}
+	}
+	toUser(username){
+		browserHistory.push(`/profile/${username}`)
+	}
+	followUser(userId){
+		let followBtn = document.getElementById(`${userId}-follow-btn`);
+		followBtn.className = "user-following-btn user-follow-type-btn";
+		followBtn.firstChild.textContent = "Following";
+		this.props.followUser(userId)
 	}
 	render(){
 		let whoToFollowIdxs = {}
@@ -45,19 +61,20 @@ class WhoToFollow extends React.Component {
 				<ul>
 					{Object.keys(whoToFollowIdxs).map((idx) => {
 						const potentialFollowed = this.props.whoToFollow[idx];
+						const toPotentialFollowed = this.toUser.bind(this, potentialFollowed.username);
 						potentialFollowed.profileImg = potentialFollowed.profileImg || "http://clipart-library.com/image_gallery/396306.png";
 						return (
 							<div key={potentialFollowed['_id']}className="who-to-follow-user">
-								<div className="who-to-follow-img-container">
+								<div className="who-to-follow-img-container" onClick={toPotentialFollowed}>
 									<img src={potentialFollowed.profileImg}/>
 								</div>
 								<div className="who-to-follow-info-container">
 									<div className="who-to-follow-names-container">
-										<h6>{potentialFollowed.fullName}</h6>
-										<span>{`@${potentialFollowed.username}`}</span>
+										<h6 onClick={toPotentialFollowed}>{potentialFollowed.fullName}</h6>
+										<span onClick={toPotentialFollowed}>{`@${potentialFollowed.username}`}</span>
 									</div>
 									{this.followedBy(potentialFollowed)}
-									<button className="user-follow-btn user-follow-type-btn" onClick={this.followUser.bind(this, potentialFollowed)}>Follow</button>
+									<button id={`${potentialFollowed['_id']}-follow-btn`}className="user-follow-btn user-follow-type-btn" onClick={this.followUser.bind(this, potentialFollowed['_id'])}><span>Follow</span></button>
 								</div>
 							</div>
 						)

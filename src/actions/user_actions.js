@@ -13,7 +13,8 @@ const resetUsers = () => ({
 export const toggleFollow = (followedUserId) => dispatch => {
 	APIUtil.toggleFollow(followedUserId)
 		.then(currUser => {
-			dispatch(receiveCurrentUser(currUser))
+			dispatch(receiveCurrentUser(currUser));
+			dispatch(deleteUnfollowedUser(followedUserId));
 		}), 
 		err => dispatch(receiveErrors(err.responseJSON))
 };
@@ -63,6 +64,13 @@ export const receiveWhoToFollow = whoToFollow => {
 	})
 };
 
+export const deleteUnfollowedUser = newFollowedUser => {
+	return({
+		type: Constants.REMOVE_NEW_FOLLOWED_USER,
+		newFollowedUser
+	})
+};
+
 export const fetchUsersBeingFollowed = (followerId) => dispatch => {
 	dispatch(resetUsers())
 	APIUtil.fetchUsersBeingFollowed(followerId)
@@ -88,5 +96,7 @@ export const uploadCoverImg = (coverImg) => dispatch => {
 		}), 
 		err => dispatch(receiveErrors(err.responseJSON))
 };
+
+
 
 

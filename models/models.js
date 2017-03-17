@@ -648,7 +648,10 @@ User.whoToFollow = (currUser, cb) => {
 		})
 		users.forEach((user) => {
 			if (usersBeingFollowedByMe[user['_id']]){
-				usersBeingFollowedByMe[user['_id']] = fullNameOfUser(user);
+				const userObj = {};
+				userObj.fullName = fullNameOfUser(user);
+				userObj.username = user.username;
+				usersBeingFollowedByMe[user['_id']] = userObj;
 			}
 		})
 		users.forEach((user) => {
@@ -656,13 +659,13 @@ User.whoToFollow = (currUser, cb) => {
 			if (!usersBeingFollowedByMe[userId]){
 				let userObj = user.toObject();
 				userObj.fullName = fullNameOfUser(userObj);
-				let nameOfFolloweeWhoFollows;
+				let followeeWhoFollows;
 				if (userObj.usersFollowing.some((userId) => {
 					const strUserId = userId.toString();
-					nameOfFolloweeWhoFollows = usersBeingFollowedByMe[strUserId];
-					return nameOfFolloweeWhoFollows;
+					followeeWhoFollows = usersBeingFollowedByMe[strUserId];
+					return followeeWhoFollows;
 				})) {
-					userObj.followerWhoWeFollow = nameOfFolloweeWhoFollows;
+					userObj.followerWhoWeFollow = followeeWhoFollows;
 					notBeingFollowedOneDegreeAway.push(userObj);
 				} else {
 					notBeingFollowedNoRelation.push(userObj);
