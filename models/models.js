@@ -616,3 +616,65 @@ User.uploadCoverImg = (userId, coverImg, cb) => {
 		user.save(cb);
 	})
 }
+
+function shuffle(array) {
+  var currentIndex = array.length, temporaryValue, randomIndex;
+
+  // While there remain elements to shuffle...
+  while (0 !== currentIndex) {
+
+    // Pick a remaining element...
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex -= 1;
+
+    // And swap it with the current element.
+    temporaryValue = array[currentIndex];
+    array[currentIndex] = array[randomIndex];
+    array[randomIndex] = temporaryValue;
+  }
+
+  return array;
+}
+
+
+User.whoToFollow = (currUser, cb) => {
+	User.find({}).exec()
+	.then((users) => {
+		let usersBeingFollowedByMe = {};
+		let notBeingFollowedOneDegreeAway = [];
+		let notBeingFollowedNoRelation = [];
+		currUser.usersBeingFollowed.forEach((userId) => {
+			usersBeingFollowedByMe[userId] = true;
+		})
+		users.forEach((user) => {
+			if (usersBeingFollowedByMe[user['_id']]){
+				usersBeingFollowedByMe[user['_id']] = fullNameOfUser(user);
+			}
+		})
+		users.forEach((user) => {
+			const userId = user['_id']
+			if (!usersBeingFollowedByMe[userId]){
+				let userObj = user.toObject();
+				userObj.fullName = fullNameOfUser(userObj);
+				let nameOfFolloweeWhoFollows;
+				if (userObj.usersFollowing.some((userId) => {
+					const strUserId = userId.toString();
+					nameOfFolloweeWhoFollows = usersBeingFollowedByMe[strUserId];
+					return nameOfFolloweeWhoFollows;
+				})) {
+					userObj.followerWhoWeFollow = nameOfFolloweeWhoFollows;
+					notBeingFollowedOneDegreeAway.push(userObj);
+				} else {
+					notBeingFollowedNoRelation.push(userObj);
+				}
+			} 
+		})
+		notBeingFollowedNoRelation = shuffle(notBeingFollowedNoRelation);
+		notBeingFollowedOneDegreeAway = shuffle(notBeingFollowedOneDegreeAway);
+		cb(null, notBeingFollowedOneDegreeAway.concat(notBeingFollowedNoRelation));
+	})
+	.catch((err) => {
+		cb(err);
+	})
+}
+

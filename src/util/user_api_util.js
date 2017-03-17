@@ -57,3 +57,10 @@ module.exports.uploadCoverImg = (coverImg) => {
 		data: {coverImg}
 	});
 }
+
+module.exports.getWhoToFollow = () => {
+	return $.ajax({
+		method: 'GET',
+		url: `/api/who_to_follow`,
+	});
+}

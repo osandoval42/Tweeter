@@ -43,12 +43,24 @@ export const fetchProfileUser = (username) => dispatch => {
 		err => dispatch(receiveErrors(err.responseJSON))
 };
 
-
 export const fetchFollowers = (followedId) => dispatch => {
 	dispatch(resetUsers())
 	APIUtil.fetchFollowers(followedId)
 		.then(users => dispatch(receiveUsers(users))), 
 		err => dispatch(receiveErrors(err.responseJSON))
+};
+
+export const getWhoToFollow = () => dispatch => {
+	APIUtil.getWhoToFollow()
+		.then(whoToFollow => dispatch(receiveWhoToFollow(whoToFollow))), 
+		err => dispatch(receiveErrors(err.responseJSON))
+};
+
+export const receiveWhoToFollow = whoToFollow => {
+	return({
+		type: Constants.RECEIVE_WHO_TO_FOLLOW,
+		whoToFollow
+	})
 };
 
 export const fetchUsersBeingFollowed = (followerId) => dispatch => {

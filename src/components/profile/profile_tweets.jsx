@@ -2,6 +2,7 @@ import React from 'react';
 import {browserHistory} from 'react-router';
 import Constants from '../../constants/constants';
 import Feed from '../feed/feed_container';
+import WhoToFollow from '../who_to_follow/who_to_follow_container';
 
 
 //add in feed calling function based on which is highlighted
@@ -26,6 +27,7 @@ class ProfileTweets extends React.Component{
   render() {
     const feedType = (this.state.currDisplay === Constants.WITH_REPLIES) ? Constants.PROFILE_FEED : Constants.NON_REPLY_PROFILE_FEED;
     return (
+      <div>
       <div id="main-profile-display">
         <div id="profile-tweets-header">
           <div id="main-profile-display-header-btns">
@@ -34,6 +36,10 @@ class ProfileTweets extends React.Component{
           </div>
         </div>
         <Feed feedType={feedType}/>
+      </div>
+        <div className="who-to-follow-on-profile">
+          <WhoToFollow/>
+        </div>
       </div>
     );
   }
