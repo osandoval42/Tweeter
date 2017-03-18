@@ -2,6 +2,7 @@ import React from 'react';
 import Constants from '../../constants/constants';
 import * as TweetActions from '../../actions/tweet_actions';
 import Tweet from '../tweet/tweet_container';
+import Spinner from '../../util/spin.js'
 
 
 class Feed extends React.Component { 
@@ -54,7 +55,7 @@ class Feed extends React.Component {
 		if ((prevProps.feedType != this.props.feedType) ||
 			prevProps.profileUser != this.props.profileUser){
 			this.fetchTweets()
-		}
+		} 
 	}
 	hideUserBoxesOfTweet(tweetId){
 		const tweetEl = document.getElementById(tweetId);
@@ -82,6 +83,7 @@ class Feed extends React.Component {
 		const scrollOffset = 10;
 		if ((scrollTop >= (scrollHeight - (windowHeight + scrollOffset))) && 
 			scrollHeight > this.oldScrollHeight){
+			this.showLoading();
 			this.oldScrollHeight = scrollHeight;
 			const tweets = document.getElementById('feed-content');
 			const lastTweetFetched = tweets.lastChild;
@@ -91,10 +93,50 @@ class Feed extends React.Component {
 			}
 		}
 	}
+	showLoading(){
+		if (this.clearLoading){
+			clearTimeout(this.clearLoading);
+		}
+		var target = document.getElementById('loading-more-tweets');
+		target.style.display = "block";
+		if (!this.spinner){
+			this.startSpinner(target);
+		}
+		this.clearLoading = setTimeout(()=> {
+			target.style.display = ""
+		}, 1500)
+	}
+	startSpinner(target){
+			var opts = {
+			  lines: 13 // The number of lines to draw
+			, length: 28 // The length of each line
+			, width: 14 // The line thickness
+			, radius: 42 // The radius of the inner circle
+			, scale: 0.1 // Scales overall size of the spinner
+			, corners: 1 // Corner roundness (0..1)
+			, color: '#000' // #rgb or #rrggbb or array of colors
+			, opacity: 0.25 // Opacity of the lines
+			, rotate: 0 // The rotation offset
+			, direction: 1 // 1: clockwise, -1: counterclockwise
+			, speed: 1 // Rounds per second
+			, trail: 60 // Afterglow percentage
+			, fps: 20 // Frames per second when using setTimeout() as a fallback for CSS
+			, zIndex: 2e9 // The z-index (defaults to 2000000000)
+			, className: 'spinner' // The CSS class to assign to the spinner
+			, top: '50%' // Top position relative to parent
+			, left: '50%' // Left position relative to parent
+			, shadow: false // Whether to render a shadow
+			, hwaccel: false // Whether to use hardware acceleration
+			, position: 'absolute' // Element positioning
+			}
+			this.spinner = new Spinner(opts).spin(target);
+	}
 	render(){
 		const tweets = this.props.tweets;
 		let nonHomeFeed = this.props.isOnHomePage ? "" : " non-home-feed";
+		const loadingMoreTweets = <div id="loading-more-tweets"></div>;
 		return (
+					<div id="feed-container">
 					<div className={`feed${nonHomeFeed}`}>
 						<ul id="feed-content">
 						{   tweets.map((tweet) => {
@@ -102,6 +144,8 @@ class Feed extends React.Component {
 							return (<Tweet key={tweetId} hideUserBoxesOfOtherTweets={this.hideUserBoxesOfOtherTweets.bind(this)} tweet={tweet}/>);
 						})}
 						</ul>
+					</div>
+					{loadingMoreTweets}
 					</div>
 		)
 	}

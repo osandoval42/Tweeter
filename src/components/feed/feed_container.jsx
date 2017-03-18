@@ -3,7 +3,6 @@ import Feed from './feed';
 import {fetchTweetsUserLikes, fetchAllTweets, fetchAllUserProfileTweets, fetchNonReplyProfileTweets} from '../../actions/tweet_actions';
 
 
-
 const mapStateToProps = (state) => ({
 	profileUser: state.profileUser,
 	tweets: state.tweets

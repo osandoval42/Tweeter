@@ -60,21 +60,25 @@ export const replyTweet = (originalTweet, replyContent) => dispatch => {
 export const fetchAllTweets = (lastTweetFetchedId) => dispatch => {
 	dispatch(resetTweets())
 	APIUtil.fetchAllTweets(lastTweetFetchedId)
-		.then(tweets => dispatch(receiveTweets(tweets))), 
+		.then((tweets) => {
+			dispatch(receiveTweets(tweets));
+		}), 
 		err => dispatch(receiveErrors(err.responseJSON))
 };
 
 export const fetchNonReplyProfileTweets = (currUserId, lastTweetFetchedId) => dispatch => {
 	dispatch(resetTweets())
 	APIUtil.fetchNonReplyProfileTweets(currUserId, lastTweetFetchedId)
-		.then(tweets => dispatch(receiveTweets(tweets))), 
+		.then((tweets) => {
+			dispatch(receiveTweets(tweets))}), 
 		err => dispatch(receiveErrors(err.responseJSON))
 };
 
 export const fetchAllUserProfileTweets = (currUserId, lastTweetFetchedId) => dispatch => {
 	dispatch(resetTweets())
 	APIUtil.fetchAllUserProfileTweets(currUserId, lastTweetFetchedId)
-		.then(tweets => dispatch(receiveTweets(tweets))), 
+		.then((tweets) => {
+			dispatch(receiveTweets(tweets))}), 
 		err => dispatch(receiveErrors(err.responseJSON))
 };
 

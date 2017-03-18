@@ -323,13 +323,11 @@ container:hover{
 	width: 100%;
 	display: block;
 	position: relative;
-	height: 400px;
+	height: 620px;
 	overflow: auto;
 	overflow-x: hidden;
-}
-
-#feed-content{
-
+	border-bottom: solid 1px rgb(225, 232, 237);
+	border-top: solid 1px rgb(225, 232, 237);
 }
 
 .notifications{
@@ -365,7 +363,7 @@ container:hover{
 
 #home-feed{
 	width: 588px;
-	height: 800px;
+	height: 700px;
 	display: inline-block;
 	position: relative;
 	margin-top: 11px;
@@ -470,6 +468,10 @@ container:hover{
 	display: block;
 	position: relative;
 	cursor: pointer;
+}
+
+.tweet:last-child{
+	border-bottom: solid 1px rgba(0, 0, 0, 0);
 }
 
 .follow-notification{
@@ -870,7 +872,7 @@ img{
 }
 
 #main-profile-display{
-	height: 800px;
+	height: 700px;
 	float: left;
 	margin-top: 10px;
 	margin-left: -2px;
@@ -883,7 +885,9 @@ img{
 	background-color: white;
 	border-top-left-radius: 4px;
 	border-top-right-radius: 4px;
-	border: 1px solid rgb(225, 232, 237);	
+	border-top: 1px solid rgb(225, 232, 237);
+	border-right: 1px solid rgb(225, 232, 237);		
+	border-left: 1px solid rgb(225, 232, 237);	
 }
 
 #main-profile-display-header-btns{
@@ -1075,7 +1079,9 @@ img{
 }
 
 #home-tweet-container{
-	border: solid 1px rgb(225, 232, 237);
+	border-top: solid 1px rgb(225, 232, 237);
+	border-right: solid 1px rgb(225, 232, 237);
+	border-left: solid 1px rgb(225, 232, 237);
 	border-top-right-radius: 3px;
 	border-top-left-radius: 3px;
 }
@@ -1390,8 +1396,16 @@ img{
 }
 
 
-
-
+#loading-more-tweets{
+	width: 100%;
+	height: 31px;
+	border-left: solid 1px rgb(225, 232, 237);
+	border-right: solid 1px rgb(225, 232, 237);
+	border-bottom: solid 1px rgb(225, 232, 237);
+	background-color: white;
+	position: relative;
+	display: none;
+}
 
 
 

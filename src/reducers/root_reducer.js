@@ -12,7 +12,7 @@ const RootReducer = combineReducers({
   profileUser: ProfileUserReducer,
   users: UsersReducer,
   tweetingStatus: WritingTweetReducer,
-  whoToFollow: WhoToFollowReducer 
+  whoToFollow: WhoToFollowReducer
 });
 
 export default RootReducer;

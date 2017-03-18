@@ -58,13 +58,11 @@ const configFollowerRoutes = (router) => {
 	//on refresh state is set to currIdx + 3
 	router.get('/who_to_follow', (req, res) => {
 		const currUser = req.user;
-		if (RouteHelpers.ensureLoggedIn(currUser, res)){
 			User.whoToFollow(currUser, (err, whoToFollow) => {
 				if (err){return res.status(401).send({"ok": false});}
 
 				res.send(whoToFollow);
 			})
-		}
 	})
 }
 
