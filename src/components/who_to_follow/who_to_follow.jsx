@@ -4,9 +4,7 @@ import {browserHistory} from 'react-router';
 class WhoToFollow extends React.Component { 
 	constructor(props) {
 		super(props);
-		if (this.props.currentUser){
-			this.props.getWhoToFollow();
-		}
+		this.props.getWhoToFollow();
 		this.state = {whoToFollowIdx: 0}
 	}
 	componentDidUpdate(prevProps){

@@ -653,27 +653,31 @@ function shuffle(array) {
 User.whoToFollow = (currUser, cb) => {
 	User.find({}).exec()
 	.then((users) => {
+
 		let usersBeingFollowedByMe = {};
 		let notBeingFollowedOneDegreeAway = [];
 		let notBeingFollowedNoRelation = [];
-		currUser.usersBeingFollowed.forEach((userId) => {
+
+		if (currUser){
+			currUser.usersBeingFollowed.forEach((userId) => {
 			usersBeingFollowedByMe[userId] = true;
-		})
-		users.forEach((user) => {
-			if (usersBeingFollowedByMe[user['_id']]){
-				const userObj = {};
-				userObj.fullName = fullNameOfUser(user);
-				userObj.username = user.username;
-				usersBeingFollowedByMe[user['_id']] = userObj;
-			}
-		})
+			})
+			users.forEach((user) => {
+				if (usersBeingFollowedByMe[user['_id']]){
+					const userObj = {};
+					userObj.fullName = fullNameOfUser(user);
+					userObj.username = user.username;
+					usersBeingFollowedByMe[user['_id']] = userObj;
+				}
+			})
+		}
 		users.forEach((user) => {
 			const userId = user['_id']
 			if (!usersBeingFollowedByMe[userId]){
 				let userObj = user.toObject();
 				userObj.fullName = fullNameOfUser(userObj);
 				let followeeWhoFollows;
-				if (userObj.usersFollowing.some((userId) => {
+				if (currUser && userObj.usersFollowing.some((userId) => {
 					const strUserId = userId.toString();
 					followeeWhoFollows = usersBeingFollowedByMe[strUserId];
 					return followeeWhoFollows;

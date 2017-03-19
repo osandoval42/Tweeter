@@ -323,7 +323,7 @@ container:hover{
 	width: 100%;
 	display: block;
 	position: relative;
-	height: 620px;
+	max-height: 620px;
 	overflow: auto;
 	overflow-x: hidden;
 	border-bottom: solid 1px rgb(225, 232, 237);
@@ -332,8 +332,17 @@ container:hover{
 
 .notifications{
 	width: 588px;
-	margin: 0 auto;
+	margin-left: 10px;
 	margin-top: 10px;
+	height: auto;
+	border-bottom: solid 1px rgb(225, 232, 237);
+}
+
+#notifications-whole-page{
+	display: flex;
+	justify-content: space-between;
+	width: 900px;
+	align-items: flex-start;
 }
 
 .notifications h1{
@@ -369,10 +378,14 @@ container:hover{
 	margin-top: 11px;
 }
 
+.profile-session-container{
+	display: flex;
+}
+
 #home{
 	display: flex;
 	justify-content: space-between;
-	width: 897px;
+	width: 1206px;
 }
 
 #tweet-img-container{
@@ -1287,12 +1300,18 @@ img{
 	width: 294px;
 }
 
+.who-to-follow-on-home{
+	float: left;
+	margin-top: 10px;
+	width: 294px;
+}
+
 #who-to-follow{
 	width: 100%;
 	border: 1px solid #e6ecf0;
 	border-radius: 5px;
 	background-color: white;
-	padding-bottom: 3px;
+	padding-bottom: 1px;
 }
 
 #who-to-follow ul{

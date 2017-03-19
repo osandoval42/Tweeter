@@ -1,6 +1,8 @@
 import React from 'react';
 import Tweet from '../tweet/tweet_container';
 import FollowNotification from './follow_notification';
+import WhoToFollow from '../who_to_follow/who_to_follow_container';
+import SessionForm from '../session_form/session_form';
 
 const Constants = {
   FOLLOW: "FOLLOW",
@@ -15,9 +17,9 @@ class Notifications extends React.Component {
       }
   }
   displayNotifications(){
-    const currUser = this.props.currentUser;
-    if (currUser){
-      const notifications = currUser.notifications.slice().reverse()
+    const currentUser = this.props.currentUser;
+    if (currentUser){
+      const notifications = currentUser.notifications.slice().reverse()
       return (<ul className="notification-feed">
         {notifications.map((notification) => {
           if (notification.type === Constants.FOLLOW){
@@ -33,12 +35,30 @@ class Notifications extends React.Component {
       return <h3>Log in to see notifications</h3>
     }
   }
+  leftBox(){
+      if (this.props.currentUser){
+        return (
+          <div className="who-to-follow-on-profile">
+            <WhoToFollow/>
+          </div>
+        )
+      } else {
+        return (
+          <div className="profile-session-container">
+            <SessionForm/>
+          </div>
+        )
+      }
+  }
 	render(){
 		return (
-			<div className = "notifications">
-        <h1>Notifications</h1>
-        {this.displayNotifications.call(this)}
-			</div>
+      <div id="notifications-whole-page">
+        {this.leftBox()}
+  			<div className = "notifications">
+          <h1>Notifications</h1>
+          {this.displayNotifications.call(this)}
+  			</div>
+      </div>
 		)
 	}
 };
