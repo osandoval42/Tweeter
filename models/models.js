@@ -460,14 +460,19 @@ const follow = (followerID, toFollowId, cb) => {
 				User.findByIdAndUpdate(
 					followerID,
 					{$push: {usersBeingFollowed: toFollowId}},
-					{safe: true, new: true, fields: {username: 1, usersBeingFollowed: 1, usersFollowing: 1, firstName: 1, lastName: 1, notifications: 1}},
+					{safe: true, new: true, fields: {username: 1, usersBeingFollowed: 1, usersFollowing: 1, firstName: 1, lastName: 1, notifications: 1, profileImg: 1, coverImg: 1}},
 					function(err, follower){
-						User.createFollowNotification(toFollowId, follower, (err, _) => {
-							if (err){
-								cb(true);
-							} else {
-								cb(null, follower);
-							}
+						let followerObj = follower.toObject();
+						Tweet.getTweetCount(followerObj['_id'], (err, count) => {
+							if (err) {return cb(true);};
+							followerObj.tweetCount = count;
+							User.createFollowNotification(toFollowId, follower, (err, _) => {
+								if (err){
+									cb(true);
+								} else {
+									cb(null, followerObj);
+								}
+							})
 						})
 					}
 				)
@@ -487,13 +492,21 @@ const unfollow = (unfollowerId, toUnfollowId, cb) => {
 				User.findByIdAndUpdate(
 					unfollowerId,
 					{$pull: {usersBeingFollowed: toUnfollowId}},
-					{safe: true, new: true, fields: {username: 1, usersBeingFollowed: 1, usersFollowing: 1, notifications: 1}},
-					function(err, model){
-						if (err){
-							cb(true);
-						} else {
-							cb(null, model)
-						}
+					{safe: true, new: true, fields: {username: 1, usersBeingFollowed: 1, usersFollowing: 1, notifications: 1, profileImg: 1, coverImg: 1}},
+					function(err, follower){
+						let followerObj = follower.toObject();
+						Tweet.getTweetCount(followerObj['_id'], (err, count) => {
+							if (err) {return cb(true);};
+
+							followerObj.tweetCount = count;
+							User.createFollowNotification(toFollowId, follower, (err, _) => {
+								if (err){
+									cb(true);
+								} else {
+									cb(null, followerObj);
+								}
+							})
+						})
 					}
 				)
 			}
