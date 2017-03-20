@@ -5,6 +5,7 @@ import ProfileUserReducer from './profile_user_reducer';
 import UsersReducer from './users_reducer';
 import WritingTweetReducer from './writing_tweet_reducer';
 import WhoToFollowReducer from './who_to_follow_reducer';
+import TweetViewReducer from './tweet_view_reducer';
 
 const RootReducer = combineReducers({
   session: SessionReducer,
@@ -12,7 +13,8 @@ const RootReducer = combineReducers({
   profileUser: ProfileUserReducer,
   users: UsersReducer,
   tweetingStatus: WritingTweetReducer,
-  whoToFollow: WhoToFollowReducer
+  whoToFollow: WhoToFollowReducer,
+  tweetView: TweetViewReducer
 });
 
 export default RootReducer;

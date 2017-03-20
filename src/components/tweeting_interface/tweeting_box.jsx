@@ -4,6 +4,9 @@ import TweetingInterface from './tweeting_interface_container';
 
 
 class TweetingBox extends React.Component{
+	constructor(props) {
+		super(props);
+	}
 	componentDidMount(){
 		this.body = document.getElementsByTagName('body')[0];
 		this.body.className='stop-scroll';

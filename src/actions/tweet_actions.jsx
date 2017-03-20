@@ -43,6 +43,19 @@ export const closeTweetingInterface = () => {
 	};	
 }
 
+
+export const closeTweetView = () => {
+	return {
+	type: Constants.NO_TWEET_VIEW,
+	};	
+}
+export const openTweetView = (tweet) => {
+	return {
+	type: Constants.YES_TWEET_VIEW,
+	tweet
+	};	
+}
+
 export const postTweet = (newTweet, isOnHomePage) => dispatch => {
 	APIUtil.postTweet(newTweet)
 		.then(newTweet => {

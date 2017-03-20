@@ -1,5 +1,5 @@
 import {connect} from 'react-redux';
-import {openReplyingInterface, deleteRetweet, postRetweet} from '../../actions/tweet_actions';
+import {openTweetView, openReplyingInterface, deleteRetweet, postRetweet} from '../../actions/tweet_actions';
 import Tweet from './tweet';
 import {toggleLike} from '../../actions/like_actions';
 
@@ -19,6 +19,9 @@ const mapDispatchToProps = (dispatch) => ({ //REVISE check that currUserId is ne
 	},
 	toggleLike(tweetId){
 		return dispatch(toggleLike(tweetId));
+	},
+	openTheTweetView(tweet){
+		return dispatch(openTweetView(tweet));
 	}
 });
 

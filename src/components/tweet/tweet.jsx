@@ -199,7 +199,7 @@ class Tweet extends React.Component{
 		const tweetId = tweet['_id'];
 		const user = tweet.user;
 		const profileImg = user.profileImg;
-		return (<div id={tweetId} className="tweet relative clearfix" key={tweetId}>
+		return (<div id={tweetId} className="tweet relative clearfix" key={tweetId} onClick={this.props.openTheTweetView.bind(this, tweet)}>
 				{this.retweeter.call(this)}
 				{this.authorRepliedTo.call(this)}
 				<div id="tweet-img-container" className="clearfix" onClick={this.toUser.bind(this)} 
