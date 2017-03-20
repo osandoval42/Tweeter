@@ -99,6 +99,21 @@ const configTweetRoutes = (router) => {
 				}
 		})
 	}),
+	router.get('/replies', (req, res) => {
+		const lastDownloadedTweetIdStr = req.query.lastId;
+		const lastDownloadedTweetId = lastDownloadedTweetIdStr ? mongoose.Types.ObjectId(lastDownloadedTweetIdStr) : undefined;
+		const tweetIdStr = req.query.replyId;
+		const tweetId = mongoose.Types.ObjectId(tweetIdStr);
+		Tweet.tweetReplies(tweetId, lastDownloadedTweetId, (err, tweets) => {
+				if (err) { 
+					return res.status(401).send({"ok": false}); 
+				}
+				else { 
+					let tweetsObj = {tweets, areAdditionalTweets: lastDownloadedTweetId ? true : false};
+					res.send(tweetsObj);
+				}
+		})
+	}),
 	router.get('/tweets_user_likes', (req, res) => {
 		const userIdStr = req.query.userId;
 		const userId = userIdStr ? mongoose.Types.ObjectId(userIdStr) : undefined;
@@ -141,20 +156,6 @@ const configTweetRoutes = (router) => {
 				else { 
 					let tweetsObj = {tweets, areAdditionalTweets: lastDownloadedTweetId ? true : false};
 					res.send(tweetsObj);
-				}
-		})
-	})
-	router.get('/tweet_replies', (req, res) => {
-		const tweetIdStr = req.query.tweetId;
-		const tweetId = tweetIdStr ? mongoose.Types.ObjectId(tweetIdStr) : undefined;
-		const lastDownloadedTweetIdStr = req.query.lastId;
-		const lastDownloadedTweetId = lastDownloadedTweetIdStr ? mongoose.Types.ObjectId(lastDownloadedTweetIdStr) : undefined;
-		Tweet.tweetReplies(tweetId, lastDownloadedTweetId, (err, replies) => {
-				if (err) { 
-					return res.status(401).send({"ok": false}); 
-				}
-				else { 
-					res.send(replies);
 				}
 		})
 	})

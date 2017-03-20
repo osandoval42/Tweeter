@@ -1,4 +1,5 @@
 import {YES_TWEET_VIEW, NO_TWEET_VIEW} from '../constants/constants';
+import merge from 'lodash/merge';
 
 const _tweetViewObj = Object.freeze({
   tweet: null,

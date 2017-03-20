@@ -38,7 +38,7 @@ export const postTweet = (content) => { //REVISE ADD LAST ID
   });
 };
 
-export const replyTweet = (original, content) => { //REVISE ADD LAST ID
+export const replyTweet = (original, content) => {
   return $.ajax({
     method: 'POST',
     url: '/api/tweet_reply',
@@ -61,5 +61,16 @@ export const deleteRetweet = (retweetId) => {
     data: {retweetId}
   });
 }
+
+export const fetchReplies = (replyId, lastId) => {
+  let query = `?replyId=${replyId}`
+  query += lastId ? `&lastId=${lastId}` : "";
+  return $.ajax({
+    method: 'GET',
+    url: `/api/replies${query}`,
+  });
+};
+
+
 
 

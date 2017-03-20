@@ -16,6 +16,10 @@ class Feed extends React.Component {
 		clearInterval(this.feedListener)
 	}
 	fetchTweets(lastTweetFetchedId){
+		const tweetViewTweet = this.props.tweetViewTweet
+		if (tweetViewTweet){
+			return this.props.fetchReplies(tweetViewTweet['_id'], lastTweetFetchedId);
+		}
 		const profileUser = this.props.profileUser;
 		let profileUserId;
 		if (profileUser){
@@ -132,8 +136,8 @@ class Feed extends React.Component {
 			this.spinner = new Spinner(opts).spin(target);
 	}
 	render(){
-		const tweets = this.props.tweets;
-		let nonHomeFeed = this.props.isOnHomePage ? "" : " non-home-feed";
+		const tweets = this.props.tweetViewTweet ? this.props.replies : this.props.tweets;
+		let nonHomeFeed = this.props.tweetViewTweet || this.props.isOnHomePage ? "" : " non-home-feed";
 		const loadingMoreTweets = <div id="loading-more-tweets"></div>;
 		return (
 					<div id="feed-container">

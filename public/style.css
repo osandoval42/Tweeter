@@ -933,7 +933,7 @@ img{
 	position: fixed;
 	background-color: rgba(0, 0, 0, 0.8);
 	margin-top: -60px;
-	z-index: 2;
+	z-index: 3;
 }
 
 #page-blackout{
@@ -959,8 +959,8 @@ img{
 
 #tweet-view{
 	margin: 0 auto;
-	width: 500px;
-	height: 500px;
+	width: 588px;
+	height: 1000px;
 	background-color: white;
 }
 

@@ -7,6 +7,10 @@ export const resetTweets = () => ({
 	type: Constants.RESET_TWEETS
 })
 
+export const resetReplies = () => ({
+	type: Constants.RESET_REPLIES
+})
+
 export const openTweetingInterface = (initialContent, fullNameTo) => {
 	return {
 	type: Constants.WRITING_TWEET,
@@ -100,6 +104,11 @@ export const receiveTweets = tweetObj => ({
 	tweetObj
 });
 
+export const receiveReplies = tweetObj => ({
+	type: Constants.RECEIVE_REPLIES,
+	tweetObj
+});
+
 export const fetchTweetsUserLikes = (likerId, lastTweetFetchedId) => dispatch => {
 	dispatch(resetTweets())
 	APIUtil.fetchTweetsUserLikes(likerId, lastTweetFetchedId)
@@ -122,3 +131,11 @@ export const receiveErrors = errors => ({
   type: Constants.RECEIVE_ERRORS,
   errors
 });
+
+export const getTweetReplies = (tweetId, lastTweetFetchedId) => dispatch => { //UPDATE
+	dispatch(resetReplies())
+	APIUtil.fetchReplies(tweetId, lastTweetFetchedId)
+		.then(replies => dispatch(receiveReplies(replies))), 
+		err => dispatch(receiveErrors(err.responseJSON))
+};
+

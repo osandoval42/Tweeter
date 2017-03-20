@@ -8,7 +8,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({ 
-	closeTweetingInterface: () => {
+	closeTheTweetView: () => {
 		return dispatch(closeTweetView());
 	}
 });

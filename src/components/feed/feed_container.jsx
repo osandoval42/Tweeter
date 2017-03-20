@@ -1,11 +1,12 @@
 import {connect} from 'react-redux';
-import Feed from './feed';
-import {fetchTweetsUserLikes, fetchAllTweets, fetchAllUserProfileTweets, fetchNonReplyProfileTweets} from '../../actions/tweet_actions';
+import Feed from './feed';Feed
+import {getTweetReplies, fetchTweetsUserLikes, fetchAllTweets, fetchAllUserProfileTweets, fetchNonReplyProfileTweets} from '../../actions/tweet_actions';
 
 
 const mapStateToProps = (state) => ({
 	profileUser: state.profileUser,
-	tweets: state.tweets
+	tweets: state.tweets,
+	replies: state.replies
 });
 
 const mapDispatchToProps = (dispatch) => ({ //REVISE check that currUserId is needed for all functions
@@ -20,6 +21,9 @@ const mapDispatchToProps = (dispatch) => ({ //REVISE check that currUserId is ne
 	},
 	getLikedTweets: (currUserId, lastTweetFetchedId) => {
 		return dispatch(fetchTweetsUserLikes(currUserId, lastTweetFetchedId))
+	},
+	fetchReplies: (tweetId, lastTweetFetchedId) => {
+		return dispatch(getTweetReplies(tweetId, lastTweetFetchedId))
 	}
 });
 
