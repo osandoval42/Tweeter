@@ -6,6 +6,13 @@ export const fetchAllTweets = (lastId) => { //REVISE ADD LAST ID
   });
 };
 
+export const getTweet = (tweetId) => { //REVISE ADD LAST ID
+  return $.ajax({
+    method: 'GET',
+    url: `/api/tweet?tweetId=${tweetId}`,
+  });
+};
+
 export const fetchAllUserProfileTweets = (userId, lastId) => { //REVISE ADD LAST ID
   const lastIdQuery = lastId ? `&lastId=${lastId}` : "";
   return $.ajax({

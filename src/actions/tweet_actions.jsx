@@ -47,6 +47,12 @@ export const closeTweetingInterface = () => {
 	};	
 }
 
+export const getTweetRepliedTo = (tweetId) => dispatch => {
+		APIUtil.getTweet(tweetId)
+		.then(tweetRepliedTo => {
+			dispatch(receiveTweetRepliedTo(tweetRepliedTo))}), 
+		err => dispatch(receiveErrors(err.responseJSON))
+}
 
 export const closeTweetView = () => {
 	return {
@@ -57,6 +63,12 @@ export const openTweetView = (tweet) => {
 	return {
 	type: Constants.YES_TWEET_VIEW,
 	tweet
+	};	
+}
+export const receiveTweetRepliedTo = (tweetRepliedTo) => {
+	return {
+	type: Constants.YES_TWEET_VIEW_REPLY,
+	reply: tweetRepliedTo
 	};	
 }
 

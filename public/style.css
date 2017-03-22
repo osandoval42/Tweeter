@@ -454,7 +454,7 @@ container:hover{
 	font-weight: 500
 }
 
-#tweet-content{
+.tweet-content{
 	color: rgb(41, 47, 51);
 	font-size: 14px;
 	line-height: 18px;
@@ -481,6 +481,11 @@ container:hover{
 	display: block;
 	position: relative;
 	cursor: pointer;
+}
+
+.mainTweet{
+	min-height: 100px; 
+	background-color: white;
 }
 
 .tweet:hover{
@@ -1025,14 +1030,17 @@ img{
 
 .user-follow-type-btn{
 	border-radius: 4px;
-	margin-left: 100px;
-	margin-top: 10px;
 	width: 99px;
 	height: 33px;
 	float: left;
 	padding: 5px 12px 8px 12px;
 	font-weight: bold;
 	font-size: 13px;
+}
+
+.user-profile-follow-type-position{
+	margin-left: 100px;
+	margin-top: 10px;
 	position: absolute;
 	left: 64px;
 	top: 94px;
@@ -1445,6 +1453,11 @@ img{
 	background-color: white;
 	position: relative;
 	display: none;
+}
+
+.maintweet-img-container{
+	width: 48px;
+	height: 48px;
 }
 
 

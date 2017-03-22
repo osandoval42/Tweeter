@@ -194,12 +194,18 @@ class Tweet extends React.Component{
 		this.stopUserBoxFromDisappearing(Constants.USERNAME);
 		this.stopUserBoxFromDisappearing(Constants.FULLNAME);
 	}
+	showTweetView(e){
+		const target = e.target;
+		if (target.className === "tweet relative clearfix" || target.className === "tweet-content"){
+			this.props.openTheTweetView(this.props.tweet)
+		}
+	}
 	render(){
 		let tweet = this.props.tweet;
 		const tweetId = tweet['_id'];
 		const user = tweet.user;
 		const profileImg = user.profileImg;
-		return (<div id={tweetId} className="tweet relative clearfix" key={tweetId} onClick={this.props.openTheTweetView.bind(this, tweet)}>
+		return (<div id={tweetId} className="tweet relative clearfix" key={tweetId} onClick={this.showTweetView.bind(this)}>
 				{this.retweeter.call(this)}
 				{this.authorRepliedTo.call(this)}
 				<div id="tweet-img-container" className="clearfix" onClick={this.toUser.bind(this)} 
@@ -212,7 +218,7 @@ class Tweet extends React.Component{
 				onMouseLeave={this.hideUserBox.bind(this, Constants.USERNAME)}> {`@${tweet.authorName}`} </span>
 				<span id="tweet-time">&nbsp;{tweet.tweetTime}</span>
 				<br/>
-				<span id="tweet-content">{tweet.content}</span>
+				<span className="tweet-content">{tweet.content}</span>
 				<br/>
 				{this.tweetButtons.call(this)}
 				<div>

@@ -1,5 +1,5 @@
 import {connect} from 'react-redux';
-import {resetReplies, openTweetView, openReplyingInterface, deleteRetweet, postRetweet} from '../../actions/tweet_actions';
+import {getTweetRepliedTo, resetReplies, openTweetView, openReplyingInterface, deleteRetweet, postRetweet} from '../../actions/tweet_actions';
 import Tweet from './tweet';
 import {toggleLike} from '../../actions/like_actions';
 
@@ -22,6 +22,10 @@ const mapDispatchToProps = (dispatch) => ({ //REVISE check that currUserId is ne
 	},
 	openTheTweetView(tweet){
 		dispatch(resetReplies());
+		const tweetRepliedToId = tweet.replyToId;
+		if (tweetRepliedToId) {
+			dispatch(getTweetRepliedTo(tweetRepliedToId));
+		}
 		return dispatch(openTweetView(tweet));
 	}
 });

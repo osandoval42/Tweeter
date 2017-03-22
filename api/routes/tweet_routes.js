@@ -158,6 +158,21 @@ const configTweetRoutes = (router) => {
 					res.send(tweetsObj);
 				}
 		})
+	}),
+	router.get('/tweet', (req, res) => {
+		const tweetIdStr = req.query.tweetId;
+		if (tweetIdStr){
+			const tweetId = mongoose.Types.ObjectId(tweetIdStr);
+			Tweet.getTweetByIdWithAllInfo(tweetId, (err, tweet) => {
+				if (err){
+					return res.status(401).send({"ok": false}); 
+				} else {
+					res.send(tweet);
+				}
+			})
+		} else {
+			return res.status(401).send({"ok": false}); 
+		}
 	})
 }
 
