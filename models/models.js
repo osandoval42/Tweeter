@@ -599,7 +599,16 @@ User.clearNotifications = (userId, cb) => {
 		user.notifications.forEach((notification) => {
 			notification.userHasSeen = true;
 		})
-		user.save(cb)
+		user.save((err, currUser) => {
+			if (err){return cb(err)};
+
+			let user = currUser.toObject();
+			Tweet.getTweetCount(userId, (err, count) => {
+				if (err) {throw err;}
+				user.tweetCount = count;
+				cb(null, user);
+			})
+		})
 	})
 }
 

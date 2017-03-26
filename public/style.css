@@ -116,7 +116,7 @@ img{
 #nav-tabs{
 	margin-top: 5px;
 	left-padding: 30px;
-	min-width: 250px;
+	min-width: 165px;
 	display: flex;
 	justify-content: space-between;
 	color: rgb(102, 117, 127);
@@ -136,6 +136,7 @@ img{
 	display: flex;
 	min-width: 400px;
 	justify-content: space-between;
+	max-height: 32px;
 }
 
 .twitter-font-color{
@@ -169,6 +170,9 @@ img{
 	border: 0px;
 	font-size: 13px;
 	position: relative;
+	width: 0.1px;
+	height: 0.1px;
+	cursor: inherit;
 }
 
 .fa-search{
@@ -731,6 +735,7 @@ img{
 	height: 32px;
 	width: 32px;
 	background-color: #1DA1F2;
+	cursor: pointer;
 }
 
 #cover-img-container{
@@ -1227,6 +1232,8 @@ img{
 }
 
 .post-tweet-btn{
+	height: 32px;
+	width: 58.6px;
 	background-color: #1b95e0;
 	border-radius: 4px;
 	border-style: solid;
@@ -1615,5 +1622,103 @@ img{
 	margin-left: 8px;
 	float: left;
 }
+
+#dropdown-backdrop{
+	background-color: rgba(0, 0, 0, 0);
+	position: absolute;
+	z-index: 100000;
+	width: 2500px;
+	height: 2500px;
+	left: 0px;
+	top: 0px
+}
+
+#dropdown{
+	position: relative;
+	background-color: rgba(255, 255, 255, 0.980392);
+	z-index: 100001;
+	top: 13px;
+	right: 125px;
+	width: 160px;
+	border-radius: 4px;
+	display: flex;
+	flex-direction: column;
+	box-shadow: 0 1px 4px rgba(0,0,0,0.25);
+}
+
+#drop-down-btn-container{
+	height: 32px;
+	max-width: 32px;
+	display: flex;
+	flex-direction: column;
+	overflow: visible;
+	z-index: 100001;
+}
+
+#view-profile{
+	border-bottom: 1px solid rgb(230, 236, 240);
+	border-top-right-radius: 4px;
+	border-top-left-radius: 4px;
+	padding-top: 10px;
+	padding-bottom: 5px;
+}
+
+#logout-btn{
+	border-bottom-right-radius: 4px;
+	border-bottom-left-radius: 4px;
+	padding-top: 6px;
+	padding-bottom: 7px;
+}
+
+#view-profile h4{
+	color: #14171a;
+	font-weight: bold;
+	font-size: 14px;
+}
+
+#view-profile h4:hover{
+	text-decoration: underline;
+}
+
+#view-profile a{
+	margin-top: 4px;
+}
+
+#dropdown a{
+	color: rgb(101, 119, 134);
+	font-size: 11px;
+}
+
+#dropdown li{
+	background-color: rgba(255, 255, 255, 0.980392);
+}
+
+#dropdown container{
+	padding: 7px 0px 7px 0px;
+}
+
+#dropdown > li > container{
+	display: flex;
+	flex-direction: column;
+	padding-left: 30px;
+}
+
+#dropdown > li > container:hover{
+	background-color: rgb(21, 49, 126);
+	cursor: pointer;
+}
+
+#dropdown > li > container:hover a{
+	color: white;
+}
+
+#dropdown > li > container:hover h4{
+	color: white;
+}
+
+
+
+
+
 
 

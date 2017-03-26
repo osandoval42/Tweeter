@@ -25,7 +25,6 @@ class ProfileBox extends React.Component{
 					<div id="profile-box-img-container" onClick={this.toProfile.bind(this, "")}>
 						<img id="profile-box-img" src={profileImg}/>
 					</div>
-					<a onClick={this.props.logout}> Logout</a>
 				</div>
 				<div id="profile-box-separator"></div>
 				<div id="bottom-half-profile-box" className="relative">
