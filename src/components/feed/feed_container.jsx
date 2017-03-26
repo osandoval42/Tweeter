@@ -5,6 +5,7 @@ import {getTweetReplies, fetchTweetsUserLikes, fetchAllTweets, fetchAllUserProfi
 
 const mapStateToProps = (state) => ({
 	profileUser: state.profileUser,
+	currUser: state.session.currentUser,
 	tweets: state.tweets,
 	replies: state.replies
 });

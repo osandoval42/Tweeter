@@ -7,6 +7,7 @@ import WritingTweetReducer from './writing_tweet_reducer';
 import WhoToFollowReducer from './who_to_follow_reducer';
 import TweetViewReducer from './tweet_view_reducer';
 import RepliesReducer from './replies_reducer';
+import LikePicturesReducer from './like_pictures_reducer';
 
 const RootReducer = combineReducers({
   session: SessionReducer,
@@ -16,7 +17,8 @@ const RootReducer = combineReducers({
   tweetingStatus: WritingTweetReducer,
   whoToFollow: WhoToFollowReducer,
   tweetView: TweetViewReducer,
-  replies: RepliesReducer
+  replies: RepliesReducer,
+  likePictures: LikePicturesReducer
 });
 
 export default RootReducer;

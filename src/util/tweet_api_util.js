@@ -78,6 +78,14 @@ export const fetchReplies = (replyId, lastId) => {
   });
 };
 
+export const getLikePictures = (body) => {
+    return $.ajax({
+    method: 'POST',
+    url: '/api/get_like_pictures',
+    data: body
+  });
+}
+
 
 
 

@@ -173,6 +173,20 @@ const configTweetRoutes = (router) => {
 		} else {
 			return res.status(401).send({"ok": false}); 
 		}
+	}),
+	router.post('/get_like_pictures', (req, res) => {
+		const likes = req.body.likes;
+		const likeIds = likes.map((like) => {
+			return (mongoose.Types.ObjectId(like['userId']));
+		})
+		User.getAllPics(likeIds, (err, userImgObjs) => {
+			if (err) { 
+				return res.status(401).send({"ok": false}); 
+			}
+			else { 
+				res.send(userImgObjs);
+			}
+		})
 	})
 }
 

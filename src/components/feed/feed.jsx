@@ -57,7 +57,8 @@ class Feed extends React.Component {
 	}
 	componentDidUpdate(prevProps){
 		if ((prevProps.feedType != this.props.feedType) ||
-			prevProps.profileUser != this.props.profileUser){
+			prevProps.profileUser != this.props.profileUser ||
+			prevProps.currUser != this.props.currUser){
 			this.fetchTweets()
 		} 
 	}
@@ -138,10 +139,14 @@ class Feed extends React.Component {
 	render(){
 		const tweets = this.props.tweetViewTweet ? this.props.replies : this.props.tweets;
 		let nonHomeFeed = this.props.tweetViewTweet || this.props.isOnHomePage ? "" : " non-home-feed";
+		let tweetViewFeed = this.props.tweetViewTweet ? " tweet-view-feed" : "";
+		if (this.props.isReply){
+			tweetViewFeed += "-with-reply"
+		}
 		const loadingMoreTweets = <div id="loading-more-tweets"></div>;
 		return (
 					<div id="feed-container">
-					<div className={`feed${nonHomeFeed}`}>
+					<div className={`feed${nonHomeFeed}${tweetViewFeed}`}>
 						<ul id="feed-content">
 						{   tweets.map((tweet) => {
 							const tweetId = tweet['_id']

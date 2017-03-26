@@ -698,3 +698,9 @@ User.whoToFollow = (currUser, cb) => {
 	})
 }
 
+User.getAllPics = (userIds, cb) => {
+	User.find({'_id': {$in: userIds}}, null, {limit: 9})
+		.select('username profileImg')
+		.exec(cb)
+}
+

@@ -11,6 +11,10 @@ export const resetReplies = () => ({
 	type: Constants.RESET_REPLIES
 })
 
+export const resetLikePictures = () => ({
+	type: Constants.RESET_LIKE_PICTURES
+})
+
 export const openTweetingInterface = (initialContent, fullNameTo) => {
 	return {
 	type: Constants.WRITING_TWEET,
@@ -144,10 +148,40 @@ export const receiveErrors = errors => ({
   errors
 });
 
+
+
 export const getTweetReplies = (tweetId, lastTweetFetchedId) => dispatch => { //UPDATE
 	dispatch(resetReplies())
 	APIUtil.fetchReplies(tweetId, lastTweetFetchedId)
 		.then(replies => dispatch(receiveReplies(replies))), 
 		err => dispatch(receiveErrors(err.responseJSON))
 };
+
+export const getLikePicturesForTweetRepliedTo = (body) => dispatch => { //UPDATE
+	APIUtil.getLikePictures(body)
+		.then(pics => dispatch(receiveTweetRepliedToLikePictures(pics))), 
+		err => dispatch(receiveErrors(err.responseJSON))
+};
+
+
+export const getLikePicturesForTweet = (body) => dispatch => { //UPDATE
+	APIUtil.getLikePictures(body)
+		.then(pics => 
+			dispatch(receiveTweetLikePictures(pics))), 
+		err => dispatch(receiveErrors(err.responseJSON))
+};
+
+export const receiveTweetLikePictures = pictures => {
+return {
+	type: Constants.TWEET_LIKE_PICTURES,
+	pictures
+}};
+
+export const receiveTweetRepliedToLikePictures = pictures => ({
+	type: Constants.TWEET_REPLIED_TO_LIKE_PICTURES,
+	pictures
+});
+
+
+
 
