@@ -1,6 +1,6 @@
 import {connect} from 'react-redux';
 import Feed from './feed';Feed
-import {getTweetReplies, fetchTweetsUserLikes, fetchAllTweets, fetchAllUserProfileTweets, fetchNonReplyProfileTweets} from '../../actions/tweet_actions';
+import {getHashtagTweets, getTweetReplies, fetchTweetsUserLikes, fetchAllTweets, fetchAllUserProfileTweets, fetchNonReplyProfileTweets} from '../../actions/tweet_actions';
 
 
 const mapStateToProps = (state) => ({
@@ -25,6 +25,9 @@ const mapDispatchToProps = (dispatch) => ({ //REVISE check that currUserId is ne
 	},
 	fetchReplies: (tweetId, lastTweetFetchedId) => {
 		return dispatch(getTweetReplies(tweetId, lastTweetFetchedId))
+	},
+	fetchHashtagTweets: (hashtagName, lastTweetFetchedId) => {
+		return dispatch(getHashtagTweets(hashtagName, lastTweetFetchedId));
 	}
 });
 

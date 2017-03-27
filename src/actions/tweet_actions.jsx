@@ -99,6 +99,16 @@ export const fetchAllTweets = (lastTweetFetchedId) => dispatch => {
 		err => dispatch(receiveErrors(err.responseJSON))
 };
 
+export const getHashtagTweets = (hashtagName, lastTweetFetchedId) => dispatch => {
+	dispatch(resetTweets())
+	APIUtil.fetchHashtagTweets(hashtagName, lastTweetFetchedId)
+		.then((tweets) => {
+			dispatch(receiveTweets(tweets));
+		}), 
+		err => dispatch(receiveErrors(err.responseJSON))
+};
+
+
 export const fetchNonReplyProfileTweets = (currUserId, lastTweetFetchedId) => dispatch => {
 	dispatch(resetTweets())
 	APIUtil.fetchNonReplyProfileTweets(currUserId, lastTweetFetchedId)

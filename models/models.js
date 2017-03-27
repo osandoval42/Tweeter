@@ -775,3 +775,11 @@ User.getAllPics = (userIds, cb) => {
 Hashtag.trending = (cb) => {
 	Hashtag.find({}, null, {limit: 10, sort: {'trendCount': -1}}, cb);
 }
+
+Tweet.hashtagTweets = (hashtagName, lastDownloadedTweetId, cb) => {
+	const query = lastDownloadedTweetId ? {_id: {$lt: lastDownloadedTweetId}} : {};
+	if (hashtagName.length > 0){
+		query.hashtags = hashtagName.capitalize();
+	}
+	getFeedTweets(query, cb);
+}

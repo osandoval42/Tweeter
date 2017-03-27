@@ -389,6 +389,8 @@ container:hover{
 
 .profile-session-container{
 	display: flex;
+	margin-left: 10px;
+	float: left;
 }
 
 #home{
@@ -1141,7 +1143,6 @@ img{
 	padding: 10px 12px 10px 12px;
 	font-size: 14px;
 	width: 100%;
-
 }
 
 #whats-happening textarea{
@@ -1779,6 +1780,27 @@ img{
 	color: rgb(0, 132, 180);
 	font-size: 13px;
 	font-weight: bold;
+	cursor: pointer;
 }
 
+.trending-hashtag h5:hover{
+	text-decoration: underline;
+	color: #1DA1F2;
+}
 
+.hashtag-page-title{
+	color: rgb(136, 153, 166);
+	font-weight: bold;
+	font-size: 21px;
+	text-align: center;
+	width: 100%;
+	display: block;
+	background-color: rgb(232, 245, 253);
+	height: 58px;
+	padding: 18px 12px 10px 12px;
+	border-top: 1px solid rgb(225, 232, 237);
+	border-right: 1px solid rgb(225, 232, 237);
+	border-left: 1px solid rgb(225, 232, 237);
+	border-top-right-radius: 3px;
+	border-top-left-radius: 3px;
+}

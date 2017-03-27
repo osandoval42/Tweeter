@@ -5,6 +5,7 @@ import App from './app/app_container';
 import Home from './home/home_container';
 import Profile from './profile/profile_container';
 import Notifications from './notifications/notifications_container';
+import HashTagPage from './hashtag_page/hashtag_page_container';
 
 String.prototype.capitalize = function(){
   return this.charAt(0).toUpperCase() + (this.slice(1).split('').map((char)=>{return char.toLowerCase();}).join(""));
@@ -32,6 +33,7 @@ return (
           <IndexRoute component={Home} />
           <Route path="profile/:username(/:display)" component={Profile}/>
           <Route path="notifications" component={Notifications}/>
+          <Route path="hashtag/:hashtagName" component={HashTagPage}/>
         </Route>
       </Router>
     </Provider>

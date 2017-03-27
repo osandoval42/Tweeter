@@ -9,7 +9,7 @@ import Trending from '../trending/trending_container';
 
 
 //REVISE put in session starter or profile on left depending 
-class HomeToBe extends React.Component {
+class Home extends React.Component {
 	 constructor(props) {
     	super(props);
     	this.state = {writingTweet: false}
@@ -46,4 +46,4 @@ class HomeToBe extends React.Component {
 	}
 }
 
-module.exports = HomeToBe;
+module.exports = Home;

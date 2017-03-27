@@ -21,11 +21,16 @@ class Feed extends React.Component {
 			return this.props.fetchReplies(tweetViewTweet['_id'], lastTweetFetchedId);
 		}
 		const profileUser = this.props.profileUser;
+		const hashtagName = this.props.hashtagName
 		let profileUserId;
 		if (profileUser){
 			profileUserId = profileUser['_id'];
 		}
 		switch (this.props.feedType){
+			case Constants.HASHTAG_FEED: {
+				this.props.fetchHashtagTweets(hashtagName, lastTweetFetchedId);
+				break;
+			}
 			case Constants.LIKES_FEED:{
 				if (profileUserId){
 					this.props.getLikedTweets(profileUserId, lastTweetFetchedId);

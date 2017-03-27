@@ -1,6 +1,6 @@
 import express from 'express';
 import passport from 'passport';
-import {Hashtag} from '../../models/models';
+import {Hashtag, Tweet} from '../../models/models';
 import RouteHelpers from '../util/route_helpers';
 var mongoose = require('mongoose');
 
@@ -13,6 +13,20 @@ const configHashtagRoutes = (router) => {
 			else { 
 				res.send(trendingHashtags);
 			}
+		})
+	}),
+	router.get('/hashtag_tweets', (req, res) => {
+		const lastDownloadedTweetIdStr = req.query.lastId;
+		const lastDownloadedTweetId = lastDownloadedTweetIdStr ? mongoose.Types.ObjectId(lastDownloadedTweetIdStr) : undefined;
+		const hashtagName = req.query.hashtag
+		Tweet.hashtagTweets(hashtagName, lastDownloadedTweetId, (err, tweets) => {
+				if (err) { 
+					return res.status(401).send({"ok": false}); 
+				}
+				else { 
+					let tweetsObj = {tweets, areAdditionalTweets: lastDownloadedTweetId ? true : false};
+					res.send(tweetsObj);
+				}
 		})
 	})
 }

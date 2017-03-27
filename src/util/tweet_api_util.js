@@ -94,5 +94,14 @@ export const getTrendingHashtags = () => {
 }
 
 
+export const fetchHashtagTweets = (hashtagName, lastId) => { //REVISE ADD LAST ID
+  let query = `?hashtag=${hashtagName}`
+  query += lastId ? `&lastId=${lastId}` : "";
+  return $.ajax({
+    method: 'GET',
+    url: `/api/hashtag_tweets${query}`,
+  });
+};
+
 
 
