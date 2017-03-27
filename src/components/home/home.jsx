@@ -5,6 +5,7 @@ import SessionForm from '../session_form/session_form';
 import Constants from '../../constants/constants';
 import TweetingInterface from '../tweeting_interface/tweeting_interface_container';
 import WhoToFollow from '../who_to_follow/who_to_follow_container';
+import Trending from '../trending/trending_container';
 
 
 //REVISE put in session starter or profile on left depending 
@@ -29,7 +30,10 @@ class HomeToBe extends React.Component {
 	render(){
 		return(
 		<div id="home">
-			{this.props.currentUser ? <ProfileBox/> : <SessionForm/>}
+			<div className="home-left-side">
+				{this.props.currentUser ? <ProfileBox/> : <SessionForm/>}
+				<Trending/>
+			</div>
 			<div id="home-feed">
 				{this.tweetInterface.call(this)}
 				<Feed feedType = {Constants.CURR_USER_FEED} isOnHomePage={true}/>

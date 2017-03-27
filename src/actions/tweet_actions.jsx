@@ -183,5 +183,19 @@ export const receiveTweetRepliedToLikePictures = pictures => ({
 });
 
 
+export const getTrendingHashtags = () => dispatch => {
+	APIUtil.getTrendingHashtags()
+		.then(hashtagObjs => 
+			dispatch(receiveTrendingHashtags(hashtagObjs))), 
+		err => dispatch(receiveErrors(err.responseJSON))
+};
+
+export const receiveTrendingHashtags = (hashtagObjs) => {
+	return ({
+		type: Constants.TRENDING_HASHTAGS,
+		hashtagObjs
+	})
+}
+
 
 

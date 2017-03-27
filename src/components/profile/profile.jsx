@@ -4,6 +4,7 @@ import Constants from '../../constants/constants';
 import ProfileTweets from './profile_tweets_container';
 import Follow from './follow_container';
 import Likes from './likes';
+import Trending from '../trending/trending_container';
 
 
 class Profile extends React.Component { 
@@ -132,6 +133,9 @@ class Profile extends React.Component {
 					{this.fullName()}
 					{this.username()}
 					{this.tweetToButton()}
+					<div className="trending-container-on-profile">
+						<Trending/>
+					</div>
 				</div>
 					{this.mainDisplay()}
 			</div>

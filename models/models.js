@@ -11,6 +11,7 @@ mongoose.Promise = es6Promise.Promise;
 module.exports.Like = Like;
 module.exports.Tweet = Tweet;
 module.exports.User = User;
+module.exports.Hashtag = Hashtag;
 
 String.prototype.capitalize = function(){
 	return this.charAt(0).toUpperCase() + (this.slice(1).split('').map((char)=>{return char.toLowerCase();}).join(""));
@@ -771,3 +772,6 @@ User.getAllPics = (userIds, cb) => {
 		.exec(cb)
 }
 
+Hashtag.trending = (cb) => {
+	Hashtag.find({}, null, {limit: 10, sort: {'trendCount': -1}}, cb);
+}

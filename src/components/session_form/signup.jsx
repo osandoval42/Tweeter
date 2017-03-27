@@ -14,9 +14,9 @@ class SignUp extends React.Component {
 		e.preventDefault();
 
 		const formData = {
-			username: this.state.username,
-			firstName: this.state.firstName,
-			lastName: this.state.lastName,
+			username: this.state.username.capitalize(),
+			firstName: this.state.firstName.capitalize(),
+			lastName: this.state.lastName.capitalize(),
 			password: this.state.password,
 			confirmPassword: this.state.confirmPassword
 		};

@@ -3,6 +3,7 @@ import Tweet from '../tweet/tweet_container';
 import FollowNotification from './follow_notification';
 import WhoToFollow from '../who_to_follow/who_to_follow_container';
 import SessionForm from '../session_form/session_form';
+import Trending from '../trending/trending_container';
 
 const Constants = {
   FOLLOW: "FOLLOW",
@@ -58,6 +59,9 @@ class Notifications extends React.Component {
           <h1>Notifications</h1>
           {this.displayNotifications.call(this)}
   			</div>
+        <div className="trending-container-on-notifications">
+          <Trending/>
+        </div>
       </div>
 		)
 	}

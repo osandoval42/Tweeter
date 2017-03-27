@@ -353,17 +353,10 @@ container:hover{
 
 .notifications{
 	width: 588px;
-	margin-left: 10px;
+	margin-left: 3px;
 	margin-top: 10px;
 	height: auto;
 	border-bottom: solid 1px rgb(225, 232, 237);
-}
-
-#notifications-whole-page{
-	display: flex;
-	justify-content: space-between;
-	width: 900px;
-	align-items: flex-start;
 }
 
 .notifications h1{
@@ -572,14 +565,6 @@ container:hover{
 	margin-right: 5px;
 }
 
-
-.home-left-box{
-	margin-left: 10px;
-	margin-top: 10px;
-	width: 290px;
-	height: 195px;
-	display: initial;
-}
 
 
 
@@ -871,10 +856,11 @@ img{
 }
 
 #user-profile-info{
-	width: 268px;
+	width: 261px;
 	margin-left: 40px;
 	margin-top: 41px;
 	float:left;
+	margin-right: 7px;
 }
 
 #profile-fullname{
@@ -1721,6 +1707,78 @@ img{
 	cursor: pointer;
 }
 
+.home-left-box{
+	
+	margin-top: 10px;
+	width: 290px;
+	height: 195px;
+	display: initial;
+}
 
+.home-left-side{
+	margin-left: 10px;
+	display: flex;
+	flex-direction: column;
+}
+
+.trending-box{
+	margin-top: 10px;
+	width: 100%;
+	background-color: #fff;
+    border: 1px solid #e6ecf0;
+    border-radius: 5px;
+    padding: 15px 15px 10px 15px;
+}
+
+#notifications-whole-page{
+	display: flex;
+	justify-content: space-between;
+	width: 1202px;
+	align-items: flex-start;
+}
+
+.trending-container-on-notifications{
+	width: 290px;
+	margin-left: 3px;
+}
+
+.trending-container-on-profile{
+	width: 100%;
+	right: 7px;
+	position: relative;
+	margin-top: 21px;
+}
+
+.trending-box > h3{
+	color: #66757f;
+    font-size: 18px;
+    font-weight: 300;
+}
+
+.trending-box > ul{
+	margin-top: 7px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.trending-hashtag{
+	margin-bottom: 8px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.trending-hashtag span{
+	margin-top: 3px;
+	color: #657786;
+	font-size: 13px;
+}
+
+.trending-hashtag h5{
+	color: rgb(0, 132, 180);
+	font-size: 13px;
+	font-weight: bold;
+}
 
 

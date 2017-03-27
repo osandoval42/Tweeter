@@ -86,6 +86,13 @@ export const getLikePictures = (body) => {
   });
 }
 
+export const getTrendingHashtags = () => {
+    return $.ajax({
+    method: 'GET',
+    url: '/api/trending',
+  });
+}
+
 
 
 

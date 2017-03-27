@@ -13,7 +13,7 @@ class LogInForm extends React.Component {
 		e.preventDefault();
 
 		const formData = {
-			username: this.state.email,
+			username: this.state.email.capitalize(),
 			password: this.state.password
 		};
 

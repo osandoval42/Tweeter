@@ -8,6 +8,7 @@ import WhoToFollowReducer from './who_to_follow_reducer';
 import TweetViewReducer from './tweet_view_reducer';
 import RepliesReducer from './replies_reducer';
 import LikePicturesReducer from './like_pictures_reducer';
+import TrendingHashtagReducer from './trending_hashtag_reducer';
 
 const RootReducer = combineReducers({
   session: SessionReducer,
@@ -18,7 +19,8 @@ const RootReducer = combineReducers({
   whoToFollow: WhoToFollowReducer,
   tweetView: TweetViewReducer,
   replies: RepliesReducer,
-  likePictures: LikePicturesReducer
+  likePictures: LikePicturesReducer,
+  trending: TrendingHashtagReducer
 });
 
 export default RootReducer;
