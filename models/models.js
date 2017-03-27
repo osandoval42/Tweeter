@@ -12,28 +12,31 @@ module.exports.Tweet = Tweet;
 module.exports.User = User;
 
 
-const verifyTweetedAtOriginalAuthor = (tweetedAtIds, originalTweet, cb) => {
-	const originalAuthorId = mongoose.Types.ObjectId(originalTweet.authorId);
-	cb(tweetedAtIds.some((tweetedAtId) => {return tweetedAtId['_id'] === originalAuthorId['_id']}));
+const verifyTweetedAtOriginalAuthor = (allTweetedAt, originalTweet, cb) => {
+	const originalAuthorId = originalTweet.authorId;
+	cb(allTweetedAt.some((tweetedAt) => {return tweetedAt['userId'].toString() == originalAuthorId;}));
 }
 
 const parseAtSymbols = (content, cb) => {
 	let namesTweetedAt = content.split('@');
-	let idsTweetedAt = [];
+	let tweetedAt = [];
 	async.eachSeries(namesTweetedAt, (stringWithName, next) => {
 		let idxAfterName = stringWithName.indexOf(" ");
 		let username = (idxAfterName === -1) ? stringWithName : stringWithName.slice(0, idxAfterName);
 		User.getUserByUsername(username, function(user, err){
 			if (err) console.error(`err is ${err}`)
 			if (user !== null){
-				console.log(`user is ${user}`);
 				const userId = user['_id'];
-				idsTweetedAt.push(userId);
+				const oneTweetedAt = {
+					userId,
+					username
+				}
+				tweetedAt.push(oneTweetedAt);
 			}
 			next()
 		})
 	}, (err) => {
-		cb(idsTweetedAt);
+		cb(tweetedAt);
 	})
 }
 
@@ -123,8 +126,8 @@ Tweet.getTweetByIdWithAllInfo = (id, cb) => {
 }
 
 Tweet.createMentionNotifications = (tweet, cb) => {
-	async.eachSeries(tweet.tweetedAt, (mentionedId, next) => {
-		User.findById(mentionedId, (err, user) => {
+	async.eachSeries(tweet.tweetedAt, (mentionedUser, next) => {
+		User.findById(mentionedUser['userId'], (err, user) => {
 			User.createMentionNotification(user, tweet, (err, _) => {
 				if (err){throw err;} else {next()}
 			})
@@ -137,11 +140,11 @@ Tweet.createMentionNotifications = (tweet, cb) => {
 //REVISE test for empty string content
 Tweet.postTweet = (content, currUserId, cb) => {
 	//REVISE parse content for @s to determine ids
-	parseAtSymbols(content, (tweetedAtIds) => {
+	parseAtSymbols(content, (tweetedAt) => {
 		const newPost = new Tweet({
 			content,
 			authorId: currUserId,
-			tweetedAt: tweetedAtIds
+			tweetedAt
 		})
 		newPost.save((err, newTweet) => {
 				if (err) {return cb(true);}
@@ -258,13 +261,12 @@ Tweet.getTweetCount = (userId, cb) => {
 }
 
 Tweet.replyTweet = (content, currUserId, originalTweet, cb) => { //REVISE disallow self reply
-	parseAtSymbols(content, (tweetedAtIds) => {
-		verifyTweetedAtOriginalAuthor(tweetedAtIds, originalTweet, (didTweetAt) => {
-			console.log(`did reply is ${didTweetAt}`);
+	parseAtSymbols(content, (tweetedAt) => {
+		verifyTweetedAtOriginalAuthor(tweetedAt, originalTweet, (didTweetAt) => {
 			const newPost = new Tweet({
 				content,
 				authorId: currUserId,
-				tweetedAt: tweetedAtIds,
+				tweetedAt,
 				replyToId: didTweetAt ? mongoose.Types.ObjectId(originalTweet['_id']) : undefined
 			})
 			newPost.save((err, newReply) => {

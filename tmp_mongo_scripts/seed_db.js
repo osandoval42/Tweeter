@@ -109,7 +109,7 @@ User.remove().exec()
 	const newTweet = new Tweet({
 		content: "Oscar's first tweet at the homies",
 		authorId: Oscar['_id'],
-		tweetedAt: [Max['_id'], Patrick['_id'], Andrew['_id']],
+		tweetedAt: [{userId: Max['_id'], username: Max.username}, {userId: Patrick['_id'], username: Patrick.username}, {userId: Andrew['_id'], username: Andrew.username}],
 		likeCount: 2
 	})
 	return newTweet.save();
@@ -142,7 +142,7 @@ User.remove().exec()
 		content: "@Oscar this is Cancer",
 		replyToId: oscarsRetweetedTweet['_id'],
 		authorId: Andrew['_id'],
-		tweetedAt: [Oscar['_id']]
+		tweetedAt: [{userId: Oscar['_id'], username: Oscar.username}]
 	})
 	return newTweet.save();
 })

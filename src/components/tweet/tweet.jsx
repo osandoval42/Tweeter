@@ -14,6 +14,9 @@ class Tweet extends React.Component{
 	toUser(tweet){
 		browserHistory.push(`/profile/${this.props.tweet.authorName}`);
 	}
+	toUserViaAt(username){
+		browserHistory.push(`/profile/${username}`);
+	}
 	fullNameOfAuthor(){
 		let names = []
 		const tweet = this.props.tweet;
@@ -200,6 +203,65 @@ class Tweet extends React.Component{
 			this.props.openTheTweetView(this.props.tweet)
 		}
 	}
+	//pull down usernames with objectIds for tweeted at.  Anytime we find regex for match below
+	//check for all tweeted ats to find out if they match (subtring of username length ~=). 
+	//With array of {firstIdx, endIdx, type: atSymbol} for all tweetedAts, create
+	//array of mix of these and type: non-atsymbols.  Return mapped array of spans of substrings according to this mixed
+	//collection.  
+	tweetContent(){
+		const validTwitterNameCharRegex = /[a-zA-Z0-9_]{1,15}/
+		const tweet = this.props.tweet;
+		const content = tweet.content;
+		const contentLength = content.length
+		const tweetedAt = tweet.tweetedAt;
+		let atIndices = []
+
+		for (var i = 0; i < contentLength - 1; i++){
+			if ((content[i] === '@') && 
+				content[i + 1].match(validTwitterNameCharRegex)){
+				for (var j = 0; j < tweetedAt.length; j++){
+					const atThisNameLength = tweetedAt[j].username.length + 1;
+					const onePastLastIdx = atThisNameLength + i;
+					if (`@${tweetedAt[j].username}` === content.slice(i, onePastLastIdx) &&
+						((onePastLastIdx >= contentLength) || (content[onePastLastIdx] === " "))){
+							atIndices.push({firstIdx: i, onePastLastIdx: onePastLastIdx, type: Constants.AT_SYMBOL});
+							break;
+					}
+				}
+			}
+		}
+
+		let allIndices = [];
+		let firstIdxNotRecorded = 0;
+		let len = atIndices.length
+		for (var i = 0; i <= len; i++){
+			if ((len === 0) || (!((i === len) && (atIndices[len - 1].onePastLastIdx === contentLength)) &&
+				!((i === 0) && (atIndices[0].firstIdx === 0)))
+			){
+				let latestNonAtContent = {firstIdx: firstIdxNotRecorded, 
+				type:  Constants.NON_AT_SYMBOL
+				}
+				latestNonAtContent.onePastLastIdx = (i !== len) ? atIndices[i].firstIdx : contentLength;
+				allIndices.push(latestNonAtContent);
+			}
+
+			if (i !== len){
+				allIndices.push(atIndices[i]);
+				firstIdxNotRecorded = atIndices[i].onePastLastIdx;
+			}
+		}
+
+		return allIndices.map((indexObj) => {
+			const contentFragment = content.slice(indexObj.firstIdx, indexObj.onePastLastIdx);
+			let className = ""
+			let onClick = (()=>{})
+			if (indexObj.type === Constants.AT_SYMBOL){
+				className = "at-symbol"
+				onClick = this.toUserViaAt.bind(this, contentFragment.slice(1));
+			} 
+			return (<span className={className} onClick={onClick}>{contentFragment}</span>);
+		});
+	}
 	render(){
 		let tweet = this.props.tweet;
 		const tweetId = tweet['_id'];
@@ -218,7 +280,7 @@ class Tweet extends React.Component{
 				onMouseLeave={this.hideUserBox.bind(this, Constants.USERNAME)}> {`@${tweet.authorName}`} </span>
 				<span id="tweet-time">&nbsp;{tweet.tweetTime}</span>
 				<br/>
-				<span className="tweet-content">{tweet.content}</span>
+				<span className="tweet-content">{this.tweetContent.call(this)}</span>
 				<br/>
 				{this.tweetButtons.call(this)}
 				<div>
