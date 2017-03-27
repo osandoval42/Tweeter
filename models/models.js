@@ -1,6 +1,7 @@
 import Tweet from './tweet';
 import User from './user';
 import Like from './like';
+import Hashtag from './hashtag';
 import async from 'async';
 var bcrypt = require('bcryptjs');
 var mongoose = require('mongoose');
@@ -11,6 +12,9 @@ module.exports.Like = Like;
 module.exports.Tweet = Tweet;
 module.exports.User = User;
 
+String.prototype.capitalize = function(){
+	return this.charAt(0).toUpperCase() + (this.slice(1).split('').map((char)=>{return char.toLowerCase();}).join(""));
+}
 
 const verifyTweetedAtOriginalAuthor = (allTweetedAt, originalTweet, cb) => {
 	const originalAuthorId = originalTweet.authorId;
@@ -24,7 +28,7 @@ const parseAtSymbols = (content, cb) => {
 		let idxAfterName = stringWithName.indexOf(" ");
 		let username = (idxAfterName === -1) ? stringWithName : stringWithName.slice(0, idxAfterName);
 		User.getUserByUsername(username, function(user, err){
-			if (err) console.error(`err is ${err}`)
+			if (err) {console.error(`err is ${err}`)}
 			if (user !== null){
 				const userId = user['_id'];
 				const oneTweetedAt = {
@@ -39,6 +43,51 @@ const parseAtSymbols = (content, cb) => {
 		cb(tweetedAt);
 	})
 }
+
+const parseHashtags = (content, cb) => {
+	let hashTagsWithExtra = content.split('#').slice(1);
+	let hashTags = [];
+	if (hashTagsWithExtra.length === 0){return cb(hashTags);}
+	async.eachSeries(hashTagsWithExtra, (stringWithHashtag, next) => {
+		if (stringWithHashtag === ""){next();}
+		let idxAfterHashtag = stringWithHashtag.indexOf(" ");
+		let hashtagName = (idxAfterHashtag === -1) ? stringWithHashtag : stringWithHashtag.slice(0, idxAfterHashtag)
+		hashtagName = hashtagName.capitalize();
+		Hashtag.findOne({name: hashtagName}, (err, hashtag) => {
+			if (err){throw err;}
+
+			hashTags.push(hashtagName);
+			const saveCb = (err) => {
+				if (err){throw err;}
+				next()
+			} 
+			if (hashtag){
+				hashtag.trendCount++;
+				hashtag.save(saveCb)
+			} else {
+				const newHashtag = new Hashtag({
+					name: hashtagName,
+					trendCount: 1
+				})
+				newHashtag.save(saveCb)
+			}
+		})
+	}, (err) => {
+		cb(hashTags)
+	})
+}
+
+// User.findOne({username: oldUsername}, function (err, user) {
+//     user.username = newUser.username;
+//     user.password = newUser.password;
+//     user.rights = newUser.rights;
+
+//     user.save(function (err) {
+//         if(err) {
+//             console.error('ERROR!');
+//         }
+//     });
+// });
 
 Tweet.getTweetById = function(id, callback){
 	Tweet.findById(id, callback);
@@ -141,20 +190,23 @@ Tweet.createMentionNotifications = (tweet, cb) => {
 Tweet.postTweet = (content, currUserId, cb) => {
 	//REVISE parse content for @s to determine ids
 	parseAtSymbols(content, (tweetedAt) => {
-		const newPost = new Tweet({
-			content,
-			authorId: currUserId,
-			tweetedAt
-		})
-		newPost.save((err, newTweet) => {
-				if (err) {return cb(true);}
-				Tweet.getTweetByIdWithAllInfo(newTweet['_id'], (err, formattedNewTweet) => {
+		  parseHashtags(content, (hashtagNames) => {
+			const newPost = new Tweet({
+				content,
+				authorId: currUserId,
+				tweetedAt,
+				hashtags: hashtagNames
+			})
+			newPost.save((err, newTweet) => {
 					if (err) {return cb(true);}
-					Tweet.createMentionNotifications(formattedNewTweet, (success) => {
-						if (success){cb(err, formattedNewTweet);} else {cb(true);}
-					})	
-				})
-		});
+					Tweet.getTweetByIdWithAllInfo(newTweet['_id'], (err, formattedNewTweet) => {
+						if (err) {return cb(true);}
+						Tweet.createMentionNotifications(formattedNewTweet, (success) => {
+							if (success){cb(err, formattedNewTweet);} else {cb(true);}
+						})	
+					})
+			});
+		})
 	});
 }
 
@@ -263,23 +315,26 @@ Tweet.getTweetCount = (userId, cb) => {
 Tweet.replyTweet = (content, currUserId, originalTweet, cb) => { //REVISE disallow self reply
 	parseAtSymbols(content, (tweetedAt) => {
 		verifyTweetedAtOriginalAuthor(tweetedAt, originalTweet, (didTweetAt) => {
-			const newPost = new Tweet({
-				content,
-				authorId: currUserId,
-				tweetedAt,
-				replyToId: didTweetAt ? mongoose.Types.ObjectId(originalTweet['_id']) : undefined
-			})
-			newPost.save((err, newReply) => {
-				if (err){return (cb(true));}
-				const originalId = mongoose.Types.ObjectId(originalTweet['_id']);
-				Tweet.getTweetByIdWithAllInfo(originalId, (err, formattedTweet) => {
-					if (err){return (cb(true));}
-					Tweet.createMentionNotifications(formattedTweet, (success) => {
-						if (success) {return cb(null, formattedTweet);} 
-						else {return cb(true);}
-					})
+			parseHashtags(content, (hashtagNames) => {
+				const newPost = new Tweet({
+					content,
+					authorId: currUserId,
+					tweetedAt,
+					replyToId: didTweetAt ? mongoose.Types.ObjectId(originalTweet['_id']) : undefined,
+					hashtags: hashtagNames
 				})
-			});
+				newPost.save((err, newReply) => {
+					if (err){return (cb(true));}
+					const originalId = mongoose.Types.ObjectId(originalTweet['_id']);
+					Tweet.getTweetByIdWithAllInfo(originalId, (err, formattedTweet) => {
+						if (err){return (cb(true));}
+						Tweet.createMentionNotifications(formattedTweet, (success) => {
+							if (success) {return cb(null, formattedTweet);} 
+							else {return cb(true);}
+						})
+					})
+				});
+			})
 		})
 	})
 }

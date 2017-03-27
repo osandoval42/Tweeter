@@ -6,6 +6,10 @@ import Home from './home/home_container';
 import Profile from './profile/profile_container';
 import Notifications from './notifications/notifications_container';
 
+String.prototype.capitalize = () => {
+  return this.charAt(0).toUpperCase() + (this.slice(1).split('').map((char)=>{return char.toLowerCase();}).join(""));
+}
+
 const Root = ({store}) => {
   // const _ensureLoggedIn = (nextState, replace) => {
   //   const currentUser = store.getState().session.currentUser;
