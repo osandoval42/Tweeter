@@ -28,6 +28,8 @@ const TweetSchema = mongoose.Schema({ //REVISE img data
 	}
 }, {timestamps: true})
 
+
+//place index at hashtags
 const Tweet = module.exports = mongoose.model('Tweet', TweetSchema);
 
 

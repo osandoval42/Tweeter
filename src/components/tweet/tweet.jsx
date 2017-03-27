@@ -17,6 +17,9 @@ class Tweet extends React.Component{
 	toUserViaAt(username){
 		browserHistory.push(`/profile/${username}`);
 	}
+	toHashTag(hashtagName){
+		browserHistory.push(`/hashtag/${hashtagName}`);
+	}
 	fullNameOfAuthor(){
 		let names = []
 		const tweet = this.props.tweet;
@@ -214,18 +217,33 @@ class Tweet extends React.Component{
 		const content = tweet.content;
 		const contentLength = content.length
 		const tweetedAt = tweet.tweetedAt;
-		let atIndices = []
+		const hashtags = tweet.hashtags
+		let atAndHashtagIndices = []
 
 		for (var i = 0; i < contentLength - 1; i++){
-			if ((content[i] === '@') && 
+			if ((content[i] === '@') && (i === 0 || content[i - 1] === " ") &&
 				content[i + 1].match(validTwitterNameCharRegex)){
 				for (var j = 0; j < tweetedAt.length; j++){
 					const atThisNameLength = tweetedAt[j].username.length + 1;
 					const onePastLastIdx = atThisNameLength + i;
-					if (`@${tweetedAt[j].username}` === content.slice(i, onePastLastIdx) &&
+					if (tweetedAt[j].username === content.slice(i + 1, onePastLastIdx).capitalize() &&
 						((onePastLastIdx >= contentLength) || (content[onePastLastIdx] === " "))){
-							atIndices.push({firstIdx: i, onePastLastIdx: onePastLastIdx, type: Constants.AT_SYMBOL});
+							atAndHashtagIndices.push({firstIdx: i, onePastLastIdx: onePastLastIdx, type: Constants.AT_SYMBOL});
 							break;
+					}
+				}
+			} else {
+
+				if ((content[i] === '#') && (i === 0 || content[i - 1] === " ") &&
+					content[i + 1].match(validTwitterNameCharRegex)){
+					for (var j = 0; j < hashtags.length; j++){
+						const atThisNameLength = hashtags[j].length + 1;
+						const onePastLastIdx = atThisNameLength + i;
+						if (hashtags[j] === content.slice(i + 1, onePastLastIdx).capitalize() &&
+							((onePastLastIdx >= contentLength) || (content[onePastLastIdx] === " "))){
+								atAndHashtagIndices.push({firstIdx: i, onePastLastIdx: onePastLastIdx, type: Constants.HASHTAG_SYMBOL});
+								break;
+						}
 					}
 				}
 			}
@@ -233,21 +251,21 @@ class Tweet extends React.Component{
 
 		let allIndices = [];
 		let firstIdxNotRecorded = 0;
-		let len = atIndices.length
+		let len = atAndHashtagIndices.length
 		for (var i = 0; i <= len; i++){
-			if ((len === 0) || (!((i === len) && (atIndices[len - 1].onePastLastIdx === contentLength)) &&
-				!((i === 0) && (atIndices[0].firstIdx === 0)))
+			if ((len === 0) || (!((i === len) && (atAndHashtagIndices[len - 1].onePastLastIdx === contentLength)) &&
+				!((i === 0) && (atAndHashtagIndices[0].firstIdx === 0)))
 			){
 				let latestNonAtContent = {firstIdx: firstIdxNotRecorded, 
 				type:  Constants.NON_AT_SYMBOL
 				}
-				latestNonAtContent.onePastLastIdx = (i !== len) ? atIndices[i].firstIdx : contentLength;
+				latestNonAtContent.onePastLastIdx = (i !== len) ? atAndHashtagIndices[i].firstIdx : contentLength;
 				allIndices.push(latestNonAtContent);
 			}
 
 			if (i !== len){
-				allIndices.push(atIndices[i]);
-				firstIdxNotRecorded = atIndices[i].onePastLastIdx;
+				allIndices.push(atAndHashtagIndices[i]);
+				firstIdxNotRecorded = atAndHashtagIndices[i].onePastLastIdx;
 			}
 		}
 
@@ -257,7 +275,11 @@ class Tweet extends React.Component{
 			let onClick = (()=>{})
 			if (indexObj.type === Constants.AT_SYMBOL){
 				className = "at-symbol"
-				onClick = this.toUserViaAt.bind(this, contentFragment.slice(1));
+				onClick = this.toUserViaAt.bind(this, contentFragment.slice(1).capitalize());
+			} 
+			if (indexObj.type === Constants.HASHTAG_SYMBOL){
+				className = "hashtag-symbol"
+				onClick = this.toHashTag.bind(this, contentFragment.slice(1).capitalize());
 			} 
 			return (<span className={className} onClick={onClick}>{contentFragment}</span>);
 		});

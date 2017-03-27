@@ -1716,13 +1716,10 @@ img{
 	color: white;
 }
 
-.at-symbol{
+.at-symbol, .hashtag-symbol{
 	color: #0084B4;
 	cursor: pointer;
 }
-
-
-
 
 
 

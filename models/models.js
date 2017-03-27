@@ -27,6 +27,7 @@ const parseAtSymbols = (content, cb) => {
 	async.eachSeries(namesTweetedAt, (stringWithName, next) => {
 		let idxAfterName = stringWithName.indexOf(" ");
 		let username = (idxAfterName === -1) ? stringWithName : stringWithName.slice(0, idxAfterName);
+		username = username.capitalize();
 		User.getUserByUsername(username, function(user, err){
 			if (err) {console.error(`err is ${err}`)}
 			if (user !== null){
