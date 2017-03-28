@@ -9,9 +9,8 @@ import Trending from '../trending/trending_container';
 
 //REVISE put in session starter or profile on left depending 
 class HashtagPage extends React.Component {
-	 constructor(props) {
+	constructor(props) {
     	super(props);
-    	const hashtag = this.props.params.hashtagName.capitalize();
   	}
 	render(){
 		const hashtagName = this.props.params.hashtagName.capitalize()

@@ -74,7 +74,7 @@ const TweetReducer = (state = tweets, action) => {
 			}
 			return stateDup;
 		case RESET_TWEETS:
-			return state;
+			return tweets;
 		default:
 			return state;
 	}

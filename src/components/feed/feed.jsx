@@ -63,7 +63,8 @@ class Feed extends React.Component {
 	componentDidUpdate(prevProps){
 		if ((prevProps.feedType != this.props.feedType) ||
 			prevProps.profileUser != this.props.profileUser ||
-			prevProps.currUser != this.props.currUser){
+			prevProps.currUser != this.props.currUser ||
+			prevProps.hashtagName != this.props.hashtagName){
 			this.fetchTweets()
 		} 
 	}

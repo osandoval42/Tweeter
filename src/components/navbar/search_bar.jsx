@@ -2,10 +2,18 @@ import React from 'react';
 import actions from './search_bar_helper_actions';
 import {browserHistory} from 'react-router';
 
-const SearchBar = React.createClass({
-  	getInitialState(){
-  		return ({searchInput: "", matchedUsers: []});
-  	},
+
+class SearchBar extends React.Component{
+    constructor(props) {
+      super(props);
+      this.state = {searchInput: "", matchedUsers: []}
+    }
+    componentDidMount(){
+      browserHistory.listen(this.reset.bind(this));
+    }
+    reset(){
+      this.setState({searchInput: "", matchedUsers: []});
+    }
   	updateSearch(e){
   		const input = e.currentTarget.value;
   		let matchedUsers = this.state.matchedUsers
@@ -20,17 +28,17 @@ const SearchBar = React.createClass({
   		} else {
   			this.setState({searchInput: input, matchedUsers: []});
   		}
-  	},
+  	}
     fullName(user){
       let names = []
       if (user.firstName) {names.push(user.firstName)};
       if (user.lastName) {names.push(user.lastName)};
       return names.join(" ");
-    },
+    }
     toUserProfile(username){
       browserHistory.push(`/profile/${username}`);
       this.setState({searchInput: "", matchedUsers: []});
-    },
+    }
   	autocompleted(){
   		return (<ul id="search-auto-complete">{
   			this.state.matchedUsers.map((user) => {
@@ -45,14 +53,14 @@ const SearchBar = React.createClass({
             <span className="autocompleted-username  autocompleted-name">{`@${username}`}</span></li>);
   			})}
   		</ul>)
-  	},
+  	}
 	render(){
 		return (
 		      <div className="search-bar">
 		        <form className="search-bar-form" onSubmit={this.handleSubmit}>
 		          <div className="search-bar-inputs">
 		            <input id="search-input" value={this.state.searchInput}
-		              onChange={this.updateSearch} placeholder="Search Twitter"
+		              onChange={this.updateSearch.bind(this)} placeholder="Search Twitter"
                   autoComplete="off"
 		            />
 		          <button type="submit" id='search-submit' >
@@ -64,6 +72,6 @@ const SearchBar = React.createClass({
 		      </div>
 		)
 	}
-});
+};
 
 module.exports = SearchBar;

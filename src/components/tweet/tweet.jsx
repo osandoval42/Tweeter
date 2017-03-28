@@ -10,7 +10,7 @@ class Tweet extends React.Component{
 	}
 	retweeter(){
 		const retweeter = this.props.tweet.retweetAuthorName;
-		return (retweeter) ? (<span className="top-of-tweet">{`@${retweeter} Retweeted`}</span>) : undefined;
+		return (retweeter) ? (<span className="top-of-tweet" onClick={this.toUserViaAt.bind(this, retweeter)}>{`@${retweeter} Retweeted`}</span>) : undefined;
 	}
 	toUser(tweet){
 		browserHistory.push(`/profile/${this.props.tweet.authorName}`);
