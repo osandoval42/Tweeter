@@ -19,9 +19,11 @@ class ProfileBox extends React.Component{
 		const currentUser = this.props.currentUser;
 		if (currentUser){
 		const profileImg = currentUser.profileImg;
+		const coverImg = currentUser.coverImg;
 		return (
 			<div id="profile-box" className="home-left-box">
-				<div id="top-half-profile-box" className="relative">				
+				<div id="top-half-profile-box" className="relative">
+					<img id="profile-box-cover-img" src={coverImg}/>			
 					<div id="profile-box-img-container" onClick={this.toProfile.bind(this, "")}>
 						<img id="profile-box-img" src={profileImg}/>
 					</div>
