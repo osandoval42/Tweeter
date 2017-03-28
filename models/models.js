@@ -522,6 +522,7 @@ const follow = (followerID, toFollowId, cb) => {
 					{safe: true, new: true, fields: {username: 1, usersBeingFollowed: 1, usersFollowing: 1, firstName: 1, lastName: 1, notifications: 1, profileImg: 1, coverImg: 1}},
 					function(err, follower){
 						let followerObj = follower.toObject();
+						followerObj.password = "";
 						Tweet.getTweetCount(followerObj['_id'], (err, count) => {
 							if (err) {return cb(true);};
 							followerObj.tweetCount = count;
@@ -556,7 +557,7 @@ const unfollow = (unfollowerId, toUnfollowId, cb) => {
 						let followerObj = follower.toObject();
 						Tweet.getTweetCount(followerObj['_id'], (err, count) => {
 							if (err) {return cb(true);};
-
+							followerObj.password = "";
 							followerObj.tweetCount = count;
 							User.createFollowNotification(toFollowId, follower, (err, _) => {
 								if (err){
@@ -662,6 +663,7 @@ User.clearNotifications = (userId, cb) => {
 			if (err){return cb(err)};
 
 			let user = currUser.toObject();
+			user.password = "";
 			Tweet.getTweetCount(userId, (err, count) => {
 				if (err) {throw err;}
 				user.tweetCount = count;
@@ -683,6 +685,7 @@ User.uploadProfileImg = (userId, profileImg, cb) => {
 				Like.count({userId: userId}, (err, count)=> {
 					if (err){throw err;}
 					userObj.likeCount = count;
+					userObj.password = "";
 					cb(err, userObj);
 				})
 			})
@@ -694,7 +697,19 @@ User.uploadCoverImg = (userId, coverImg, cb) => {
 	User.getUserById(userId, (err, user) => {
 		if (err){throw err;}
 		user.coverImg = coverImg;
-		user.save(cb);
+		user.save((err, updatedUser) => {
+			Tweet.getTweetCount(userId, (err, count) => {
+				if (err){throw err;}
+				let userObj = user.toObject();
+				userObj.tweetCount = count;
+				Like.count({userId: userId}, (err, count)=> {
+					if (err){throw err;}
+					userObj.likeCount = count;
+					userObj.password = "";
+					cb(err, userObj);
+				})
+			})
+		});
 	})
 }
 

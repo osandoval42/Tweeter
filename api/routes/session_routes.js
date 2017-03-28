@@ -33,6 +33,7 @@ const configSessionRoutes = (router) => {
 		     			if (err) { return res.status(401).send({"ok": false}); }
 		     			let userInJson = user.toObject();
 		     			userInJson.tweetCount = tweetCount;
+		     			userInJson.password = "";
 		     			return res.send(userInJson);
 		     		})
 		        });
@@ -81,6 +82,7 @@ const configSessionRoutes = (router) => {
 			     			if (err) { return res.status(401).send({"ok": false}); }
 			     			let userInJson = user.toObject();
 			     			userInJson.tweetCount = tweetCount;
+			     			userInJson.password = "";
 			     			return res.send(userInJson);
 			     		})
 			    	});
