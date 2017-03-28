@@ -18,6 +18,11 @@ const Helpers = {
 			return true;
 		}
 		return false;
+	},
+	usernameIsUnique(username, cb){
+		User.find({username: username}, (err, user) => {
+			cb(user && user.length === 0);
+		})
 	}
 };
 
@@ -59,34 +64,42 @@ const configSessionRoutes = (router) => {
 
 			if (Helpers.checkForSessionStartErrs(req, res, true) === false){
 				//REVISE check for signupErrs
-				const newUser = new User({
-					username,
-					firstName,
-					lastName,
-					password
-					// email,
-					// firstName,
-					// lastName, 
-					// profilePic,
-					// coverPic,
-					// following,
-					// followedBy
-				});
+				Helpers.usernameIsUnique(username, (isUnique) => {
+					if (isUnique){
+						const newUser = new User({
+							username,
+							firstName,
+							lastName,
+							password
+							// email,
+							// firstName,
+							// lastName, 
+							// profilePic,
+							// coverPic,
+							// following,
+							// followedBy
+						});
 
-				User.createUser(newUser, function(err, user){
-					if(err) throw err;
-					// req.flash('success_msg', 'You are registered and can now login');
-					req.logIn(user, function(err) {
-			     	if (err) { return res.status(401).send({"ok": false}); }
-			     		Tweet.getTweetCount(user['_id'], (err, tweetCount) => {
-			     			if (err) { return res.status(401).send({"ok": false}); }
-			     			let userInJson = user.toObject();
-			     			userInJson.tweetCount = tweetCount;
-			     			userInJson.password = "";
-			     			return res.send(userInJson);
-			     		})
-			    	});
-				});
+						User.createUser(newUser, function(err, user){
+							if(err) throw err;
+							// req.flash('success_msg', 'You are registered and can now login');
+							req.logIn(user, function(err) {
+					     	if (err) { return res.status(401).send({"ok": false}); }
+					     		Tweet.getTweetCount(user['_id'], (err, tweetCount) => {
+					     			if (err) { return res.status(401).send({"ok": false}); }
+					     			let userInJson = user.toObject();
+					     			userInJson.tweetCount = tweetCount;
+					     			userInJson.password = "";
+					     			return res.send(userInJson);
+					     		})
+					    	});
+						});
+					} else {
+						return res.status(401).send({"ok": false});
+					}
+				})	
+			} else {
+				return res.status(401).send({"ok": false});
 			}
 		});
 
