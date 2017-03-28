@@ -27,7 +27,7 @@ class Profile extends React.Component {
 					return <Follow followType={display}/>;
 					break;}
 				case Constants.LIKES: {
-					return <Likes profileUser={this.props.profileUser}/>;
+					return <Likes params={this.props.params} profileUser={this.props.profileUser}/>;
 					break;}
 				default: {
 				<span>Invalid Section</span>}

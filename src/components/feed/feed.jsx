@@ -69,13 +69,15 @@ class Feed extends React.Component {
 	}
 	hideUserBoxesOfTweet(tweetId){
 		const tweetEl = document.getElementById(tweetId);
-		let userboxes = [];
-		userboxes.push(tweetEl.getElementsByClassName("user-photo-hover")[0]);
-		userboxes.push(tweetEl.getElementsByClassName("username-hover")[0]);
-		userboxes.push(tweetEl.getElementsByClassName("fullname-hover")[0]);
-		userboxes.forEach((userBox) => {
-			userBox.style.display = "none";
-		})
+		if (tweetEl.className === 'tweet relative clearfix has-hover-boxes'){
+			let userboxes = [];
+			userboxes.push(tweetEl.getElementsByClassName("user-photo-hover")[0]);
+			userboxes.push(tweetEl.getElementsByClassName("username-hover")[0]);
+			userboxes.push(tweetEl.getElementsByClassName("fullname-hover")[0]);
+			userboxes.forEach((userBox) => {
+				userBox.style.display = "none";
+			})
+		}
 	}
 	hideUserBoxesOfOtherTweets(tweetWithUserBoxDisplayedId){
 		const tweets = this.props.tweets;
@@ -155,7 +157,7 @@ class Feed extends React.Component {
 						<ul id="feed-content">
 						{   tweets.map((tweet) => {
 							const tweetId = tweet['_id']
-							return (<Tweet key={tweetId} hideUserBoxesOfOtherTweets={this.hideUserBoxesOfOtherTweets.bind(this)} tweet={tweet}/>);
+							return (<Tweet key={tweetId} params={this.props.params} hideUserBoxesOfOtherTweets={this.hideUserBoxesOfOtherTweets.bind(this)} tweet={tweet}/>);
 						})}
 						</ul>
 					</div>

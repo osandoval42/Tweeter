@@ -6,6 +6,7 @@ import Constants from '../../constants/constants';
 class Tweet extends React.Component{
 	constructor(props) {
 		super(props);
+		this.hasHoverBoxes = false;
 	}
 	retweeter(){
 		const retweeter = this.props.tweet.retweetAuthorName;
@@ -196,9 +197,11 @@ class Tweet extends React.Component{
 		}
 	}
 	componentWillUnmount(){
-		this.stopUserBoxFromDisappearing(Constants.USER_PHOTO);
-		this.stopUserBoxFromDisappearing(Constants.USERNAME);
-		this.stopUserBoxFromDisappearing(Constants.FULLNAME);
+		if (this.hasHoverBoxes){
+			this.stopUserBoxFromDisappearing(Constants.USER_PHOTO);
+			this.stopUserBoxFromDisappearing(Constants.USERNAME);
+			this.stopUserBoxFromDisappearing(Constants.FULLNAME);
+		}
 	}
 	showTweetView(e){
 		const target = e.target;
@@ -289,27 +292,36 @@ class Tweet extends React.Component{
 		const tweetId = tweet['_id'];
 		const user = tweet.user;
 		const profileImg = user.profileImg;
-		return (<div id={tweetId} className="tweet relative clearfix" key={tweetId} onClick={this.showTweetView.bind(this)}>
+		let hoverBoxes;
+		let hasHoverBoxesClass = "";
+		const emptyFunction = ()=>{};
+		if (tweet.authorId !== this.props.currentUser['_id'] && 
+			(!this.props.params || tweet.authorName !== this.props.params.username)){
+			this.hasHoverBoxes = true
+			hasHoverBoxesClass = " has-hover-boxes"
+			hoverBoxes = 				(<div>
+					{this.hoverBox(Constants.USER_PHOTO)}
+					{this.hoverBox(Constants.USERNAME)}
+					{this.hoverBox(Constants.FULLNAME)}
+				</div>)
+		}
+		return (<div id={tweetId} className={`tweet relative clearfix${hasHoverBoxesClass}`} key={tweetId} onClick={this.hasHoverBoxes ? this.showTweetView.bind(this) : emptyFunction}>
 				{this.retweeter.call(this)}
 				{this.authorRepliedTo.call(this)}
-				<div id="tweet-img-container" className="clearfix" onClick={this.toUser.bind(this)} 
-					onMouseEnter={this.displayUserBox.bind(this, Constants.USER_PHOTO)} onMouseLeave={this.hideUserBox.bind(this, Constants.USER_PHOTO)}>
+				<div id="tweet-img-container" className="clearfix" onClick={this.hasHoverBoxes ? this.toUser.bind(this) : emptyFunction} 
+					onMouseEnter={hoverBoxes? this.displayUserBox.bind(this, Constants.USER_PHOTO) : emptyFunction} onMouseLeave={this.hasHoverBoxes ? this.hideUserBox.bind(this, Constants.USER_PHOTO) : emptyFunction}>
 					<img id="tweet-img" src={profileImg}/>
 				</div>
-				<h3 id="tweet-authorname" onClick={this.toUser.bind(this)} onMouseEnter={this.displayUserBox.bind(this, Constants.FULLNAME)} 
-				onMouseLeave={this.hideUserBox.bind(this, Constants.FULLNAME)}>{this.fullNameOfAuthor.call(this)}</h3>
-				<span id="tweet-username" onClick={this.toUser.bind(this)} onMouseEnter={this.displayUserBox.bind(this, Constants.USERNAME)}
-				onMouseLeave={this.hideUserBox.bind(this, Constants.USERNAME)}> {`@${tweet.authorName}`} </span>
+				<h3 id="tweet-authorname" onClick={this.hasHoverBoxes ? this.toUser.bind(this) : emptyFunction} onMouseEnter={hoverBoxes? this.displayUserBox.bind(this, Constants.FULLNAME) : emptyFunction} 
+				onMouseLeave={this.hasHoverBoxes ? this.hideUserBox.bind(this, Constants.FULLNAME) : emptyFunction}>{this.fullNameOfAuthor.call(this)}</h3>
+				<span id="tweet-username" onClick={this.hasHoverBoxes ? this.toUser.bind(this) : emptyFunction} onMouseEnter={this.hasHoverBoxes ? this.displayUserBox.bind(this, Constants.USERNAME) : emptyFunction}
+				onMouseLeave={this.hasHoverBoxes ? this.hideUserBox.bind(this, Constants.USERNAME) : emptyFunction}> {`@${tweet.authorName}`} </span>
 				<span id="tweet-time">&nbsp;{tweet.tweetTime}</span>
 				<br/>
 				<span className="tweet-content">{this.tweetContent.call(this)}</span>
 				<br/>
 				{this.tweetButtons.call(this)}
-				<div>
-					{this.hoverBox(Constants.USER_PHOTO)}
-					{this.hoverBox(Constants.USERNAME)}
-					{this.hoverBox(Constants.FULLNAME)}
-				</div>
+				{hoverBoxes}
 		</div>)
 	}
 }

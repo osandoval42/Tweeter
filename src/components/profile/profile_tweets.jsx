@@ -50,7 +50,7 @@ class ProfileTweets extends React.Component{
             <a onClick = {this.changeDisplay.bind(this, Constants.WITH_REPLIES)} className = {(this.state.currDisplay === Constants.WITH_REPLIES) ? "highlighted" : ""}>Tweets & Replies</a>
           </div>
         </div>
-        <Feed feedType={feedType}/>
+        <Feed params={this.props.params} feedType={feedType}/>
       </div>
         {this.rightBox.call(this)}
       </div>
