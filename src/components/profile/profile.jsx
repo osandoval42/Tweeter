@@ -58,8 +58,10 @@ class Profile extends React.Component {
 	}
 	tweetToButton(){
 		const username = this.props.profileUser.username;
-		const fullNameTo = this.fullNameOfUser(this.props.profileUser);
-		return username ? <button id="tweet-to-btn" onClick={this.props.openTweetingInterface.bind(this, `@${username}`, fullNameTo)}>Tweet to {fullNameTo}</button> : <a>invalid user</a>;
+		if (this.props.currUser.username !== username){
+			const fullNameTo = this.fullNameOfUser(this.props.profileUser);
+			return username ? <button id="tweet-to-btn" onClick={this.props.openTweetingInterface.bind(this, `@${username}`, fullNameTo)}>Tweet to {fullNameTo}</button> : <a>invalid user</a>;
+		}
 	}
 	getImageFromUser(type){
 		let file = document.getElementById(type === Constants.PROFILE_IMG ? "profile-img-upload-btn" : "cover-img-upload-btn").files[0];

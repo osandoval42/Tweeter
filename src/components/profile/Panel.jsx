@@ -24,10 +24,12 @@ class Panel extends React.Component{
   }
   followButton(){ //REVISE DISABLE DOUBLE CLICK
     const profileUser = this.props.profileUser;
-    if (this.isFollowingUser()){
-      return (<button onClick={this.props.toggleFollow.bind(this, profileUser['_id'])} id="following-btn" className="profile-follow-btn"><span>Following</span></button>)
-    } else {
-      return (<button onClick={this.props.toggleFollow.bind(this, profileUser['_id'])} id="follow-btn" className="profile-follow-btn">Follow</button>)
+    if (profileUser.username !== this.props.currUser.username){
+        if (this.isFollowingUser()){
+          return (<button onClick={this.props.toggleFollow.bind(this, profileUser['_id'])} id="following-btn" className="profile-follow-btn"><span>Following</span></button>)
+        } else {
+          return (<button onClick={this.props.toggleFollow.bind(this, profileUser['_id'])} id="follow-btn" className="profile-follow-btn">Follow</button>)
+        }
     }
   }
   render() {

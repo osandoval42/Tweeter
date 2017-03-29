@@ -4,7 +4,7 @@ import {browserHistory} from 'react-router';
 class TweetingInterface extends React.Component {
 	constructor(props) {
     	super(props);
-    	let newTweetContent = this.props.initialContent ? this.props.initialContent : "";
+    	let newTweetContent = this.props.initialContent ? `${this.props.initialContent} ` : "";
     	this.state = {newTweetContent: newTweetContent}
   	}
   	updateTweetContent(e){
