@@ -91,7 +91,9 @@ export const replyTweet = (originalTweet, replyContent) => dispatch => {
 };
 
 export const fetchAllTweets = (lastTweetFetchedId) => dispatch => {
-	dispatch(resetTweets())
+	if (!lastTweetFetchedId){
+		dispatch(resetTweets())	
+	}
 	APIUtil.fetchAllTweets(lastTweetFetchedId)
 		.then((tweets) => {
 			dispatch(receiveTweets(tweets));
@@ -100,7 +102,9 @@ export const fetchAllTweets = (lastTweetFetchedId) => dispatch => {
 };
 
 export const getHashtagTweets = (hashtagName, lastTweetFetchedId) => dispatch => {
-	dispatch(resetTweets())
+	if (!lastTweetFetchedId){
+		dispatch(resetTweets())	
+	}
 	APIUtil.fetchHashtagTweets(hashtagName, lastTweetFetchedId)
 		.then((tweets) => {
 			dispatch(receiveTweets(tweets));
@@ -110,7 +114,9 @@ export const getHashtagTweets = (hashtagName, lastTweetFetchedId) => dispatch =>
 
 
 export const fetchNonReplyProfileTweets = (currUserId, lastTweetFetchedId) => dispatch => {
-	dispatch(resetTweets())
+	if (!lastTweetFetchedId){
+		dispatch(resetTweets())	
+	}
 	APIUtil.fetchNonReplyProfileTweets(currUserId, lastTweetFetchedId)
 		.then((tweets) => {
 			dispatch(receiveTweets(tweets))}), 
@@ -118,7 +124,9 @@ export const fetchNonReplyProfileTweets = (currUserId, lastTweetFetchedId) => di
 };
 
 export const fetchAllUserProfileTweets = (currUserId, lastTweetFetchedId) => dispatch => {
-	dispatch(resetTweets())
+	if (!lastTweetFetchedId){
+		dispatch(resetTweets())	
+	}
 	APIUtil.fetchAllUserProfileTweets(currUserId, lastTweetFetchedId)
 		.then((tweets) => {
 			dispatch(receiveTweets(tweets))}), 
@@ -136,7 +144,9 @@ export const receiveReplies = tweetObj => ({
 });
 
 export const fetchTweetsUserLikes = (likerId, lastTweetFetchedId) => dispatch => {
-	dispatch(resetTweets())
+	if (!lastTweetFetchedId){
+		dispatch(resetTweets())	
+	}
 	APIUtil.fetchTweetsUserLikes(likerId, lastTweetFetchedId)
 		.then(tweets => dispatch(receiveTweets(tweets))), 
 		err => dispatch(receiveErrors(err.responseJSON))
@@ -161,7 +171,9 @@ export const receiveErrors = errors => ({
 
 
 export const getTweetReplies = (tweetId, lastTweetFetchedId) => dispatch => { //UPDATE
-	dispatch(resetReplies())
+	if (!lastTweetFetchedId){
+		dispatch(resetReplies())	
+	}
 	APIUtil.fetchReplies(tweetId, lastTweetFetchedId)
 		.then(replies => dispatch(receiveReplies(replies))), 
 		err => dispatch(receiveErrors(err.responseJSON))
