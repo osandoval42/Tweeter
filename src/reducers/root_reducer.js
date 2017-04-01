@@ -9,6 +9,7 @@ import TweetViewReducer from './tweet_view_reducer';
 import RepliesReducer from './replies_reducer';
 import LikePicturesReducer from './like_pictures_reducer';
 import TrendingHashtagReducer from './trending_hashtag_reducer';
+import SessionPopupReducer from './session_popup_reducer';
 
 const RootReducer = combineReducers({
   session: SessionReducer,
@@ -20,7 +21,8 @@ const RootReducer = combineReducers({
   tweetView: TweetViewReducer,
   replies: RepliesReducer,
   likePictures: LikePicturesReducer,
-  trending: TrendingHashtagReducer
+  trending: TrendingHashtagReducer,
+  sessionPopup: SessionPopupReducer
 });
 
 export default RootReducer;

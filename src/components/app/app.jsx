@@ -3,6 +3,7 @@ import Navbar from '../navbar/navbar_container';
 import TweetingBox from '../tweeting_interface/tweeting_box_container';
 import ReplyingBox from '../tweeting_interface/replying_box_container';
 import TweetView from '../tweet/tweet_view_container';
+import SessionFormPopup from '../session_form/session_popup_container';
 
 class App extends React.Component {
 	constructor(props) {
@@ -22,10 +23,16 @@ class App extends React.Component {
         return <TweetView />
       }
     }
+    sessionFormPopup(){
+      if (this.props.sessionPopupStatus){
+        return <SessionFormPopup />
+      }
+    }
 	render(){
 		return (
 			<div className = "App" id="app">
 				<Navbar/>
+        {this.sessionFormPopup()}
 				{this.tweetingInterface()}
         {this.tweetView()}
 				{this.props.children}

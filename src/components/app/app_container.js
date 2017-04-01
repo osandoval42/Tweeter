@@ -3,7 +3,8 @@ import App from './app';
 
 const mapStateToProps = (state) => ({
 	tweetingStatus: state.tweetingStatus,
-	tweetViewTweet: state.tweetView.tweet
+	tweetViewTweet: state.tweetView.tweet,
+	sessionPopupStatus: state.sessionPopup.showSessionPopup
 });
 
 const AppContainer = connect(mapStateToProps)(App);

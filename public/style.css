@@ -334,6 +334,17 @@ container:hover{
 	border-top: solid 1px rgb(225, 232, 237);
 }
 
+.tweet{
+	border-bottom: solid 1px rgb(225, 232, 237);
+	border-left: solid 1px rgb(225, 232, 237);
+	border-right: solid 1px rgb(225, 232, 237);
+	background-color: white;
+	min-height: 75px; 
+	display: block;
+	position: relative;
+	cursor: pointer;
+}
+
 .non-home-feed{
 	width: 588px;
 	position: relative;
@@ -481,17 +492,6 @@ container:hover{
 	position: absolute;
 	bottom: 10px;
 	left: 71px;
-}
-
-.tweet{
-	border-bottom: solid 1px rgb(225, 232, 237);
-	border-left: solid 1px rgb(225, 232, 237);
-	border-right: solid 1px rgb(225, 232, 237);
-	background-color: white;
-	min-height: 75px; 
-	display: block;
-	position: relative;
-	cursor: pointer;
 }
 
 .mainTweet{
@@ -946,6 +946,16 @@ img{
 	z-index: 3;
 }
 
+#session-popup-holder{
+	height: 2900px;
+	width: 1500px;
+	margin: 0 auto;
+	position: fixed;
+	background-color: rgba(0, 0, 0, 0.8);
+	margin-top: -60px;
+	z-index: 3;
+}
+
 #page-blackout{
 	height: 105%;
 	width: 100%;
@@ -991,6 +1001,16 @@ img{
 	position: fixed;
 	left: 50%;
 	margin-left: -295px;
+}
+
+#session-popup{
+	margin: 0 auto;
+	margin-top: 122px;
+	position: fixed;
+	left: 50%;
+	margin-left: -118px;
+	display: flex;
+	z-index: 900001;
 }
 
 #tweeting-box-header{
@@ -1803,4 +1823,8 @@ img{
 	border-left: 1px solid rgb(225, 232, 237);
 	border-top-right-radius: 3px;
 	border-top-left-radius: 3px;
+}
+
+.unretweet-btn{
+	color: #17bf63;
 }

@@ -63,7 +63,7 @@ class Tweet extends React.Component{
 				if (bool) {retweetId = retweet['_id']}
 				return bool;
 			})){
-				return (<a onClick={this.props.unretweet.bind(this, retweetId)}>retweeted {this.getCount.call(this, "retweets")}</a>)
+				return (<a className="unretweet-btn" onClick={this.props.unretweet.bind(this, retweetId)}>retweet {this.getCount.call(this, "retweets")}</a>)
 			} else {
 				return retweetButton
 			}

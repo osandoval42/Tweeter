@@ -71,6 +71,13 @@ class Navbar extends React.Component{
 	toHome(){
 		browserHistory.push('/')
 	}
+	tweetButtonClicked(){
+		if (this.props.currentUser){
+			this.props.openTweetingInterface();	
+		} else {
+			this.props.openSessionPopup();
+		}
+	}
 	render(){
 		return (
 			<header className="full-width block" id="header">
@@ -83,7 +90,7 @@ class Navbar extends React.Component{
 				<SearchBar/>
 				{this.myProfileImg.call(this)}
 				{this.settingsDropDownBackdrop.call(this)}
-					<button className="post-tweet-btn" onClick={this.props.openTweetingInterface}>Tweet</button>
+					<button className="post-tweet-btn" onClick={this.tweetButtonClicked.bind(this)}>Tweet</button>
 				</div>
 			</header>
 		)

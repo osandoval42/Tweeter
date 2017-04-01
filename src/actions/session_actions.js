@@ -36,3 +36,15 @@ export const receiveErrors = errors => ({
   type: Constants.RECEIVE_ERRORS,
   errors
 });
+
+export const openSessionPopup = () => {
+  return {
+    type: Constants.SHOW_SESSION_POPUP
+  };  
+}
+
+export const closeSessionPopup = () => {
+  return {
+  type: Constants.HIDE_SESSION_POPUP,
+  };  
+}
