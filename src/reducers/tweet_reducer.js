@@ -51,6 +51,7 @@ const TweetReducer = (state = tweets, action) => {
 	let tweet;
 	switch(action.type){
 		case RECEIVE_TWEETS:
+			// console.log(new Date().getTime());
 			if (action.tweetObj.areAdditionalTweets){
 				stateDup = state.dup()
 				return addTweets(stateDup, action.tweetObj.tweets);

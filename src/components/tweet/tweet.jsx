@@ -300,7 +300,7 @@ class Tweet extends React.Component{
 			}
 		}
 
-		return allIndices.map((indexObj) => {
+		return allIndices.map((indexObj, i) => {
 			const contentFragment = content.slice(indexObj.firstIdx, indexObj.onePastLastIdx);
 			let className = ""
 			let onClick = (()=>{})
@@ -312,7 +312,8 @@ class Tweet extends React.Component{
 				className = "hashtag-symbol"
 				onClick = this.toHashTag.bind(this, contentFragment.slice(1).capitalize());
 			} 
-			return (<span className={className} onClick={onClick}>{contentFragment}</span>);
+			const key = tweet['_id'] + i
+			return (<span className={className} key={key} onClick={onClick}>{contentFragment}</span>);
 		});
 	}
 	render(){

@@ -606,6 +606,27 @@ container:hover{
 	margin-bottom: 11px;
 }
 
+.top-question-holder{
+	display: flex;
+	width: 94%;
+	justify-content: space-between;
+}
+
+#demo-login-btn{
+    padding: 0px 5px 0px 5px;
+    height: 20px;
+    border-radius: 3px;
+    top: 16px;
+    position: relative;
+    border: 1px solid white;
+    color: rgb(136, 153, 166);
+    left: 4px;
+}
+
+#demo-login-btn:hover{
+	text-decoration: underline;
+}
+
 #new-to-twitter{
 	margin-top: 0px;
 }

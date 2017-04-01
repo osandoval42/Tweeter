@@ -6,11 +6,15 @@ var mongoose = require('mongoose');
 
 const configHashtagRoutes = (router) => {
 	router.get('/trending', (req, res) => { //REVISE protect CSRF
+		// const reqTime = new Date().getTime()
+		// console.log(`hash req time is ${reqTime}`);
 		Hashtag.trending((err, trendingHashtags) => {
 			if (err) { 
 				return res.status(401).send({"ok": false}); 
 			}
 			else { 
+				// const resTime = new Date().getTime();
+				// console.log(`hash res time is ${resTime}`);
 				res.send(trendingHashtags);
 			}
 		})

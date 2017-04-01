@@ -16,6 +16,7 @@ class Feed extends React.Component {
 		clearInterval(this.feedListener)
 	}
 	fetchTweets(lastTweetFetchedId){
+		// console.log(new Date().getTime());
 		const tweetViewTweet = this.props.tweetViewTweet
 		if (tweetViewTweet){
 			return this.props.fetchReplies(tweetViewTweet['_id'], lastTweetFetchedId);
@@ -61,6 +62,8 @@ class Feed extends React.Component {
 		}
 	}
 	componentDidUpdate(prevProps){
+		const afterRenderTime = new Date().getTime();
+		console.log(`after render time: ${afterRenderTime}`)
 		if ((prevProps.feedType != this.props.feedType) ||
 			prevProps.profileUser != this.props.profileUser ||
 			prevProps.currUser != this.props.currUser ||
@@ -145,6 +148,8 @@ class Feed extends React.Component {
 			this.spinner = new Spinner(opts).spin(target);
 	}
 	render(){
+		// const beforeRenderTime = new Date().getTime();
+		// console.log(`before render time: ${beforeRenderTime}`)
 		const tweets = this.props.tweetViewTweet ? this.props.replies : this.props.tweets;
 		let nonHomeFeed = this.props.tweetViewTweet || this.props.isOnHomePage ? "" : " non-home-feed";
 		let tweetViewFeed = this.props.tweetViewTweet ? " tweet-view-feed" : "";

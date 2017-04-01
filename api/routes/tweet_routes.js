@@ -85,6 +85,8 @@ const configTweetRoutes = (router) => {
 		}
 	}),
 	router.get('/feed_tweets', (req, res) => {
+		// const reqTime = new Date().getTime()
+		// console.log(`feed req time is ${reqTime}`);
 		const currUser = req.user;
 		const currUserId = currUser ? currUser['_id'] : undefined;
 		const lastDownloadedTweetIdStr = req.query.lastId;
@@ -95,6 +97,8 @@ const configTweetRoutes = (router) => {
 				}
 				else { 
 					let tweetsObj = {tweets, areAdditionalTweets: lastDownloadedTweetId ? true : false};
+					// const resTime = new Date().getTime();
+					// console.log(`feed res time is ${resTime}`);
 					res.send(tweetsObj);
 				}
 		})
