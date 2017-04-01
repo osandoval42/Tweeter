@@ -37,10 +37,14 @@ class WhoToFollow extends React.Component {
 		browserHistory.push(`/profile/${username}`)
 	}
 	followUser(userId){
-		let followBtn = document.getElementById(`${userId}-follow-btn`);
-		followBtn.className = "user-following-btn user-follow-type-btn";
-		followBtn.firstChild.textContent = "Following";
-		this.props.followUser(userId)
+		if (this.props.currentUser){
+			let followBtn = document.getElementById(`${userId}-follow-btn`);
+			followBtn.className = "user-following-btn user-follow-type-btn";
+			followBtn.firstChild.textContent = "Following";
+			this.props.followUser(userId)
+		} else {
+			this.props.openSessionPopup();
+		}
 	}
 	render(){
 		let whoToFollowIdxs = {}

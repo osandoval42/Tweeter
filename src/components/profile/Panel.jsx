@@ -22,13 +22,20 @@ class Panel extends React.Component{
         return false;
       }
   }
+  followButtonClicked(userId){
+    if (this.props.currUser){
+      this.props.toggleFollow(userId);
+    } else {
+      this.props.openSessionPopup();
+    }
+  }
   followButton(){ //REVISE DISABLE DOUBLE CLICK
     const profileUser = this.props.profileUser;
     if (profileUser.username !== this.props.currUser.username){
         if (this.isFollowingUser()){
           return (<button onClick={this.props.toggleFollow.bind(this, profileUser['_id'])} id="following-btn" className="profile-follow-btn"><span>Following</span></button>)
         } else {
-          return (<button onClick={this.props.toggleFollow.bind(this, profileUser['_id'])} id="follow-btn" className="profile-follow-btn">Follow</button>)
+          return (<button onClick={this.followButtonClicked.bind(this, profileUser['_id'])} id="follow-btn" className="profile-follow-btn">Follow</button>)
         }
     }
   }

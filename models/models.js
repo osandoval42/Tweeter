@@ -559,7 +559,7 @@ const unfollow = (unfollowerId, toUnfollowId, cb) => {
 							if (err) {return cb(true);};
 							followerObj.password = "";
 							followerObj.tweetCount = count;
-							User.createFollowNotification(toFollowId, follower, (err, _) => {
+							User.createFollowNotification(toUnfollowId, follower, (err, _) => {
 								if (err){
 									cb(true);
 								} else {

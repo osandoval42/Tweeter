@@ -41,20 +41,41 @@ class Tweet extends React.Component{
 			return tweet[type].length;
 		}
 	}
+	likeButtonClicked(tweet){
+		if (this.props.currentUser){
+			this.props.toggleLike(tweet['_id']);
+		} else {
+			this.props.openSessionPopup();
+		}
+	}
 	likeButton(){
 		const tweet = this.props.tweet;
 		const currUser = this.props.currentUser
 		if ((!tweet.likes) || currUser && tweet.likes.some((like) => { return (like.userId === currUser['_id'])})){
-			return <a onClick={this.props.toggleLike.bind(this, tweet['_id'])}>unlike {this.getCount("likes")}</a>
+			return <a onClick={this.likeButtonClicked.bind(this, tweet)}>unlike {this.getCount("likes")}</a>
 		} else {
-			return <a onClick={this.props.toggleLike.bind(this, tweet['_id'])}>like {this.getCount("likes")}</a>
+			return <a onClick={this.likeButtonClicked.bind(this, tweet)}>like {this.getCount("likes")}</a>
+		}
+	}
+	retweetClicked(tweetId){
+		if (this.props.currentUser){
+			this.props.retweet(tweetId)
+		} else {
+			this.props.openSessionPopup();
+		}
+	}
+	unretweetClicked(retweetId){
+		if (this.props.currentUser){
+			this.props.unretweet(retweetId)
+		} else {
+			this.props.openSessionPopup();
 		}
 	}
 	retweetButton(){
 		const tweet = this.props.tweet;
 		const tweetId = tweet['_id'];
 		const currUser = this.props.currentUser
-		const retweetButton = <a onClick={this.props.retweet.bind(this, tweetId)}>retweet {this.getCount.call(this, "retweets")}</a>
+		const retweetButton = <a onClick={this.retweetClicked.bind(this, tweetId)}>retweet {this.getCount.call(this, "retweets")}</a>
 		let retweetId;
 		const retweets = tweet.retweets;
 		if (currUser){
@@ -63,7 +84,7 @@ class Tweet extends React.Component{
 				if (bool) {retweetId = retweet['_id']}
 				return bool;
 			})){
-				return (<a className="unretweet-btn" onClick={this.props.unretweet.bind(this, retweetId)}>retweet {this.getCount.call(this, "retweets")}</a>)
+				return (<a className="unretweet-btn" onClick={this.unretweetClicked.bind(this, retweetId)}>retweet {this.getCount.call(this, "retweets")}</a>)
 			} else {
 				return retweetButton
 			}
@@ -73,6 +94,13 @@ class Tweet extends React.Component{
 			return retweetButton;
 		}
 	}
+	replyClicked(tweet){
+		if (this.props.currentUser){
+			this.props.openReplyingInterface(tweet)
+		} else {
+			this.props.openSessionPopup();
+		}
+	}
 	tweetButtons(){
 		if (this.props.isReplying){
 			return undefined;
@@ -80,7 +108,7 @@ class Tweet extends React.Component{
 			const tweet = this.props.tweet;
 			return (
 				<div className="tweet-buttons">
-					<span className="tweet-inter-btn"><a onClick={this.props.openReplyingInterface.bind(this, tweet)}>reply {tweet.replyCount == 0 ? "" : tweet.replyCount}</a></span>
+					<span className="tweet-inter-btn"><a onClick={this.replyClicked.bind(this, tweet)}>reply {tweet.replyCount == 0 ? "" : tweet.replyCount}</a></span>
 					<span className="tweet-inter-btn">{this.retweetButton.call(this)}</span>
 					<span className="tweet-inter-btn">{this.likeButton.call(this)}</span>
 				</div>

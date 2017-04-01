@@ -17,13 +17,20 @@ class User extends React.Component {
 			return false;
 		}
 	}
+	followButtonClicked(userId){
+		if (this.props.currUser){
+			this.props.toggleFollow(userId);
+		} else {
+			this.props.openSessionPopup();
+		}
+	}
 	followButton(){ //REVISE DISABLE DOUBLE CLICK
 		const oneOfUsers = this.props.user;
 		const currUser = this.props.currUser;
 	    if (this.isFollowingUser(oneOfUsers)){
 	      return (<button onClick={this.props.toggleFollow.bind(this, oneOfUsers['_id'])} className="user-following-btn user-follow-type-btn user-profile-follow-type-position"><span>Following</span></button>)
 	    } else {
-	      return (<button onClick={this.props.toggleFollow.bind(this, oneOfUsers['_id'])} className="user-follow-btn user-follow-type-btn user-profile-follow-type-position"><span>Follow</span></button>)
+	      return (<button onClick={this.followButtonClicked.bind(this, oneOfUsers['_id'])} className="user-follow-btn user-follow-type-btn user-profile-follow-type-position"><span>Follow</span></button>)
 	    }
 	}
 	fullNameOfUser(){
