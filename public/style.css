@@ -1644,6 +1644,7 @@ img{
 	border-radius: 3px;
 	background-color: #1DA1F2;
 	float: left;
+	cursor: pointer;
 }
 
 .tweet-view-pictures{

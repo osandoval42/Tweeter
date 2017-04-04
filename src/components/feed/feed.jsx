@@ -62,8 +62,6 @@ class Feed extends React.Component {
 		}
 	}
 	componentDidUpdate(prevProps){
-		const afterRenderTime = new Date().getTime();
-		console.log(`after render time: ${afterRenderTime}`)
 		if ((prevProps.feedType != this.props.feedType) ||
 			prevProps.profileUser != this.props.profileUser ||
 			prevProps.currUser != this.props.currUser ||
