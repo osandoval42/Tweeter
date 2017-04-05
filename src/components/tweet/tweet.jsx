@@ -341,13 +341,13 @@ class Tweet extends React.Component{
 		return (<div id={this.tweetElId} className={`tweet relative clearfix${hasHoverBoxesClass}`} key={this.tweetElId} onClick={this.showTweetView.bind(this)}>
 				{this.retweeter.call(this)}
 				{this.authorRepliedTo.call(this)}
-				<div id="tweet-img-container" className="clearfix" onClick={this.hasHoverBoxes ? this.toUser.bind(this) : emptyFunction} 
+				<div id="tweet-img-container" className="clearfix" onClick={this.toUser.bind(this)} 
 					onMouseEnter={hoverBoxes? this.displayUserBox.bind(this, Constants.USER_PHOTO) : emptyFunction} onMouseLeave={this.hasHoverBoxes ? this.hideUserBox.bind(this, Constants.USER_PHOTO) : emptyFunction}>
 					<img id="tweet-img" src={profileImg}/>
 				</div>
-				<h3 id="tweet-authorname" onClick={this.hasHoverBoxes ? this.toUser.bind(this) : emptyFunction} onMouseEnter={hoverBoxes? this.displayUserBox.bind(this, Constants.FULLNAME) : emptyFunction} 
+				<h3 id="tweet-authorname" onClick={this.toUser.bind(this)} onMouseEnter={hoverBoxes? this.displayUserBox.bind(this, Constants.FULLNAME) : emptyFunction} 
 				onMouseLeave={this.hasHoverBoxes ? this.hideUserBox.bind(this, Constants.FULLNAME) : emptyFunction}>{this.fullNameOfAuthor.call(this)}</h3>
-				<span id="tweet-username" onClick={this.hasHoverBoxes ? this.toUser.bind(this) : emptyFunction} onMouseEnter={this.hasHoverBoxes ? this.displayUserBox.bind(this, Constants.USERNAME) : emptyFunction}
+				<span id="tweet-username" onClick={this.toUser.bind(this)} onMouseEnter={this.hasHoverBoxes ? this.displayUserBox.bind(this, Constants.USERNAME) : emptyFunction}
 				onMouseLeave={this.hasHoverBoxes ? this.hideUserBox.bind(this, Constants.USERNAME) : emptyFunction}> {`@${tweet.authorName}`} </span>
 				<span id="tweet-time">&nbsp;{tweet.tweetTime}</span>
 				<br/>

@@ -33,10 +33,17 @@ class TweetView extends React.Component{
 		const oneOfUsers = {_id: tweet.authorId};
 		const currUser = this.props.currUser;
 	    if (this.isFollowingUser(oneOfUsers)){
-	      return (<button onClick={this.props.toggleFollow.bind(this, oneOfUsers['_id'])} className="user-following-btn user-follow-type-btn main-tweet-follow-type-position"><span>Following</span></button>)
+	      return (<button onClick={this.toggleFollow.bind(this, oneOfUsers['_id'])} className="user-following-btn user-follow-type-btn main-tweet-follow-type-position"><span>Following</span></button>)
 	    } else {
-	      return (<button onClick={this.props.toggleFollow.bind(this, oneOfUsers['_id'])} className="user-follow-btn user-follow-type-btn main-tweet-follow-type-position"><span>Follow</span></button>)
+	      return (<button onClick={this.toggleFollow.bind(this, oneOfUsers['_id'])} className="user-follow-btn user-follow-type-btn main-tweet-follow-type-position"><span>Follow</span></button>)
 	    }
+	}
+	toggleFollow(userId){
+		if (this.props.currUser){
+			this.props.toggleFollow(userId);
+		} else {
+			this.props.openSessionPopup();
+		}
 	}
 	isFollowingUser(oneOfUsers){ //optimization opp: turn follow arrays into hashes
 		const currUser = this.props.currUser;

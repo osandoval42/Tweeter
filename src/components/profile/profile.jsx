@@ -65,7 +65,7 @@ class Profile extends React.Component {
 	}
 	tweetToButton(){
 		const username = this.props.profileUser.username;
-		if (this.props.currUser.username !== username){
+		if (!this.props.currUser || this.props.currUser.username !== username){
 			const fullNameTo = this.fullNameOfUser(this.props.profileUser);
 			return username ? <button id="tweet-to-btn" onClick={this.tweetToButtonClicked.bind(this, username, fullNameTo)}>Tweet to {fullNameTo}</button> : <a>invalid user</a>;
 		}

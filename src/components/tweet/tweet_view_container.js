@@ -2,6 +2,7 @@ import {connect} from 'react-redux';
 import TweetView from './tweet_view';
 import {resetLikePictures, closeTweetView, getLikePicturesForTweet, getLikePicturesForTweetRepliedTo} from '../../actions/tweet_actions';
 import {toggleFollow} from '../../actions/user_actions';
+import {openSessionPopup} from '../../actions/session_actions';
 
 
 const mapStateToProps = (state) => ({
@@ -29,6 +30,9 @@ const mapDispatchToProps = (dispatch) => ({
 		const likes = tweetRepliedTo.likes;
 		const body = {likes}
 		dispatch(getLikePicturesForTweetRepliedTo(body));
+	},
+	openSessionPopup: () => {
+		return dispatch(openSessionPopup());
 	}
 });
 
