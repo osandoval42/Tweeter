@@ -1,6 +1,7 @@
 import React from 'react';
 import Feed from '../feed/feed_container';
 import {browserHistory} from 'react-router';
+import Constants from '../../constants/constants';
 
 
 class TweetView extends React.Component{
@@ -22,6 +23,15 @@ class TweetView extends React.Component{
 	}
 	toUser(tweet){
 		browserHistory.push(`/profile/${tweet.authorName}`);
+		this.props.closeTheTweetView()
+	}
+	toUserViaAt(username){
+		browserHistory.push(`/profile/${username}`);
+		this.props.closeTheTweetView()
+	}
+	toHashTag(hashtagName){
+		browserHistory.push(`/hashtag/${hashtagName}`);
+		this.props.closeTheTweetView();
 	}
 	fullNameOfAuthor(tweet){
 		let names = []
@@ -55,6 +65,79 @@ class TweetView extends React.Component{
 			return false;
 		}
 	}
+	tweetContent(tweet){
+		const validTwitterNameCharRegex = /[a-zA-Z0-9_]{1,15}/
+		const content = tweet.content;
+		const contentLength = content.length
+		const tweetedAt = tweet.tweetedAt;
+		const hashtags = tweet.hashtags
+		let atAndHashtagIndices = []
+
+		for (var i = 0; i < contentLength - 1; i++){
+			if ((content[i] === '@') && (i === 0 || content[i - 1] === " ") &&
+				content[i + 1].match(validTwitterNameCharRegex)){
+				for (var j = 0; j < tweetedAt.length; j++){
+					const atThisNameLength = tweetedAt[j].username.length + 1;
+					const onePastLastIdx = atThisNameLength + i;
+					if (tweetedAt[j].username === content.slice(i + 1, onePastLastIdx).capitalize() &&
+						((onePastLastIdx >= contentLength) || (content[onePastLastIdx] === " "))){
+							atAndHashtagIndices.push({firstIdx: i, onePastLastIdx: onePastLastIdx, type: Constants.AT_SYMBOL});
+							break;
+					}
+				}
+			} else {
+
+				if ((content[i] === '#') && (i === 0 || content[i - 1] === " ") &&
+					content[i + 1].match(validTwitterNameCharRegex)){
+					for (var j = 0; j < hashtags.length; j++){
+						const atThisNameLength = hashtags[j].length + 1;
+						const onePastLastIdx = atThisNameLength + i;
+						if (hashtags[j] === content.slice(i + 1, onePastLastIdx).capitalize() &&
+							((onePastLastIdx >= contentLength) || (content[onePastLastIdx].search(/[\s\.\?\!,;]/) !== -1))){
+								atAndHashtagIndices.push({firstIdx: i, onePastLastIdx: onePastLastIdx, type: Constants.HASHTAG_SYMBOL});
+								break;
+						}
+					}
+				}
+			}
+		}
+
+		let allIndices = [];
+		let firstIdxNotRecorded = 0;
+		let len = atAndHashtagIndices.length
+		for (var i = 0; i <= len; i++){
+			if ((len === 0) || (!((i === len) && (atAndHashtagIndices[len - 1].onePastLastIdx === contentLength)) &&
+				!((i === 0) && (atAndHashtagIndices[0].firstIdx === 0)))
+			){
+				let latestNonAtContent = {firstIdx: firstIdxNotRecorded, 
+				type:  Constants.NON_AT_SYMBOL
+				}
+				latestNonAtContent.onePastLastIdx = (i !== len) ? atAndHashtagIndices[i].firstIdx : contentLength;
+				allIndices.push(latestNonAtContent);
+			}
+
+			if (i !== len){
+				allIndices.push(atAndHashtagIndices[i]);
+				firstIdxNotRecorded = atAndHashtagIndices[i].onePastLastIdx;
+			}
+		}
+
+		return allIndices.map((indexObj, i) => {
+			const contentFragment = content.slice(indexObj.firstIdx, indexObj.onePastLastIdx);
+			let className = "tweet-content-fragment"
+			let onClick = (()=>{})
+			if (indexObj.type === Constants.AT_SYMBOL){
+				className = "at-symbol"
+				onClick = this.toUserViaAt.bind(this, contentFragment.slice(1).capitalize());
+			} 
+			if (indexObj.type === Constants.HASHTAG_SYMBOL){
+				className = "hashtag-symbol"
+				onClick = this.toHashTag.bind(this, contentFragment.slice(1).capitalize());
+			} 
+			const key = tweet['_id'] + i
+			return (<span className={className} key={key} onClick={onClick}>{contentFragment}</span>);
+		});
+	}
 	mainTweet(tweet, isTweetRepliedTo){
 		const replyClassName = isTweetRepliedTo ? " reply-tweet-view" : "";
 		return (
@@ -71,7 +154,7 @@ class TweetView extends React.Component{
 				</div>
 				<br/>
 				<span className="main-tweet-content">
-				 {tweet.content}
+				 {this.tweetContent.call(this, tweet)}
 				</span>
 				<br/>
 				<div className="main-tweet-stats">
@@ -102,7 +185,7 @@ class TweetView extends React.Component{
 				</div>
 				<div id="tweet-view">
 					{reply ? this.mainTweet(reply, true) : undefined}
-					{this.mainTweet(tweet)}
+					{this.mainTweet.call(this, tweet)}
 					<Feed tweetViewTweet={tweet} isReply={reply}/>
 				</div>
 			</div>

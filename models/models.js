@@ -50,9 +50,22 @@ const parseHashtags = (content, cb) => {
 	let hashTagsWithExtra = content.split('#').slice(1);
 	let hashTags = [];
 	if (hashTagsWithExtra.length === 0){return cb(hashTags);}
+	const hashTagEndings = [" ", "!", "?", ".", ",", ";"]
 	async.eachSeries(hashTagsWithExtra, (stringWithHashtag, next) => {
 		if (stringWithHashtag === ""){next();}
-		let idxAfterHashtag = stringWithHashtag.indexOf(" ");
+		const possibleIdxsAfterHashtag = hashTagEndings.map((suffix) => {
+			return stringWithHashtag.indexOf(suffix);
+		})
+		let idxAfterHashtag = possibleIdxsAfterHashtag.reduce((lowestIdx, idx) => {
+			if (idx !== -1 && idx < lowestIdx){
+				return idx;
+			} else {
+				return lowestIdx;
+			}
+		}, Infinity)
+		if (idxAfterHashtag === Infinity){
+			idxAfterHashtag = -1;
+		}
 		let hashtagName = (idxAfterHashtag === -1) ? stringWithHashtag : stringWithHashtag.slice(0, idxAfterHashtag)
 		hashtagName = hashtagName.capitalize();
 		Hashtag.findOne({name: hashtagName}, (err, hashtag) => {

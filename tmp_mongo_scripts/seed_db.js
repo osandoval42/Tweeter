@@ -415,7 +415,7 @@ User.remove().exec()
 	const content = "@Birdman BRRRRRR"
 	return postTweet(content , LittleRed)})
 .then(() => {
-	const content = "I'm announcing my candidacy for #2020 . WE WILL NOT LET SESAME STREET DIE! #Sesamestreet"
+	const content = "I'm announcing my candidacy for #2020. WE WILL NOT LET SESAME STREET DIE! #Sesamestreet"
 	return postTweet(content , BigBird)})
 .then((newTweet) => {
 	candidacyAnnouncement = newTweet;

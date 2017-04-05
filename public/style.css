@@ -476,14 +476,7 @@ container:hover{
 	font-weight: 500
 }
 
-.tweet-content{
-	color: rgb(41, 47, 51);
-	font-size: 14px;
-	line-height: 18px;
-	width: 510px;
-	margin-bottom: 33px;
-	display: inline-block;
-}
+
 
 .tweet-buttons{
 	display: flex;
@@ -1576,6 +1569,15 @@ img{
 	font-size: 25px;
 	margin-top: 52px;
 	margin-left: 4px;
+}
+
+.tweet-content{
+	color: rgb(41, 47, 51);
+	font-size: 14px;
+	line-height: 18px;
+	width: 510px;
+	margin-bottom: 33px;
+	display: inline-block;
 }
 
 .reply-tweet-view{

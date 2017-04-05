@@ -272,7 +272,7 @@ class Tweet extends React.Component{
 						const atThisNameLength = hashtags[j].length + 1;
 						const onePastLastIdx = atThisNameLength + i;
 						if (hashtags[j] === content.slice(i + 1, onePastLastIdx).capitalize() &&
-							((onePastLastIdx >= contentLength) || (content[onePastLastIdx] === " "))){
+							((onePastLastIdx >= contentLength) || (content[onePastLastIdx].search(/[\s\.\?\!,;]/) !== -1))){
 								atAndHashtagIndices.push({firstIdx: i, onePastLastIdx: onePastLastIdx, type: Constants.HASHTAG_SYMBOL});
 								break;
 						}
