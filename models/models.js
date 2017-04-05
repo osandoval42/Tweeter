@@ -463,6 +463,11 @@ User.createUser = function(newUser, callback){
 	bcrypt.genSalt(10, function(err, salt) {
 	    bcrypt.hash(newUser.password, salt, function(err, hash) {
 	        newUser.password = hash;
+	        newUser.fullName = newUser.firstName
+	        if (newUser.lastName){
+	        	newUser.fullName += " ";
+	        	newUser.fullName += newUser.lastName;
+	        }
 	        newUser.save(callback);
 	    });
 	});
@@ -599,7 +604,7 @@ User.toggleFollow = function(currUserId, otherUserId, cb){
 }
 
 User.usersMatchingSubstr = (substr, cb) => {
-	User.find({'username': {$regex: substr, $options: 'i'}}, null, {limit: 10}, cb)
+	User.find({$or: [{'username': {$regex: substr, $options: 'i'}}, {'fullName': {$regex: substr, $options: 'i'}}]}, null, {limit: 10}, cb)
 }
 
 // User.saveProfilePic = function(userID, callback){

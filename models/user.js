@@ -16,6 +16,9 @@ var UserSchema = mongoose.Schema({
 		trim: true,
 		sparse: true //REVISE DELETE
 	},
+	fullName: {
+		type: String
+	},
 	username: {
 		type: String,
 		index: true,
