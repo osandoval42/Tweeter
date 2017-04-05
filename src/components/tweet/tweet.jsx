@@ -102,7 +102,7 @@ class Tweet extends React.Component{
 		}
 	}
 	tweetButtons(){
-		if (this.props.isReplying){
+		if (this.props.isReplying || this.props.forNotification){
 			return undefined;
 		} else {
 			const tweet = this.props.tweet;

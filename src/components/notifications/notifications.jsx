@@ -28,7 +28,7 @@ class Notifications extends React.Component {
             return <FollowNotification key={follower['_id']} follower={follower}/>
           } else if (notification.type === Constants.MENTION){
             const tweet = notification.tweet;
-            return <Tweet key={tweet['_id']} tweet={tweet}/>
+            return <Tweet key={tweet['_id']} tweet={tweet} forNotification={true}/>
           }
         })}
       </ul>)
