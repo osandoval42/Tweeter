@@ -28,7 +28,8 @@ class Follow extends React.Component {
 		}
 	}
 	componentDidUpdate(prevProps){
-		if (prevProps.followType != this.props.followType){
+		if (prevProps.followType != this.props.followType ||
+			prevProps.profileUser.username != this.props.profileUser.username){
 			this.fetchFollow()
 		}
 	}

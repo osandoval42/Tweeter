@@ -15,7 +15,7 @@ class SessionPopup extends React.Component{
 			<div id="session-popup-holder">
 				<div id="page-blackout" onClick={this.props.closeSessionPopup}>
 				</div>
-				<div id="session-popup" onClick={(proxy) => {proxy.stopPropogation()}}>
+				<div id="session-popup">
 					<SessionForm />
 				</div>
 			</div>

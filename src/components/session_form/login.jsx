@@ -5,7 +5,7 @@ class LogInForm extends React.Component {
 		super(props);
 		this.state = {username: "", password: "" };
 		this.handleSubmit = this.handleSubmit.bind(this);
-		this.DEMO_EMAIL = "Oscar";
+		this.DEMO_EMAIL = "Big_bird";
 		this.DEMO_PASSWORD = "password";
 	}
 	update(property) {

@@ -28,13 +28,6 @@ var UserSchema = mongoose.Schema({
 	password: {
 		type: String
 	},
-	email: {
-		type: String,
-		unique: true,
-		trim: true,
-		index: true,
-		sparse: true //REVISE DELETE
-	},
 	profileImg: {
 		type: String,
 		"default": Default.profileImg

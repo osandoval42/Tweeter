@@ -19,7 +19,7 @@ class TweetingBox extends React.Component{
 			<div id="tweeting-box-holder">
 				<div id="page-blackout" onClick={this.props.closeTweetingInterface}>
 				</div>
-				<div id="tweeting-box" onClick={(proxy) => {proxy.stopPropogation()}}>
+				<div id="tweeting-box">
 					<h5 id="tweeting-box-header">{this.props.fullNameTo ? `Tweet to ${this.props.fullNameTo}` : "Compose new Tweet"}</h5>
 					<TweetingInterface initialContent={this.props.initialContent}/>
 				</div>

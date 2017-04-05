@@ -93,7 +93,7 @@ class TweetView extends React.Component{
 			<div id="tweet-view-holder">
 				<div id="page-blackout" onClick={this.props.closeTheTweetView}>
 				</div>
-				<div id="tweet-view" onClick={(proxy) => {proxy.stopPropogation()}}>
+				<div id="tweet-view">
 					{reply ? this.mainTweet(reply, true) : undefined}
 					{this.mainTweet(tweet)}
 					<Feed tweetViewTweet={tweet} isReply={reply}/>

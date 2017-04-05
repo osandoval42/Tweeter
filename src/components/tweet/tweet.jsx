@@ -127,8 +127,8 @@ class Tweet extends React.Component{
 	}
 	displayUserBox(type){
 		this.stopUserBoxFromDisappearing(type);
-		const tweetId = this.props.tweet['_id']
-		const tweetEl = document.getElementById(tweetId);
+		// const tweetId = this.props.tweet['_id']
+		const tweetEl = document.getElementById(this.tweetElId);
 		if (type !== Constants.USER_PHOTO){
 			this.immediatelyHideUserBox(Constants.USER_PHOTO);
 		}
@@ -139,7 +139,7 @@ class Tweet extends React.Component{
 			this.immediatelyHideUserBox(Constants.FULLNAME);
 		}
 		if (this.props.hideUserBoxesOfOtherTweets){
-			this.props.hideUserBoxesOfOtherTweets(tweetId)
+			this.props.hideUserBoxesOfOtherTweets(this.tweetElId)
 		}
 		let userBox;
 		switch(type){
@@ -162,8 +162,8 @@ class Tweet extends React.Component{
 		if (this.displayCountdown){
 			clearTimeout(this.displayCountdown)
 		}
-		const tweetId = this.props.tweet['_id']
-		const tweetEl = document.getElementById(tweetId);
+		// const tweetId = this.props.tweet['_id']
+		const tweetEl = document.getElementById(this.tweetElId);
 		let userBox;
 		switch(type){
 			case Constants.USER_PHOTO:{
@@ -188,7 +188,7 @@ class Tweet extends React.Component{
 		}
 	}
 	immediatelyHideUserBox(type){
-		const tweetEl = document.getElementById(this.props.tweet['_id']);
+		const tweetEl = document.getElementById(this.tweetElId);
 		let userBox;
 		switch(type){
 			case Constants.USER_PHOTO:{
@@ -233,7 +233,8 @@ class Tweet extends React.Component{
 	}
 	showTweetView(e){
 		const target = e.target;
-		if (target.className === "tweet relative clearfix" || target.className === "tweet-content"){
+		if (target.className === "tweet relative clearfix" || target.className === "tweet-content" ||
+			target.className === "tweet-content-fragment"){
 			this.props.openTheTweetView(this.props.tweet)
 		}
 	}
@@ -302,7 +303,7 @@ class Tweet extends React.Component{
 
 		return allIndices.map((indexObj, i) => {
 			const contentFragment = content.slice(indexObj.firstIdx, indexObj.onePastLastIdx);
-			let className = ""
+			let className = "tweet-content-fragment"
 			let onClick = (()=>{})
 			if (indexObj.type === Constants.AT_SYMBOL){
 				className = "at-symbol"
@@ -318,13 +319,16 @@ class Tweet extends React.Component{
 	}
 	render(){
 		let tweet = this.props.tweet;
-		const tweetId = tweet.retweetId ? tweet.retweetId : tweet['_id'];
+		this.tweetElId = tweet.retweetId ? tweet.retweetId : tweet['_id'];
+		if (this.props.isForTweetView){
+			this.tweetElId = "TweetView" + this.tweetElId;
+		}
 		const user = tweet.user;
 		const profileImg = user.profileImg;
 		let hoverBoxes;
 		let hasHoverBoxesClass = "";
 		const emptyFunction = ()=>{};
-		if (tweet.authorId !== this.props.currentUser['_id'] && 
+		if ((!this.props.currentUser || tweet.authorId !== this.props.currentUser['_id']) && 
 			(!this.props.params || tweet.authorName !== this.props.params.username)){
 			this.hasHoverBoxes = true
 			hasHoverBoxesClass = " has-hover-boxes"
@@ -334,7 +338,7 @@ class Tweet extends React.Component{
 					{this.hoverBox(Constants.FULLNAME)}
 				</div>)
 		}
-		return (<div id={tweetId} className={`tweet relative clearfix${hasHoverBoxesClass}`} key={tweetId} onClick={this.hasHoverBoxes ? this.showTweetView.bind(this) : emptyFunction}>
+		return (<div id={this.tweetElId} className={`tweet relative clearfix${hasHoverBoxesClass}`} key={this.tweetElId} onClick={this.showTweetView.bind(this)}>
 				{this.retweeter.call(this)}
 				{this.authorRepliedTo.call(this)}
 				<div id="tweet-img-container" className="clearfix" onClick={this.hasHoverBoxes ? this.toUser.bind(this) : emptyFunction} 

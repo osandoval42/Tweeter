@@ -82,8 +82,14 @@ class Feed extends React.Component {
 		}
 	}
 	hideUserBoxesOfOtherTweets(tweetWithUserBoxDisplayedId){
-		const tweets = this.props.tweets;
-		tweets.forEach((tweetId) => {
+		const tweets = this.props.tweetViewTweet ? this.props.replies : this.props.tweets;	
+		tweets.forEach((tweetId, val) => {
+			if (val.retweetId){
+				tweetId = val.retweetId;
+			}
+			if (this.props.tweetViewTweet){
+				tweetId = "TweetView" + tweetId;
+			}
 			if (tweetId !== tweetWithUserBoxDisplayedId){
 				this.hideUserBoxesOfTweet(tweetId);
 			}
@@ -102,7 +108,10 @@ class Feed extends React.Component {
 			const tweets = document.getElementById('feed-content');
 			const lastTweetFetched = tweets.lastChild;
 			if (lastTweetFetched){
-				const lastTweetFetchedId = lastTweetFetched.id;
+				let lastTweetFetchedId = lastTweetFetched.id;
+				if (lastTweetFetchedId.search(/^TweetView/) !== -1){
+					lastTweetFetchedId = lastTweetFetchedId.slice(9);
+				}
 				this.fetchTweets(lastTweetFetchedId);
 			}
 		}
@@ -151,6 +160,10 @@ class Feed extends React.Component {
 		const tweets = this.props.tweetViewTweet ? this.props.replies : this.props.tweets;
 		let nonHomeFeed = this.props.tweetViewTweet || this.props.isOnHomePage ? "" : " non-home-feed";
 		let tweetViewFeed = this.props.tweetViewTweet ? " tweet-view-feed" : "";
+		let isForTweetView
+		if (this.props.tweetViewTweet){
+			isForTweetView = true;
+		}
 		if (this.props.isReply){
 			tweetViewFeed += "-with-reply"
 		}
@@ -161,7 +174,7 @@ class Feed extends React.Component {
 						<ul id="feed-content">
 						{   tweets.map((tweet) => {
 							const tweetId = tweet['_id']
-							return (<Tweet key={tweetId} params={this.props.params} hideUserBoxesOfOtherTweets={this.hideUserBoxesOfOtherTweets.bind(this)} tweet={tweet}/>);
+							return (<Tweet key={tweetId} params={this.props.params} isForTweetView={isForTweetView} hideUserBoxesOfOtherTweets={this.hideUserBoxesOfOtherTweets.bind(this)} tweet={tweet}/>);
 						})}
 						</ul>
 					</div>
