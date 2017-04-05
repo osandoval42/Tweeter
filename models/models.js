@@ -747,7 +747,11 @@ function shuffle(array) {
 
 
 User.whoToFollow = (currUser, cb) => {
-	User.find({}).exec()
+	let query = {};
+	if (currUser){
+		query['_id'] = {'$ne': currUser['_id'] };
+	}
+	User.find(query).exec()
 	.then((users) => {
 
 		let usersBeingFollowedByMe = {};
