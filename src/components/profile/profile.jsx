@@ -5,6 +5,7 @@ import ProfileTweets from './profile_tweets_container';
 import Follow from './follow_container';
 import Likes from './likes';
 import Trending from '../trending/trending_container';
+import Defaults from '../../util/defaults';
 
 
 class Profile extends React.Component { 
@@ -67,7 +68,7 @@ class Profile extends React.Component {
 		const username = this.props.profileUser.username;
 		if (!this.props.currUser || this.props.currUser.username !== username){
 			const fullNameTo = this.fullNameOfUser(this.props.profileUser);
-			return username ? <button id="tweet-to-btn" onClick={this.tweetToButtonClicked.bind(this, username, fullNameTo)}>Tweet to {fullNameTo}</button> : <a>invalid user</a>;
+			return username ? <button id="tweet-to-btn" onClick={this.tweetToButtonClicked.bind(this, username, fullNameTo)}>Tweet to {fullNameTo}</button> : undefined;
 		}
 	}
 	getImageFromUser(type){
@@ -123,8 +124,8 @@ class Profile extends React.Component {
 	}
 	render(){
 		const user = this.props.profileUser;
-		const profileImg = user.profileImg;
-		const coverImg = user.coverImg;
+		const profileImg = user.profileImg || Defaults.profileImg;
+		const coverImg = user.coverImg || Defaults.coverImg;
 		return (
 			<div>
 				{this.profileImgUpload()}
