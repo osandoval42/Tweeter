@@ -3,7 +3,7 @@ import Panel from './panel_container';
 import Constants from '../../constants/constants';
 import ProfileTweets from './profile_tweets_container';
 import Follow from './follow_container';
-import Likes from './likes';
+import Likes from './likes_container';
 import Trending from '../trending/trending_container';
 import Defaults from '../../util/defaults';
 

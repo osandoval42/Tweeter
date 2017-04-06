@@ -733,15 +733,14 @@ User.remove().exec()
 .then(() => {
 	const originalTweet = cacawww;
 	return like(LarryBird, originalTweet);})
-
-
-
-
-
-
-// .catch((err) => {
-// 	console.error(`err is ${err}`)
-// })
+.then(() => {
+	console.log("DB SEEDED")
+	process.exit(0);
+})
+.catch((err) => {
+	console.error(`err is ${err}`)
+	process.exit(1);
+})
 
 
 
