@@ -15,6 +15,7 @@ var LocalStrategy = require('passport-local').Strategy;
 var User = require('./models/user');
 import Tweet from './models/tweet'
 import apiRouter from './api';
+import Keys from './keys';
 
 export const nodeEnv = env.NODE_ENV || 'development';
 
@@ -62,7 +63,7 @@ export default {
 	}, 
 	configAuth(server){
 		  server.use(session({
-		    secret: 'abracadabra',
+		    secret: Keys.sessionSalt,
 		    saveUninitialized: true,
 		    resave: true
 		  }));
