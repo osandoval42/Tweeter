@@ -25,7 +25,7 @@ export const logStars = function(message) {
 };
 const DATABASEUrl = 'mongodb://localhost/jobhunt_dbseeding'
 export default {
-  port: env.PORT || 3000,
+  port: env.PORT || 8080,
   host: env.HOST || '0.0.0.0',
   get serverUrl() {
     return `http://${this.host}:${this.port}`;
@@ -62,7 +62,7 @@ export default {
 	}, 
 	configAuth(server){
 		  server.use(session({
-		    secret: 'secret',
+		    secret: 'abracadabra',
 		    saveUninitialized: true,
 		    resave: true
 		  }));
