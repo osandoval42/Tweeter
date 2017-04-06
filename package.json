@@ -54,5 +54,15 @@
     "eslint-plugin-react": "^6.4.0",
     "nodemon": "^1.11.0",
     "webpack": "^1.13.2"
+  },
+  "babel": {
+    "env": {
+      "production": {
+        "plugins": [
+          "transform-react-constant-elements",
+          "transform-react-inline-elements"
+        ]
+      }
+    }
   }
 }
