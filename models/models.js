@@ -13,16 +13,16 @@ module.exports.Tweet = Tweet;
 module.exports.User = User;
 module.exports.Hashtag = Hashtag;
 
-String.prototype.capitalize = function(){
+String.prototype.capitalize = function(){ //SKIP
 	return this.charAt(0).toUpperCase() + (this.slice(1).split('').map((char)=>{return char.toLowerCase();}).join(""));
 }
 
-const verifyTweetedAtOriginalAuthor = (allTweetedAt, originalTweet, cb) => {
+const verifyTweetedAtOriginalAuthor = (allTweetedAt, originalTweet, cb) => { //SKIP
 	const originalAuthorId = originalTweet.authorId;
 	cb(allTweetedAt.some((tweetedAt) => {return tweetedAt['userId'].toString() == originalAuthorId;}));
 }
 
-const parseAtSymbols = (content, cb) => {
+const parseAtSymbols = (content, cb) => { //SKIP
 	let namesTweetedAt = content.split('@');
 	let tweetedAt = [];
 	async.eachSeries(namesTweetedAt, (stringWithName, next) => {
@@ -46,7 +46,7 @@ const parseAtSymbols = (content, cb) => {
 	})
 }
 
-const parseHashtags = (content, cb) => {
+const parseHashtags = (content, cb) => { //SKIP
 	let hashTagsWithExtra = content.split('#').slice(1);
 	let hashTags = [];
 	if (hashTagsWithExtra.length === 0){return cb(hashTags);}
@@ -104,11 +104,11 @@ const parseHashtags = (content, cb) => {
 //     });
 // });
 
-Tweet.getTweetById = function(id, callback){
+Tweet.getTweetById = function(id, callback){ //OPT
 	Tweet.findById(id, callback);
 }
 
-User.getUserById = function(id, callback){
+User.getUserById = function(id, callback){ //OPT
 	User.findById(id, callback);
 }
 
@@ -117,7 +117,7 @@ const Constants = {
 	MENTION: "MENTION"
 }
 
-function fullNameOfUser(user){
+function fullNameOfUser(user){ //OPT
       let names = []
       if (user.firstName) {names.push(user.firstName)};
       if (user.lastName) {names.push(user.lastName)};
@@ -163,7 +163,7 @@ User.createMentionNotification = (followedUser, tweet, cb) => {
 
 const getFollowing = (userID, callback, type) => {
 	const id = mongoose.Types.ObjectId(userID);
-	User.findById(id, (err, userOfInterest) => {
+	User.findById(id, 'usersBeingFollowed usersFollowing', (err, userOfInterest) => {
 		if (err){
 			return callback(err);
 		} 
@@ -274,9 +274,9 @@ Tweet.delete = (currUserId, tweetId, cb) => {
 	})
 }
 
-const getFeedTweets = (query, cb) => {
+const getFeedTweets = (query, cb) => { //OPT
 	Tweet.find(query ,null, 
-		{limit: 10, sort: { _id: -1}}, //change to limit: 8
+		{limit: 8, sort: { _id: -1}}, //change to limit: 8
 		(err, tweets) => {
 			const jsonTweets = tweets.map((tweet) => {return tweet.toObject();});
 			async.eachSeries(jsonTweets, (tweet, next) => {
@@ -287,42 +287,34 @@ const getFeedTweets = (query, cb) => {
 	})
 }
 
-Tweet.tweetReplies = (tweetId, lastDownloadedReplyId, cb) => {
+Tweet.tweetReplies = (tweetId, lastDownloadedReplyId, cb) => { //OPT
 	const query = lastDownloadedReplyId ? {_id: {$lt: lastDownloadedReplyId}} : {};
 	query.replyToId = tweetId;
 	getFeedTweets(query, cb);
 }
 
-Tweet.feedTweets = (currUserId, lastDownloadedTweetId, cb) => {
+Tweet.feedTweets = (currUser, lastDownloadedTweetId, cb) => { //OPT
 	const query = lastDownloadedTweetId ? {_id: {$lt: lastDownloadedTweetId}} : {};
-	if (currUserId){
-		User.usersBeingFollowed(currUserId, (err, usersBeingFollowed) => {
-			if (err){return cb(err);}
-
-			const beingFollowedIds = usersBeingFollowed.map((user) => {return user['_id'];});
-			query.authorId = {$in: beingFollowedIds};
-			getFeedTweets(query, cb);
-		})
-	} else {
-		getFeedTweets(query, cb);
+	if (currUser){
+		query.authorId = {$in: currUser.usersBeingFollowed};
 	}
+	getFeedTweets(query, cb);
 }
 
-Tweet.userTweets = (userId, lastDownloadedTweetId, cb) => {
+Tweet.userTweets = (userId, lastDownloadedTweetId, cb) => { //OPT
 	const query = lastDownloadedTweetId ? {_id: {$lt: lastDownloadedTweetId}} : {};
 	query.authorId = userId;
 	getFeedTweets(query, cb);
 }
 
-Tweet.userTweetsWithoutReplies = (userId, lastDownloadedTweetId, cb) => {
+Tweet.userTweetsWithoutReplies = (userId, lastDownloadedTweetId, cb) => { //OPT
 	const query = lastDownloadedTweetId ? {_id: {$lt: lastDownloadedTweetId}} : {};
 	query.authorId = userId;
 	query.replyToId = {$exists: false};
 	getFeedTweets(query, cb);
 }
 
-Tweet.getTweetCount = (userId, cb) => {
-	const query = {authorId: userId};
+Tweet.getTweetCount = (userId, cb) => { //OPT
 	Tweet.count({authorId: userId}, (err, count) => {
 		if (err) {cb(err);}
 		return cb(null, count);
@@ -362,7 +354,7 @@ Tweet.replyTweet = (content, currUserId, originalTweet, cb, forSeeding) => { //R
 //need _id username, firstname, lastname, coverphoto, profilephoto
 //usersBeingfollowed
 //usersFollowing
-const getAuthorInfoAndNext = (tweet, next, finalCB, tweetToReturn) => {
+const getAuthorInfoAndNext = (tweet, next, finalCB, tweetToReturn) => { 
 			User.findById(tweet.authorId, 'username firstName lastName coverImg profileImg usersBeingFollowed usersFollowing', (err, user) => {
 				if (err) {throw err;} //REVISE
 				tweet.authorName = user.username;
@@ -377,21 +369,16 @@ const getAuthorInfoAndNext = (tweet, next, finalCB, tweetToReturn) => {
 			})
 }
 
-const getTweetRepliedToAndNext = (tweet, next, finalCB) => {
+const getTweetRepliedToAndNext = (tweet, next, finalCB) => { //OPT
 	if (tweet.replyToId){
 		Tweet.findById(tweet.replyToId, (err, tweetRepliedTo) => {
 			if (err) {throw err;} //REVISE
 
-			User.getUserById(tweetRepliedTo.authorId, (err, user) => {
+			User.findOne({'_id': tweetRepliedTo.authorId}).select('username').exec((err, user) => {
 				if (err) {throw err;} //REVISE
-
 				tweet.tweetRepliedTo = {
 					_id: tweetRepliedTo['id'],
-					content: tweetRepliedTo.content,
-					authorName: user.username,
-					firstName: user.firstName,
-					lastName: user.lastName,
-					user: {profileImg: user.profileImg}
+					authorName: user.username
 				};
 				getAuthorInfoAndNext(tweet, next, finalCB);
 			})
@@ -401,13 +388,16 @@ const getTweetRepliedToAndNext = (tweet, next, finalCB) => {
 	}
 }
 
-const determineIfRetweet = (tweet, next, finalCB, tweetToReturn) => {
+const determineIfRetweet = (tweet, next, finalCB, tweetToReturn) => { //OPT
 	const originalId = tweet.originalTweetId;
 	if (originalId){
 		Tweet.getTweetById(originalId, (err, originalTweet) => {
 			if (err) {throw err;} //REVISE
 			const jsonOriginalTweet = originalTweet.toObject();
 			tweet.originalTweet = jsonOriginalTweet;
+			tweet.firstName = undefined;
+			tweet.lastName = undefined;
+			tweet.user = undefined;
 			getAuthorInfoAndNext(jsonOriginalTweet, next, finalCB, tweetToReturn);
 		})
 	} else {
@@ -415,16 +405,16 @@ const determineIfRetweet = (tweet, next, finalCB, tweetToReturn) => {
 	}
 }
 
-const getLikesAndNext = (tweetToGetLikesFor, next, finalCB, tweetToReturn) => {
-	Like.find({tweetId: tweetToGetLikesFor['_id']}, (err, likes) => {
+const getLikesAndNext = (tweetToGetLikesFor, next, finalCB, tweetToReturn) => { //OPT
+	Like.find({tweetId: tweetToGetLikesFor['_id']}, 'userId', (err, likes) => {
 		if (err) {throw err;} //REVISE
 		tweetToGetLikesFor.likes = likes;
 		getRetweetsAndNext(tweetToGetLikesFor, next, finalCB, tweetToReturn);
 	})
 }
 
-const getRetweetsAndNext = (tweetToGetRetweetsFor, next, finalCB, tweetToReturn) => {
-	Tweet.find({originalTweetId: tweetToGetRetweetsFor['_id']}, (err, retweets) => {
+const getRetweetsAndNext = (tweetToGetRetweetsFor, next, finalCB, tweetToReturn) => { //OPT
+	Tweet.find({originalTweetId: tweetToGetRetweetsFor['_id']}, 'authorId', (err, retweets) => {
 		if (err) {throw err;} //REVISE
 		tweetToGetRetweetsFor.retweets = retweets;
 		computeTweetTimeAndNext(tweetToGetRetweetsFor, next, finalCB, tweetToReturn);
@@ -435,7 +425,7 @@ const secondsInDay = 86400;
 const secondsInHour = 3600;
 const months = ["", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept",  "Oct",  "Nov",  "Dec"];
 
-const computeTweetTimeAndNext = (tweetToComputeTimeFor, next, finalCB, tweetToReturn) => {
+const computeTweetTimeAndNext = (tweetToComputeTimeFor, next, finalCB, tweetToReturn) => { //OPT
 	const now = new Date();
 	const createdAt = tweetToComputeTimeFor.createdAt;
 	const diffInSeconds = (now - createdAt) / 1000;
@@ -458,7 +448,7 @@ const computeTweetTimeAndNext = (tweetToComputeTimeFor, next, finalCB, tweetToRe
 	getReplyCountAndComplete(tweetToComputeTimeFor, next, finalCB, tweetToReturn);
 }
 
-const getReplyCountAndComplete = (tweetToGetReplyCountFor, next, finalCB, tweetToReturn) => {
+const getReplyCountAndComplete = (tweetToGetReplyCountFor, next, finalCB, tweetToReturn) => { //OPT
 	Tweet.count({replyToId: tweetToGetReplyCountFor['_id']}, (err, count) => {
 		if (err) {throw err;}
 
@@ -504,8 +494,8 @@ User.getUserByUsername = function(username, callback){
      });;
 }
 
-User.getUserForProfileByUsername = (username, cb) => {
-	User.getUserByUsername(username, (user, err) => {
+User.getUserForProfileByUsername = (username, cb) => {//Opt further
+	User.findOne({username: username}, 'firstName lastName username profileImg coverImg usersBeingFollowed usersFollowing', (err, user) => {
 		if (err){return cb(err)};
 		if (!user){return cb(null, user)}
 		Like.count({userId: user['_id']}, (err, count)=> {
@@ -617,7 +607,7 @@ User.toggleFollow = function(currUserId, otherUserId, cb){
 }
 
 User.usersMatchingSubstr = (substr, cb) => {
-	User.find({$or: [{'username': {$regex: substr, $options: 'i'}}, {'fullName': {$regex: substr, $options: 'i'}}]}, null, {limit: 10}, cb)
+	User.find({$or: [{'username': {$regex: substr, $options: 'i'}}, {'fullName': {$regex: substr, $options: 'i'}}]}, 'firstName lastName username profileImg', {limit: 10}, cb)
 }
 
 // User.saveProfilePic = function(userID, callback){
@@ -764,7 +754,7 @@ User.whoToFollow = (currUser, cb) => {
 	if (currUser){
 		query['_id'] = {'$ne': currUser['_id'] };
 	}
-	User.find(query).exec()
+	User.find(query).select('username profileImg firstName lastName usersFollowing').exec()
 	.then((users) => {
 
 		let usersBeingFollowedByMe = {};
@@ -821,7 +811,7 @@ Hashtag.trending = (cb) => {
 	Hashtag.find({}, null, {limit: 10, sort: {'trendCount': -1}}, cb);
 }
 
-Tweet.hashtagTweets = (hashtagName, lastDownloadedTweetId, cb) => {
+Tweet.hashtagTweets = (hashtagName, lastDownloadedTweetId, cb) => { //OPT
 	const query = lastDownloadedTweetId ? {_id: {$lt: lastDownloadedTweetId}} : {};
 	if (hashtagName.length > 0){
 		query.hashtags = hashtagName.capitalize();

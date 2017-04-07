@@ -31,7 +31,7 @@ class Tweet extends React.Component{
 	authorRepliedTo(){
 		const tweet = this.props.tweet;
 		const repliedTo = tweet.tweetRepliedTo;
-		return repliedTo ? (<span className="top-of-tweet">In reply to @{repliedTo.authorName}</span>) : undefined;
+		return repliedTo ? (<span className="top-of-tweet" onClick={this.toUserViaAt.bind(this, repliedTo.authorName)}>In reply to @{repliedTo.authorName}</span>) : undefined;
 	}
 	getCount(type){
 		const tweet = this.props.tweet;

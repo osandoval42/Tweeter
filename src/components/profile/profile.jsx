@@ -11,6 +11,7 @@ import Defaults from '../../util/defaults';
 class Profile extends React.Component { 
 	constructor(props) {
 		super(props);
+		this.props.resetTweets();
 		const username = this.props.params.username;
 		this.props.getProfileUser(username);
 	}

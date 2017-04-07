@@ -1,7 +1,7 @@
 import {connect} from 'react-redux';
 import Profile from './profile';
 import {fetchProfileUser, uploadProfileImg, uploadCoverImg} from '../../actions/user_actions';
-import {openTweetingInterface} from '../../actions/tweet_actions';
+import {openTweetingInterface, resetTweets} from '../../actions/tweet_actions';
 import {openSessionPopup} from '../../actions/session_actions';
 
 const mapStateToProps = (state) => ({
@@ -24,6 +24,9 @@ const mapDispatchToProps = (dispatch) => ({
 	},
 	openSessionPopup: () => {
 		return dispatch(openSessionPopup())
+	},
+	resetTweets: () => {
+		return dispatch(resetTweets())
 	}
 });
 
