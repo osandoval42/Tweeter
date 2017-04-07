@@ -548,11 +548,10 @@ const follow = (followerID, toFollowId, cb) => {
 							followerObj.tweetCount = count;
 							User.createFollowNotification(toFollowId, follower, (err, _) => {
 								if (err){																		
-									cb(true);
-								} else {
-									cb(null, followerObj);
-								}
+									console.error('follow notification creation failed');
+								} 
 							})
+							return cb(null, followerObj);
 						})
 					}
 				)
