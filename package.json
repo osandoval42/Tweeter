@@ -4,8 +4,8 @@
   "description": "First Job Hunt Project",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon --exec babel-node app.js --ignore public/",
-    "test": "nodemon --exec babel-node --inspect app.js --ignore public/",
+    "start": "nodemon --exec babel-node app.js",
+    "test": "nodemon --exec babel-node --inspect app.js",
     "dev": "webpack -wd",
     "seed": "babel-node tmp_mongo_scripts/seed_db.js"
   },
@@ -54,15 +54,5 @@
     "eslint-plugin-react": "^6.4.0",
     "nodemon": "^1.11.0",
     "webpack": "^1.13.2"
-  },
-  "babel": {
-    "env": {
-      "production": {
-        "plugins": [
-          "transform-react-constant-elements",
-          "transform-react-inline-elements"
-        ]
-      }
-    }
   }
 }

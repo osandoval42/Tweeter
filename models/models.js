@@ -578,7 +578,7 @@ const unfollow = (unfollowerId, toUnfollowId, cb) => {
 				User.findByIdAndUpdate(
 					unfollowerId,
 					{$pull: {usersBeingFollowed: toUnfollowId}},
-					{safe: true, new: true, fields: {username: 1, usersBeingFollowed: 1, usersFollowing: 1, notifications: 1, profileImg: 1, coverImg: 1}},
+					{safe: true, new: true, fields: {username: 1, usersBeingFollowed: 1, usersFollowing: 1, notifications: 1, profileImg: 1, coverImg: 1, firstName: 1, lastName: 1}},
 					function(err, follower){
 						let followerObj = follower.toObject();
 						Tweet.getTweetCount(followerObj['_id'], (err, count) => {
