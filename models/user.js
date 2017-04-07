@@ -9,15 +9,18 @@ var UserSchema = mongoose.Schema({
 	firstName: {
 		type: String,
 		trim: true,
-		sparse: true //REVISE DELETE
+		sparse: true, //REVISE DELETE
+		index: true
 	},
 	lastName: {
 		type: String,
 		trim: true,
-		sparse: true //REVISE DELETE
+		sparse: true, //REVISE DELETE
+		index: true
 	},
 	fullName: {
-		type: String
+		type: String,
+		index: true
 	},
 	username: {
 		type: String,

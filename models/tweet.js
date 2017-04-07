@@ -21,8 +21,8 @@ const TweetSchema = mongoose.Schema({ //REVISE img data
 		type: mongoose.Schema.Types.ObjectId,
 		index: true
 	},
-	tweetedAt: {type: Array, "default": []},
-	hashtags: {type: Array, "default": []},
+	tweetedAt: {type: Array, "default": [], index: true},
+	hashtags: {type: Array, "default": [], index: true},
 	likeCount: {
 		type: Number
 	}

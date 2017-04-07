@@ -128,7 +128,11 @@ User.createFollowNotification = (followedId, followerModel, cb) => { //REVISE pr
 	User.getUserById(followedId, (err, followedUser) => {
 		if (err){cb(err);}
 		const follower = followerModel.toObject();
-		follower.notifications = null;
+		follower.notifications = undefined;
+		follower.coverImg = undefined;
+		follower.password = undefined;
+		follower.usersBeingfollowed = undefined;
+		follower.usersFollowing = undefined;
 		follower.fullName = fullNameOfUser(follower);
 		const followNotification = {
 			type: Constants.FOLLOW,
@@ -575,13 +579,7 @@ const unfollow = (unfollowerId, toUnfollowId, cb) => {
 							if (err) {return cb(true);};
 							followerObj.password = "";
 							followerObj.tweetCount = count;
-							User.createFollowNotification(toUnfollowId, follower, (err, _) => {
-								if (err){
-									cb(true);
-								} else {
-									cb(null, followerObj);
-								}
-							})
+							cb(null, followerObj);
 						})
 					}
 				)
