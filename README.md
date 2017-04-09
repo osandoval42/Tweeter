@@ -71,3 +71,7 @@ const getFollowing = (userID, callback, type) => {
 Upon each character that is changed in the `SearchBar` component, its state is updated and an AJAX request is made to retrieve all users for whom the entered text matches a substring of `username` or `fullName`.  With a little Regex magic Mongo returns all matches in an instant.
 
 ![](https://github.com/osandoval42/TwitterClone/blob/master/screenshots/searcher.png "search")
+
+## Author
+
+Oscar Sandoval
