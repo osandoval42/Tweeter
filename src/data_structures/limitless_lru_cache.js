@@ -97,18 +97,18 @@ LimitLessLRUCache.prototype.insertNewestNodeYet = function(key, val){
 	this.joinNodes(newNode, afterHead);
 }
 
-LimitLessLRUCache.prototype.updateNode = function(key, val){
-	if (this.keys[key]){
-		this.keys[key].val = val;
-	}
-}
-
 LimitLessLRUCache.prototype.insertOldestNodeYet = function(key, val){
 	if (this.val(key) === undefined){
 		let newNode = this.createNewNode(key, val);
 		let beforeTail = this.tail.prev;
 		this.joinNodes(beforeTail, newNode);
 		this.joinNodes(newNode, this.tail);
+	}
+}
+
+LimitLessLRUCache.prototype.updateNode = function(key, val){
+	if (this.keys[key]){
+		this.keys[key].val = val;
 	}
 }
 
