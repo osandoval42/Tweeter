@@ -48,6 +48,8 @@ LimitLessLRUCache.prototype.insertOldestNodeYet = function(key, val){
 ```
 ### Following and Followers
 
+![](https://github.com/osandoval42/TwitterClone/blob/master/screenshots/Following.png "Following")
+
 Upon clicking the following or followers tab on a user's profile, the `Follow` component is rendered and the dispatching of `fetchFollowers` or `fetchFollowing` results in express being asked for the appropriate user data.  For each `User` document Mongo stores the ids of each follower and user being followed in arrays titled `usersBeingFollowed` and `usersFollowing`.  Given the appropriate array, the relevant info for each user is returned to the client where it is stored in the `UserReducer`.  A `User` component is rendered for each user in `Follow`, and is also used when hovering over a tweet.
 
 ```javascript
