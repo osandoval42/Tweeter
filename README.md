@@ -8,11 +8,11 @@ Inspired by Twitter and the beautiful birds of the world, Tweeter.Solutions is a
 ### Tweets Feed
 Whether viewing the homepage, a particular user's tweets, the tweets a user has liked, or the replies to a given tweet, the user is always looking at a `Feed` component consisting of many `Tweet` components.  A `Feed` component always renders all tweets from the `TweetReducer`, with the exception of the `Feed` of replies rendered after clicking on an individual tweet, which renders all tweets in `RepliesReducer`.  
 
-PICTURE OF REPLIES FEED
+![](https://github.com/osandoval42/TwitterClone/blob/master/screenshots/replies.png "Replies")
 
 To prevent unecessary load on the server and speed up the user experience, tweets are pulled down 8 at a time, with 8 additional tweets being fetched each time the user scrolls to the bottom of the feed.  On every fetch a spinner, courtesy of spin.js, is presented to shorten the percieved load time.
 
-PICTURE OF LOADING
+![](https://github.com/osandoval42/TwitterClone/blob/master/screenshots/spin.png "Spinner")
 
 For any given feed, a tweet is only rendered once, in its most recent version, regardless of how many times it was retweeted.  Hence when a new tweet comes in (that was recently posted), if it's a retweet with an `originalTweet['_id]` equal to the `id` of an already rendered tweet, then the older tweet should leave the screen to make room for the newer one.  Likewise, when an older tweet comes in (as result of a user scrolling down on the `Feed`), it should not be rendered if it is an older version of an already rendered tweet.
 
