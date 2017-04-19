@@ -37,6 +37,8 @@ class Navbar extends React.Component{
 	toNotificationsPage(){
 		if (this.props.currentUser){
 			browserHistory.push(`/notifications`);
+		} else {
+			this.props.openSessionPopup();
 		}
 	}
 	fullName(){

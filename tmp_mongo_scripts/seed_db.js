@@ -394,16 +394,10 @@ User.remove().exec()
 	const content = "Hoot hoot hoot hoot hoot"
 	return postTweet(content , BabyFace)})
 .then(() => {
-	const content = "Don't let the baby face fool you"
-	return postTweet(content , BabyFace)})
-.then(() => {
 	const content = "I don't follow, I lead!"
 	return postTweet(content , LittleRed)})
 .then(() => {
 	const content = "@Eagle_eye You wanna mess with me!"
-	return postTweet(content , LittleRed)})
-.then(() => {
-	const content = "@Bluejay I'm flying south next month #MIGRATIONLIFE"
 	return postTweet(content , LittleRed)})
 .then(() => {
 	const content = "Tweet tweet!"
@@ -505,10 +499,6 @@ User.remove().exec()
 	const originalTweet = candidacyAnnouncement;
 	return postReply(content, Falco, originalTweet);})
 .then(() => {
-	const content = "@Big_bird CACAW CACAW CACAW!";
-	const originalTweet = candidacyAnnouncement;
-	return postReply(content, HoOh, originalTweet);})
-.then(() => {
 	const content = "@Big_bird tweet tweet";
 	const originalTweet = candidacyAnnouncement;
 	return postReply(content, LittleRed, originalTweet);})
@@ -532,9 +522,6 @@ User.remove().exec()
 	return retweet(Bluejay, originalTweet);})
 .then(() => {
 	const originalTweet = candidacyAnnouncement;
-	return retweet(Falco, originalTweet);})
-.then(() => {
-	const originalTweet = candidacyAnnouncement;
 	return retweet(Birdman, originalTweet);})
 .then(() => {
 	const originalTweet = candidacyAnnouncement;
@@ -554,6 +541,9 @@ User.remove().exec()
 .then(() => {
 	const originalTweet = concertAnticipation;
 	return retweet(Genghis, originalTweet);})
+.then(() => {
+	const originalTweet = candidacyAnnouncement;
+	return retweet(Falco, originalTweet);})
 .then(() => {
 	const originalTweet = migrationTweet;
 	return retweet(HoOh, originalTweet);})
@@ -585,13 +575,23 @@ User.remove().exec()
 	const originalTweet = amen;
 	return retweet(Falco, originalTweet);})
 .then(() => {
-	const content = "@Minerva @Falco #Lovebirds";
+	const content = "@Big_bird CACAW CACAW CACAW!";
+	const originalTweet = candidacyAnnouncement;
+	return postReply(content, HoOh, originalTweet);})
+.then(() => {
+	const content = "@Bluejay I'm flying south next month #MIGRATIONLIFE"
+	return postTweet(content , LittleRed)})
+.then(() => {
+	const content = "@Minerva @Falco42 #Lovebirds";
 	const originalTweet = loveBirdsTweet;
 	return postReply(content, Bluejay, originalTweet);})
 .then((newReply) => {
 	loveAccusation = newReply;
 	const originalTweet = candidacyAnnouncement;
 	return like(Bluejay, originalTweet);})
+.then(() => {
+	const content = "Don't let the baby face fool you"
+	return postTweet(content , BabyFace)})
 .then(() => {
 	const originalTweet = candidacyAnnouncement;
 	return like(HoOh, originalTweet);})
@@ -745,10 +745,5 @@ User.remove().exec()
 
 
 // .then(() => {return delay(5000);})
-
-
-
-
-
 
 
