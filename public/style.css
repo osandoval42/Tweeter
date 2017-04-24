@@ -343,6 +343,7 @@ container:hover{
 	display: block;
 	position: relative;
 	cursor: pointer;
+	width: 588px;
 }
 
 .non-home-feed{
