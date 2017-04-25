@@ -732,7 +732,7 @@ User.uploadProfileImg = (userId, profileImg, cb) => {
         } else {
         	smallTargetHeight = 96;
         	smallTargetWidth = 288;
-        	bigTargetWidth = 1560;
+        	bigTargetWidth = 1100;
         	bigTargetHeight = 420;
         }
 

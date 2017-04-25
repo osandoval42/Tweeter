@@ -80,7 +80,7 @@ function addPicture(location, user, profile){
         } else {
         	smallTargetHeight = 96;
         	smallTargetWidth = 288;
-        	bigTargetWidth = 1560;
+        	bigTargetWidth = 1200;
         	bigTargetHeight = 420;
         }
 
