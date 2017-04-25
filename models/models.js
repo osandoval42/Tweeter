@@ -6,7 +6,6 @@ import async from 'async';
 var bcrypt = require('bcryptjs');
 var mongoose = require('mongoose');
 import es6Promise from 'es6-promise';
-import imagemagick from 'imagemagick';
 import sharp from 'sharp';
 mongoose.Promise = es6Promise.Promise;
 

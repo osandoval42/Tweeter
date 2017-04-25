@@ -99,6 +99,11 @@ export default {
 		  });
 	},
 	setupRoutes(server){
+		server.get('*.js', function (req, res, next) {
+		  req.url = req.url + '.gz';
+		  res.set('Content-Encoding', 'gzip');
+		  next();
+		});
 		server.use('/api', apiRouter);
 		server.get('/*', (req, res) => {
 			let currUser;
