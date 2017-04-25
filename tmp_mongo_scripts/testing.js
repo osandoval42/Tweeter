@@ -8,7 +8,3 @@ const db = config.configDB();
 
 
 
-        // "plugins": [
-        //   "transform-react-constant-elements",
-        //   "transform-react-inline-elements"
-        // ]
