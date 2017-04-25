@@ -7,3 +7,8 @@ mongoose.Promise = es6Promise.Promise;
 const db = config.configDB();
 
 
+
+        // "plugins": [
+        //   "transform-react-constant-elements",
+        //   "transform-react-inline-elements"
+        // ]

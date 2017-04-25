@@ -5,7 +5,6 @@ import ProfileTweets from './profile_tweets_container';
 import Follow from './follow_container';
 import Likes from './likes_container';
 import Trending from '../trending/trending_container';
-import Defaults from '../../util/defaults';
 
 
 class Profile extends React.Component { 
@@ -125,8 +124,8 @@ class Profile extends React.Component {
 	}
 	render(){
 		const user = this.props.profileUser;
-		const profileImg = user.profileImg || Defaults.profileImg;
-		const coverImg = user.coverImg || Defaults.coverImg;
+		const profileImg = user.largeProfileImg;
+		const coverImg = user.largeCoverImg;
 		return (
 			<div>
 				{this.profileImgUpload()}

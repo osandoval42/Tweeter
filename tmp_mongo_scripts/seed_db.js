@@ -2,6 +2,7 @@ import {User, Like, Tweet, Hashtag} from '../models/models'
 import config from '../config';
 var mongoose = require('mongoose');
 import es6Promise from 'es6-promise';
+import sharp from 'sharp';
 
 var fs = require('fs');
 // fs.readFile('./tweeter_pictures/ho-oh_profile.png', 'base64', function(err, data){
@@ -29,19 +30,80 @@ function addPicture(location, user, profile){
 				} else {
 					throw err;
 				}
+				let largePhotoString;
+				let smallPhotoString;
+				let type;
 
-				user[profile ? "profileImg" : "coverImg"] = base64Data;
-				user.save((err, updatedUser) => {
-					if (err){throw err;}
-					else {
-						resolve(user);
-					}
+				if (profile){
+					largePhotoString = "largeProfileImg";
+					smallPhotoString = "profileImg"
+					type = "profile"
+				}  else {
+					largePhotoString = "largeCoverImg";
+					smallPhotoString = "coverImg";
+					type = "cover";				
+				}
+
+				downsizeImg(base64Data, type, (err, small, big) => {
+					user[smallPhotoString] = small;
+					user[largePhotoString] = big;
+					user.save((err, updatedUser) => {
+						if (err){throw err;}
+						else {
+							resolve(user);
+						}
+					})
 				})		
 			}
 		})
 	})
 	return promise;
 }
+
+
+ const downsizeImg = (imgData, type, cb) => {
+ 		let idx = imgData.indexOf(',');
+ 		const slicedImgData = imgData.slice(idx + 1);
+ 		const formatSpecifier = imgData.slice(0, idx + 1);
+        let imgBuffer =  Buffer.from(slicedImgData, 'base64');
+
+        let smallTargetWidth;
+        let smallTargetHeight;
+        let bigTargetWidth;
+        let bigTargetHeight;
+
+        if (type === 'profile'){
+        	smallTargetWidth = 73;
+        	smallTargetHeight = 73;
+        	bigTargetHeight = 190;
+        	bigTargetWidth = 190;
+        } else {
+        	smallTargetHeight = 96;
+        	smallTargetWidth = 288;
+        	bigTargetWidth = 1560;
+        	bigTargetHeight = 420;
+        }
+
+        sharp(imgBuffer)
+        .resize(smallTargetWidth, smallTargetHeight)
+        .toBuffer()
+        .then(buffer => {
+        	let data = buffer.toString('base64');        	
+        	data = formatSpecifier + data;   
+            sharp(imgBuffer)
+            .resize(bigTargetWidth, bigTargetHeight)
+            .toBuffer()
+            .then(buffer => {
+            	let bigData = buffer.toString('base64');
+            	bigData = formatSpecifier + bigData;          
+            	cb(null, data, bigData)
+            })
+        })
+        .catch( (err) => {
+        	console.log(`downisze issue ${err}`);
+        	cb(err);
+    	});
+ }
 
 function createUserWithPictures(user, profileLocation, coverLocation){
 	const promise = new es6Promise.Promise((resolve, reject) => {

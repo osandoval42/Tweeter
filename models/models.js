@@ -6,6 +6,8 @@ import async from 'async';
 var bcrypt = require('bcryptjs');
 var mongoose = require('mongoose');
 import es6Promise from 'es6-promise';
+import imagemagick from 'imagemagick';
+import sharp from 'sharp';
 mongoose.Promise = es6Promise.Promise;
 
 module.exports.Like = Like;
@@ -369,7 +371,7 @@ const getAuthorInfoAndNext = (tweet, next, finalCB, tweetToReturn) => {
 					if (err) {throw err;}
 					tweet.user.tweetCount = count;
 					determineIfRetweet(tweet, next, finalCB, tweetToReturn);
-				})
+				})				
 			})
 }
 
@@ -498,8 +500,8 @@ User.getUserByUsername = function(username, callback){
      });;
 }
 
-User.getUserForProfileByUsername = (username, cb) => {//Opt further
-	User.findOne({username: username}, 'firstName lastName username profileImg coverImg usersBeingFollowed usersFollowing', (err, user) => {
+User.getUserForProfileByUsername = (username, cb) => {//DO NOT DOWNSAMPLE IMAGES
+	User.findOne({username: username}, 'firstName lastName username largeProfileImg largeCoverImg usersBeingFollowed usersFollowing', (err, user) => {
 		if (err){return cb(err)};
 		if (!user){return cb(null, user)}
 		Like.count({userId: user['_id']}, (err, count)=> {
@@ -688,40 +690,93 @@ User.clearNotifications = (userId, cb) => {
 
 User.uploadProfileImg = (userId, profileImg, cb) => {
 	User.getUserById(userId, (err, user) => {
-		if (err){throw err;}
-		user.profileImg = profileImg;
-		user.save((err, updatedUser) => {
-			Tweet.getTweetCount(userId, (err, count) => {
-				if (err){throw err;}
-				let userObj = user.toObject();
-				userObj.tweetCount = count;
-				Like.count({userId: userId}, (err, count)=> {
+		if (err){throw err; }
+		user.largeProfileImg = profileImg
+		downsizeImg(profileImg, "profile", (err, downsizedImgSmall, downsizedImgBig) => {
+			if (err) {return cb(err);}
+			user.profileImg = downsizedImgSmall;
+			user.largeProfileImg = downsizedImgBig;
+			user.save((err, updatedUser) => {
+				Tweet.getTweetCount(userId, (err, count) => {
 					if (err){throw err;}
-					userObj.likeCount = count;
-					userObj.password = "";
-					cb(err, userObj);
+					let userObj = user.toObject();
+					userObj.tweetCount = count;
+					Like.count({userId: userId}, (err, count)=> {
+						if (err){throw err;}
+						userObj.likeCount = count;
+						userObj.password = "";
+						cb(err, userObj);
+					})
 				})
-			})
+			});
 		});
 	})
 }
 
+ const downsizeImg = (imgData, type, cb) => {
+ 		let idx = imgData.indexOf(',');
+ 		const slicedImgData = imgData.slice(idx + 1);
+ 		const formatSpecifier = imgData.slice(0, idx + 1);
+        let imgBuffer =  Buffer.from(slicedImgData, 'base64');
+
+        let smallTargetWidth;
+        let smallTargetHeight;
+        let bigTargetWidth;
+        let bigTargetHeight;
+
+        if (type === 'profile'){
+        	smallTargetWidth = 73;
+        	smallTargetHeight = 73;
+        	bigTargetHeight = 190;
+        	bigTargetWidth = 190;
+        } else {
+        	smallTargetHeight = 96;
+        	smallTargetWidth = 288;
+        	bigTargetWidth = 1560;
+        	bigTargetHeight = 420;
+        }
+
+        sharp(imgBuffer)
+        .resize(smallTargetWidth, smallTargetHeight)
+        .toBuffer()
+        .then(buffer => {
+        	let data = buffer.toString('base64');        	
+        	data = formatSpecifier + data;   
+            sharp(imgBuffer)
+            .resize(bigTargetWidth, bigTargetHeight)
+            .toBuffer()
+            .then(buffer => {
+            	let bigData = buffer.toString('base64');
+            	bigData = formatSpecifier + bigData;          
+            	cb(null, data, bigData)
+            })
+        })
+        .catch( (err) => {
+        	console.log(`downisze issue ${err}`);
+        	cb(err);
+    	});
+ }
+
 User.uploadCoverImg = (userId, coverImg, cb) => {
 	User.getUserById(userId, (err, user) => {
 		if (err){throw err;}
-		user.coverImg = coverImg;
-		user.save((err, updatedUser) => {
-			Tweet.getTweetCount(userId, (err, count) => {
-				if (err){throw err;}
-				let userObj = user.toObject();
-				userObj.tweetCount = count;
-				Like.count({userId: userId}, (err, count)=> {
-					if (err){throw err;}
-					userObj.likeCount = count;
-					userObj.password = "";
-					cb(err, userObj);
-				})
-			})
+		downsizeImg(coverImg, "cover", (err, downsizedImgSmall, downsizedImgBig) => {
+					if (err){return cb(err);}
+					user.largeCoverImg = downsizedImgBig;
+					user.coverImg = downsizedImgSmall;
+					user.save((err, updatedUser) => {
+					Tweet.getTweetCount(userId, (err, count) => {
+						if (err){throw err;}
+						let userObj = user.toObject();
+						userObj.tweetCount = count;
+						Like.count({userId: userId}, (err, count)=> {
+							if (err){throw err;}
+							userObj.likeCount = count;
+							userObj.password = "";
+							cb(err, userObj);
+						})
+					})
+				});
 		});
 	})
 }

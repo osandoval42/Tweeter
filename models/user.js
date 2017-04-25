@@ -38,7 +38,15 @@ var UserSchema = mongoose.Schema({
 	coverImg: {
 		type: String,
 		"default": Default.coverImg
-	}, 
+	},
+	largeProfileImg: {
+		type: String,
+		"default": Default.largeProfileImg
+	},
+	largeCoverImg: {
+		type: String,
+		"default": Default.largeCoverImg
+	},
 	usersBeingFollowed: [mongoose.Schema.Types.ObjectId],
 	usersFollowing: [mongoose.Schema.Types.ObjectId],
 	notifications: {type: Array, "default": []}
